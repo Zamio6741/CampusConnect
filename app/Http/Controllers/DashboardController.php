@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\Business;
 use App\Models\Note;
 use App\Models\Unit;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,10 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $announcements = Announcement::latest()->take(5)->get();
+        $businesses = Business::where('active', true)
+    ->latest()
+    ->take(6)
+    ->get();
 
         $recentNotes = Note::with(['user', 'unit'])
             ->latest()
@@ -32,16 +37,18 @@ class DashboardController extends Controller
 
         ];
 
-        return view('dashboard', [
+       return view('dashboard', [
 
-            'user' => $user,
+    'user' => $user,
 
-            'announcements' => $announcements,
+    'announcements' => $announcements,
 
-            'recentNotes' => $recentNotes,
+    'businesses' => $businesses,
 
-            'stats' => $stats,
+    'recentNotes' => $recentNotes,
 
-        ]);
+    'stats' => $stats,
+
+]);
     }
 }

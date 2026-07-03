@@ -14,6 +14,12 @@ class Note extends Model
         'file_path',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -22,5 +28,46 @@ class Note extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'favorites'
+        )->withTimestamps();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    public function averageRating()
+    {
+        return round($this->ratings()->avg('rating') ?? 0, 1);
+    }
+
+    public function ratingsCount()
+    {
+        return $this->ratings()->count();
+    }
+
+    public function isFavoritedBy(User $user)
+    {
+        return $this->favorites()
+            ->where('user_id', $user->id)
+            ->exists();
     }
 }

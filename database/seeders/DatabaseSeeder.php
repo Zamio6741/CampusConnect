@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             SemesterSeeder::class,
 
             UnitSeeder::class,
+            NearbyAreaSeeder::class,
 
         ]);
     }

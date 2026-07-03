@@ -10,9 +10,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'name',
         'email',
@@ -29,17 +26,11 @@ class User extends Authenticatable
         'bio',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Attribute casting.
-     */
     protected function casts(): array
     {
         return [
@@ -50,7 +41,7 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Relationships
+    | Academic Relationships
     |--------------------------------------------------------------------------
     */
 
@@ -84,8 +75,85 @@ class User extends Authenticatable
         return $this->belongsTo(Semester::class);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Notes
+    |--------------------------------------------------------------------------
+    */
+
     public function notes()
     {
         return $this->hasMany(Note::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accommodation Passes
+    |--------------------------------------------------------------------------
+    */
+
+    public function accommodationPasses()
+    {
+        return $this->hasMany(AccommodationPass::class);
+    }
+
+    public function hasActiveAccommodationPass()
+    {
+        return $this->accommodationPasses()
+            ->where('status', 'paid')
+            ->where('expires_at', '>', now())
+            ->exists();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Legacy Hostels
+    |--------------------------------------------------------------------------
+    */
+
+    public function hostels()
+    {
+        return $this->hasMany(Hostel::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accommodation Listings
+    |--------------------------------------------------------------------------
+    */
+
+    public function accommodations()
+    {
+        return $this->hasMany(Accommodation::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Saved Accommodations
+    |--------------------------------------------------------------------------
+    */
+
+    public function savedAccommodations()
+    {
+        return $this->hasMany(SavedAccommodation::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accommodation Reviews
+    |--------------------------------------------------------------------------
+    */
+
+    public function accommodationReviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+    public function marketplaceFavorites()
+{
+    return $this->hasMany(MarketplaceFavorite::class);
+}
+public function businesses()
+{
+    return $this->hasMany(Business::class);
+}
 }

@@ -14,48 +14,33 @@ class NoteController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Note::with(['user', 'unit']);
+        $search = $request->search;
 
-        // Search
-        if ($request->filled('search')) {
+        $notes = Note::with([
+                'user',
+                'unit',
+                'ratings'
+            ])
+            ->when($search, function ($query) use ($search) {
 
-            $search = $request->search;
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('unit', function ($q) use ($search) {
 
-            $query->where(function ($q) use ($search) {
+                        $q->where('unit_code', 'like', "%{$search}%")
+                          ->orWhere('unit_name', 'like', "%{$search}%");
 
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhereHas('unit', function ($unit) use ($search) {
+                    });
 
-                      $unit->where('unit_code', 'like', "%{$search}%")
-                           ->orWhere('unit_name', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->get();
 
-                  })
-                  ->orWhereHas('user', function ($user) use ($search) {
-
-                      $user->where('name', 'like', "%{$search}%");
-
-                  });
-
-            });
-        }
-
-        // Filter by Unit
-        if ($request->filled('unit')) {
-
-            $query->where('unit_id', $request->unit);
-
-        }
-
-        $notes = $query->latest()->paginate(9)->withQueryString();
-
-        $units = Unit::orderBy('unit_code')->get();
-
-        return view('notes.index', compact('notes', 'units'));
+        return view('notes.index', compact('notes', 'search'));
     }
 
     /**
-     * Upload page
+     * Show upload page.
      */
     public function create()
     {
@@ -65,40 +50,42 @@ class NoteController extends Controller
     }
 
     /**
-     * Save Note
+     * Store uploaded note.
      */
     public function store(Request $request)
     {
         $request->validate([
-
             'unit_id' => 'required|exists:units,id',
-
             'title' => 'required|max:255',
-
-            'description' => 'nullable',
-
+            'description' => 'nullable|max:1000',
             'pdf' => 'required|mimes:pdf|max:25600',
-
         ]);
 
         $path = $request->file('pdf')->store('notes', 'public');
 
         Note::create([
-
             'user_id' => Auth::id(),
-
             'unit_id' => $request->unit_id,
-
             'title' => $request->title,
-
             'description' => $request->description,
-
             'file_path' => $path,
-
         ]);
 
         return redirect()
             ->route('notes.index')
             ->with('success', '🎉 Notes uploaded successfully!');
+    }
+
+    /**
+     * Preview PDF inside CampusConnect.
+     */
+    public function preview(Note $note)
+    {
+        return response()->file(
+            storage_path('app/public/' . $note->file_path),
+            [
+                'Content-Type' => 'application/pdf',
+            ]
+        );
     }
 }
