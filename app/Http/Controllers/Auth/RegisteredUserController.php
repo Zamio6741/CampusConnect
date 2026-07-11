@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\University;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +22,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'roles' => Role::all(),
+            'universities' => University::all(),
+        ]);
     }
 
     /**
@@ -32,13 +37,45 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                'unique:' . User::class,
+            ],
+
+            'role_id' => [
+                'required',
+                'exists:roles,id',
+            ],
+
+            'university_id' => [
+                'required',
+                'exists:universities,id',
+            ],
+
+            'password' => [
+                'required',
+                'confirmed',
+                Rules\Password::defaults(),
+            ],
         ]);
+        $role = Role::findOrFail($request->role_id);
+
+if ($role->name === 'Admin') {
+    abort(403, 'Admin accounts cannot be created through registration.');
+}
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+
+            'role_id' => $request->role_id,
+            'university_id' => $request->university_id,
+
             'password' => Hash::make($request->password),
         ]);
 
@@ -46,6 +83,18 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return match ($user->role->name) {
+
+    'Admin' => redirect()->route('admin.dashboard'),
+
+    'Student' => redirect()->route('student.dashboard'),
+
+    'Landlord' => redirect()->route('landlord.dashboard'),
+
+    'Business Owner' => redirect()->route('business.dashboard'),
+
+    default => redirect()->route('student.dashboard'),
+
+};
     }
 }

@@ -17,12 +17,50 @@ use App\Http\Controllers\SavedAccommodationController;
 use App\Http\Controllers\LostFoundController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\StudentServiceController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LandlordDashboardController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\RentalWizardController;
+
+Route::middleware(['auth', 'role:Landlord'])->group(function () {
+
+    Route::get('/landlord/rental/create/step1', [RentalWizardController::class, 'step1'])
+        ->name('rental.step1');
+
+    Route::post('/landlord/rental/create/step1', [RentalWizardController::class, 'storeStep1'])
+        ->name('rental.step1.store');
+
+    Route::get('/landlord/rental/create/step2', [RentalWizardController::class, 'step2'])
+        ->name('rental.step2');
+
+    Route::post('/landlord/rental/create/step2', [RentalWizardController::class, 'storeStep2'])
+        ->name('rental.step2.store');
+    Route::get('/landlord/rental/create/step3', [RentalWizardController::class, 'step3'])
+        ->name('rental.step3');
+
+    Route::get('/landlord/rental/create/step4', [RentalWizardController::class, 'step4'])
+        ->name('rental.step4');
+
+    Route::get('/landlord/rental/create/step5', [RentalWizardController::class, 'step5'])
+        ->name('rental.step5');
+});
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    /*
+|--------------------------------------------------------------------------
+| Bookings
+|--------------------------------------------------------------------------
+*/
+
+Route::post(
+    '/accommodation/{accommodation}/book',
+    [BookingController::class, 'store']
+)->name('bookings.store');
 
     /*
     |--------------------------------------------------------------------------
@@ -30,9 +68,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+   Route::get('/dashboard', function () {
 
+    $role = optional(auth()->user()->role)->name;
+
+    return match ($role) {
+        'Student' => redirect()->route('student.dashboard'),
+        'Landlord' => redirect()->route('landlord.dashboard'),
+        'Business Owner' => redirect()->route('business.dashboard'),
+        'Admin' => redirect()->route('admin.dashboard'),
+        default => abort(403),
+    };
+
+})->middleware(['auth', 'verified'])->name('dashboard');
     /*
     |--------------------------------------------------------------------------
     | Marketplace
@@ -163,7 +211,14 @@ Route::patch('/marketplace/{marketplace}/sold', [MarketplaceController::class, '
 
     Route::post('/notes/{note}/favorite', [FavoriteController::class, 'toggle'])
         ->name('favorites.toggle');
+    /*
+|--------------------------------------------------------------------------
+| Announcements
+|--------------------------------------------------------------------------
+*/
 
+Route::resource('announcements', AnnouncementController::class)
+    ->middleware(['auth']);
     /*
     |--------------------------------------------------------------------------
     | Past Papers
@@ -243,6 +298,38 @@ Route::put('/businesses/{business}', [BusinessController::class, 'update'])
 
 Route::delete('/businesses/{business}', [BusinessController::class, 'destroy'])
     ->name('businesses.destroy');
+    
+/*
+|--------------------------------------------------------------------------
+| Role Dashboards
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/student/dashboard', [DashboardController::class, 'index'])
+        ->middleware('role:Student')
+        ->name('student.dashboard');
+
+    Route::get('/landlord/dashboard', [LandlordDashboardController::class, 'index'])
+        ->middleware('role:Landlord')
+        ->name('landlord.dashboard');
+
+    Route::get('/business/dashboard', function () {
+        return view('business.dashboard');
+    })
+        ->middleware('role:Business Owner')
+        ->name('business.dashboard');
+
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })
+        ->middleware('role:Admin')
+        ->name('admin.dashboard');
+
+});
+Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.read');
 
 });
 require __DIR__.'/auth.php';

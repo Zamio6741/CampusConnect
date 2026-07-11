@@ -9,6 +9,8 @@ use App\Models\NearbyArea;
 use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
+use App\Models\User;
 
 class AccommodationController extends Controller
 {
@@ -21,6 +23,7 @@ class AccommodationController extends Controller
     public function campus()
     {
         $hostels = Accommodation::where('listing_type', 'campus')
+            ->where('university_id', Auth::user()->university_id)
             ->latest()
             ->paginate(12);
 
@@ -38,15 +41,16 @@ class AccommodationController extends Controller
             compact('universities', 'locations')
         );
     }
-
     public function storeCampus(Request $request)
     {
         if (!Auth::user()->hasActiveAccommodationPass()) {
 
-    return redirect()
-        ->route('pass.index')
-        ->with('error', 'You need an active Accommodation Pass before posting.');
-}
+            return redirect()
+                ->route('pass.index')
+                ->with('error', 'You need an active Accommodation Pass before posting.');
+
+        }
+
         $validated = $request->validate([
 
             'title' => 'required|max:255',
@@ -110,28 +114,58 @@ class AccommodationController extends Controller
                     'image_path' => $path,
 
                 ]);
+
             }
+
+        }
+
+        // Notify users from the same university
+
+        $users = User::where(
+            'university_id',
+            Auth::user()->university_id
+        )->get();
+
+        foreach ($users as $user) {
+
+            Notification::create([
+
+                'user_id' => $user->id,
+
+                'title' => 'New Accommodation',
+
+                'message' => $accommodation->title . ' has been posted.',
+
+                'type' => 'accommodation',
+
+            ]);
+
         }
 
         return redirect()
             ->route('accommodation.show', $accommodation)
             ->with('success', 'Campus hostel posted successfully.');
     }
-
     /*
     |--------------------------------------------------------------------------
     | Off Campus Rentals
     |--------------------------------------------------------------------------
     */
 
-    public function rentals()
-    {
-        $rentals = Accommodation::where('listing_type', 'rental')
-            ->latest()
-            ->paginate(12);
+   public function rentals()
+{
+    $rentals = Accommodation::where('listing_type', 'rental')
+        ->where('university_id', auth()->user()->university_id)
+        ->latest()
+        ->paginate(9);
 
-        return view('accommodation.rentals', compact('rentals'));
-    }
+    $areas = NearbyArea::orderBy('name')->get();
+
+    return view('accommodation.rentals', compact(
+        'rentals',
+        'areas'
+    ));
+}
 
     public function createRental()
     {
@@ -143,18 +177,18 @@ class AccommodationController extends Controller
             'accommodation.create-rental',
             compact('universities', 'locations')
         );
-    }
+    }  
+        public function storeRental(Request $request)
+    {
+        if (!Auth::user()->hasActiveAccommodationPass()) {
 
-   public function storeRental(Request $request)
-{
-    if (!Auth::user()->hasActiveAccommodationPass()) {
+            return redirect()
+                ->route('pass.index')
+                ->with('error', 'You need an active Accommodation Pass before posting.');
 
-        return redirect()
-            ->route('pass.index')
-            ->with('error', 'You need an active Accommodation Pass before posting.');
-    }
+        }
 
-    $validated = $request->validate([
+        $validated = $request->validate([
 
             'property_type' => 'required',
 
@@ -219,7 +253,9 @@ class AccommodationController extends Controller
                     'image_path' => $path,
 
                 ]);
+
             }
+
         }
 
         if ($request->has('facilities')) {
@@ -233,37 +269,61 @@ class AccommodationController extends Controller
                     'name' => $facility,
 
                 ]);
+
             }
+
+        }
+
+        // Notify users from the same university
+
+        $users = User::where(
+            'university_id',
+            Auth::user()->university_id
+        )->get();
+
+        foreach ($users as $user) {
+
+            Notification::create([
+
+                'user_id' => $user->id,
+
+                'title' => 'New Accommodation',
+
+                'message' => $accommodation->title . ' has been posted.',
+
+                'type' => 'accommodation',
+
+            ]);
+
         }
 
         return redirect()
             ->route('accommodation.show', $accommodation)
             ->with('success', 'Rental posted successfully.');
-    }
-
-    /*
+    }      
+        /*
     |--------------------------------------------------------------------------
     | Show Accommodation
     |--------------------------------------------------------------------------
     */
 
     public function show(Accommodation $accommodation)
-{
-    $accommodation->load([
-        'images',
-        'facilities',
-        'reviews.user',
-        'owner',
-        'university'
-    ]);
+    {
+        $accommodation->load([
+            'images',
+            'facilities',
+            'reviews.user',
+            'owner',
+            'university',
+        ]);
 
-    $hasPass = auth()->check()
-        ? auth()->user()->hasActiveAccommodationPass()
-        : false;
+        $hasPass = auth()->check()
+            ? auth()->user()->hasActiveAccommodationPass()
+            : false;
 
-    return view('accommodation.show', [
-        'accommodation' => $accommodation,
-        'hasPass' => $hasPass,
-    ]);
-}
+        return view('accommodation.show', [
+            'accommodation' => $accommodation,
+            'hasPass' => $hasPass,
+        ]);
+    }
 }

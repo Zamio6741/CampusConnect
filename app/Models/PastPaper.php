@@ -8,6 +8,7 @@ class PastPaper extends Model
 {
     protected $fillable = [
         'user_id',
+        'university_id',
         'unit_id',
         'title',
         'year',
@@ -26,6 +27,11 @@ class PastPaper extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function university()
+    {
+        return $this->belongsTo(University::class);
     }
 
     public function unit()

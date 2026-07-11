@@ -10,8 +10,10 @@ class Accommodation extends Model
     use HasFactory;
 
     protected $fillable = [
+
         'user_id',
         'university_id',
+        'nearby_area_id',
 
         'listing_type',
         'property_type',
@@ -20,32 +22,42 @@ class Accommodation extends Model
         'description',
 
         'price',
+
+        'capacity',
         'available_spaces',
 
         'phone',
         'whatsapp',
 
         'location',
-
-        // NEW LOCATION FIELDS
         'area',
+
         'latitude',
         'longitude',
 
+        'gender',
+        'room_number',
+
         'verified',
         'featured',
+
     ];
 
     protected $casts = [
+
         'verified' => 'boolean',
         'featured' => 'boolean',
+
         'latitude' => 'float',
         'longitude' => 'float',
+
+        'price' => 'decimal:2',
+
     ];
 
     /*
     |--------------------------------------------------------------------------
-    | Relationships
+    | Owner
     |--------------------------------------------------------------------------
     */
 
@@ -54,28 +66,82 @@ class Accommodation extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | University
+    |--------------------------------------------------------------------------
+    */
+
     public function university()
     {
         return $this->belongsTo(University::class);
     }
 
-    public function images()
+    /*
+    |--------------------------------------------------------------------------
+    | Nearby Area
+    |--------------------------------------------------------------------------
+    */
+
+    public function nearbyArea()
     {
-        return $this->hasMany(AccommodationImage::class);
+        return $this->belongsTo(NearbyArea::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Photos
+    |--------------------------------------------------------------------------
+    */
+
+   public function photos()
+{
+    return $this->hasMany(AccommodationImage::class);
+}
+    /*
+    |--------------------------------------------------------------------------
+    | Facilities
+    |--------------------------------------------------------------------------
+    */
 
     public function facilities()
     {
-        return $this->hasMany(Facility::class);
+        return $this->belongsToMany(
+            Facility::class,
+            'accommodation_facility'
+        );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reviews
+    |--------------------------------------------------------------------------
+    */
 
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Saved By Users
+    |--------------------------------------------------------------------------
+    */
+
     public function savedBy()
     {
         return $this->hasMany(SavedAccommodation::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bookings
+    |--------------------------------------------------------------------------
+    */
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }

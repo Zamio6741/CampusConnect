@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accommodation;
 use App\Models\Announcement;
 use App\Models\Business;
 use App\Models\Note;
+use App\Models\Notification;
+use App\Models\PastPaper;
 use App\Models\Unit;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,41 +17,98 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        $announcements = Announcement::latest()->take(5)->get();
-        $businesses = Business::where('active', true)
-    ->latest()
-    ->take(6)
-    ->get();
+        /*
+        |--------------------------------------------------------------------------
+        | University Filter
+        |--------------------------------------------------------------------------
+        */
 
-        $recentNotes = Note::with(['user', 'unit'])
+        $universityId = $user->university_id;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Dashboard Content
+        |--------------------------------------------------------------------------
+        */
+
+        $announcements = Announcement::where('university_id', $universityId)
             ->latest()
-            ->take(6)
+            ->take(3)
             ->get();
+
+        $businesses = Business::where('university_id', $universityId)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $trendingNotes = Note::with(['user', 'unit'])
+            ->where('university_id', $universityId)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $pastPapers = PastPaper::with(['user', 'unit'])
+            ->where('university_id', $universityId)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Statistics
+        |--------------------------------------------------------------------------
+        */
 
         $stats = [
 
-            'notes' => Note::count(),
+            'notes' => Note::where('university_id', $universityId)->count(),
+
+            'pastpapers' => PastPaper::where('university_id', $universityId)->count(),
+
+            'businesses' => Business::where('university_id', $universityId)->count(),
+
+            'accommodations' => Accommodation::where('university_id', $universityId)->count(),
+
+            'announcements' => Announcement::where('university_id', $universityId)->count(),
 
             'units' => Unit::count(),
-
-            'announcements' => Announcement::count(),
 
             'myNotes' => Note::where('user_id', $user->id)->count(),
 
         ];
 
-       return view('dashboard', [
+        /*
+        |--------------------------------------------------------------------------
+        | Notifications
+        |--------------------------------------------------------------------------
+        */
 
-    'user' => $user,
+        $notifications = Notification::where('user_id', $user->id)
+            ->latest()
+            ->get();
 
-    'announcements' => $announcements,
+        $notificationCount = $notifications
+            ->where('is_read', false)
+            ->count();
 
-    'businesses' => $businesses,
+        return view('student.dashboard', [
 
-    'recentNotes' => $recentNotes,
+            'user' => $user,
 
-    'stats' => $stats,
+            'announcements' => $announcements,
 
-]);
+            'businesses' => $businesses,
+
+            'trendingNotes' => $trendingNotes,
+
+            'pastPapers' => $pastPapers,
+
+            'stats' => $stats,
+
+            'notifications' => $notifications,
+
+            'notificationCount' => $notificationCount,
+
+        ]);
     }
 }

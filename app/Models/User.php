@@ -41,14 +41,46 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Academic Relationships
+    | Role Relationship
     |--------------------------------------------------------------------------
     */
 
     public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
+{
+    return $this->belongsTo(Role::class);
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    public function isAdmin()
+{
+    return optional($this->role)->name === 'Admin';
+}
+
+public function isStudent()
+{
+    return optional($this->role)->name === 'Student';
+}
+
+public function isLandlord()
+{
+    return optional($this->role)->name === 'Landlord';
+}
+
+public function isBusinessOwner()
+{
+    return optional($this->role)->name === 'Business Owner';
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | Academic Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function university()
     {
@@ -107,7 +139,7 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Legacy Hostels
+    | Hostels
     |--------------------------------------------------------------------------
     */
 
@@ -148,12 +180,48 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Marketplace
+    |--------------------------------------------------------------------------
+    */
+
     public function marketplaceFavorites()
+    {
+        return $this->hasMany(MarketplaceFavorite::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Businesses
+    |--------------------------------------------------------------------------
+    */
+
+    public function businesses()
+    {
+        return $this->hasMany(Business::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    */
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+/*
+|--------------------------------------------------------------------------
+| Bookings
+|--------------------------------------------------------------------------
+*/
+
+public function bookings()
 {
-    return $this->hasMany(MarketplaceFavorite::class);
+    return $this->hasMany(Booking::class, 'student_id');
 }
-public function businesses()
-{
-    return $this->hasMany(Business::class);
-}
+
 }

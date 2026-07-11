@@ -9,26 +9,24 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('roles')->truncate();
+
         DB::table('roles')->insert([
             [
-                'name' => 'Student',
-                'description' => 'Regular student'
-            ],
-            [
-                'name' => 'Lecturer',
-                'description' => 'University lecturer'
-            ],
-            [
                 'name' => 'Admin',
-                'description' => 'System administrator'
+                'description' => 'System administrator',
             ],
             [
-                'name' => 'Hostel Owner',
-                'description' => 'Hostel manager'
+                'name' => 'Student',
+                'description' => 'University student',
+            ],
+            [
+                'name' => 'Landlord',
+                'description' => 'Off-campus rental owner',
             ],
             [
                 'name' => 'Business Owner',
-                'description' => 'Marketplace seller'
+                'description' => 'Marketplace seller',
             ],
         ]);
     }

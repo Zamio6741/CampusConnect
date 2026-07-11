@@ -8,15 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('marketplace_items', function (Blueprint $table) {
-            $table->string('condition')->default('Used')->after('category');
+        Schema::table('users', function (Blueprint $table) {
+
+            if (Schema::hasColumn('users', 'role')) {
+                $table->dropColumn('role');
+            }
+
         });
     }
 
     public function down(): void
     {
-        Schema::table('marketplace_items', function (Blueprint $table) {
-            $table->dropColumn('condition');
+        Schema::table('users', function (Blueprint $table) {
+
+            $table->string('role')->nullable();
+
         });
     }
 };

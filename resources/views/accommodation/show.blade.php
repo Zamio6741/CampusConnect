@@ -1,6 +1,19 @@
 <x-app-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
+    @if(session('success'))
+
+<div class="max-w-7xl mx-auto mt-6">
+
+    <div class="bg-green-100 border border-green-300 text-green-700 px-6 py-4 rounded-2xl">
+
+        {{ session('success') }}
+
+    </div>
+
+</div>
+
+@endif
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-orange-600 to-amber-500 text-white">
@@ -293,21 +306,62 @@
 
     @endif
 
-    <form action="{{ route('accommodation.save', $accommodation) }}"
-          method="POST"
-          class="mt-6">
+   <form action="{{ route('accommodation.save', $accommodation) }}"
+      method="POST"
+      class="mt-6">
 
-        @csrf
+    @csrf
 
-        <button
-            type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold">
+    <button
+        type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold">
 
-            ❤️ Save Accommodation
+        ❤️ Save Accommodation
 
-        </button>
+    </button>
 
-    </form>
+</form>
+
+<hr class="my-8">
+
+<h3 class="text-xl font-bold text-orange-700 mb-4">
+📩 Book this Accommodation
+</h3>
+
+<form action="{{ route('bookings.store', $accommodation) }}" method="POST">
+
+    @csrf
+
+    <label class="font-semibold block mb-2">
+        Preferred Move-in Date
+    </label>
+
+    <input
+        type="date"
+        name="move_in_date"
+        required
+        class="w-full rounded-xl border-gray-300 mb-4">
+
+    <label class="font-semibold block mb-2">
+        Message to Landlord
+    </label>
+
+    <textarea
+        name="message"
+        rows="4"
+        class="w-full rounded-xl border-gray-300 mb-5"
+        placeholder="Introduce yourself..."></textarea>
+
+    <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-bold">
+
+        📩 Send Booking Request
+
+    </button>
+
+</form>
+
 
 </div>
 
