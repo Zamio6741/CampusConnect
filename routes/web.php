@@ -331,5 +331,9 @@ Route::middleware(['auth'])->group(function () {
 Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
     ->name('notifications.read');
 
+Route::post('/landlord/rental/publish',
+    [RentalWizardController::class, 'publish'])
+    ->name('rental.publish');    
+
 });
 require __DIR__.'/auth.php';

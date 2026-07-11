@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Accommodation;
 
 class RentalWizardController extends Controller
 {
@@ -103,36 +105,88 @@ class RentalWizardController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | STEP 5
+    | STEP 5 (Preview)
     |--------------------------------------------------------------------------
     */
 
-   public function step5()
-{
-    $step1 = session('rental.step1');
-    $step2 = session('rental.step2');
-    $step3 = session('rental.step3');
-    $step4 = session('rental.step4');
+    public function step5()
+    {
+        $step1 = session('rental.step1');
+        $step2 = session('rental.step2');
+        $step3 = session('rental.step3');
+        $step4 = session('rental.step4');
 
-    $university = null;
-    $area = null;
+        $university = null;
+        $area = null;
 
-    if (!empty($step1['university_id'])) {
-        $university = \App\Models\University::find($step1['university_id']);
+        if (!empty($step1['university_id'])) {
+            $university = \App\Models\University::find($step1['university_id']);
+        }
+
+        if (!empty($step1['nearby_area_id'])) {
+            $area = \App\Models\NearbyArea::find($step1['nearby_area_id']);
+        }
+
+        return view('accommodation.create-step5', compact(
+            'step1',
+            'step2',
+            'step3',
+            'step4',
+            'university',
+            'area'
+        ));
     }
 
-    if (!empty($step1['nearby_area_id'])) {
-        $area = \App\Models\NearbyArea::find($step1['nearby_area_id']);
+    /*
+    |--------------------------------------------------------------------------
+    | PUBLISH RENTAL
+    |--------------------------------------------------------------------------
+    */
+
+    public function publish()
+    {
+        $step1 = session('rental.step1');
+        $step2 = session('rental.step2');
+        $step3 = session('rental.step3');
+        $step4 = session('rental.step4');
+
+        Accommodation::create([
+
+            'user_id' => Auth::id(),
+
+            'listing_type' => 'rental',
+
+            'property_type' => strtolower($step1['property_type']),
+
+            'title' => ucfirst($step1['property_type']),
+
+            'description' => $step1['description'] ?? null,
+
+            'university_id' => $step1['university_id'],
+
+            'location' => $step2['location'] ?? '',
+
+            'latitude' => $step2['latitude'] ?? null,
+
+            'longitude' => $step2['longitude'] ?? null,
+
+            'price' => $step3['price'] ?? 0,
+
+            'phone' => $step3['phone'] ?? null,
+
+            'whatsapp' => $step3['whatsapp'] ?? null,
+
+            'available_spaces' => 1,
+
+            'verified' => false,
+
+            'featured' => false,
+        ]);
+
+        session()->forget('rental');
+
+        return redirect()
+            ->route('landlord.dashboard')
+            ->with('success', '🎉 Rental published successfully!');
     }
-
-    return view('accommodation.create-step5', compact(
-        'step1',
-        'step2',
-        'step3',
-        'step4',
-        'university',
-        'area'
-    ));
-}
-
 }

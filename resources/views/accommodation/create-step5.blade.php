@@ -76,12 +76,19 @@
 
                 </a>
 
-                <button
-                    class="px-10 py-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold">
+                <form action="{{ route('rental.publish') }}" method="POST">
 
-                    🚀 Publish Rental
+    @csrf
 
-                </button>
+    <button
+        type="submit"
+        class="px-10 py-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold">
+
+        🚀 Publish Rental
+
+    </button>
+
+</form>
 
             </div>
 
