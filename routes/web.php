@@ -25,6 +25,7 @@ use App\Http\Controllers\RentalWizardController;
 use App\Http\Controllers\Landlord\RentalController;
 use App\Http\Controllers\Student\RentalBrowseController;
 use App\Http\Controllers\BookingRequestController;
+use App\Http\Controllers\BusinessDashboardController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -115,6 +116,8 @@ Route::delete('/notifications/{notification}', [NotificationController::class, '
     ->name('notifications.destroy');    
 
 });
+
+
 Route::get('/rentals/{accommodation}', [AccommodationController::class, 'show'])
     ->name('rentals.public.show');
 
@@ -363,9 +366,14 @@ Route::post('/lost-found', [LostFoundController::class, 'store'])
 Route::get('/lost-found/{lostfound}', [LostFoundController::class, 'show'])
     ->name('lostfound.show');
 
-Route::resource('businesses', BusinessController::class);
+
 Route::get('/businesses/{business}/edit', [BusinessController::class, 'edit'])
     ->name('businesses.edit');
+Route::get('/businesses/create', [BusinessController::class, 'create'])
+    ->name('businesses.create');
+
+Route::post('/businesses', [BusinessController::class, 'store'])
+    ->name('businesses.store');    
 
 Route::put('/businesses/{business}', [BusinessController::class, 'update'])
     ->name('businesses.update');
@@ -389,11 +397,9 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:Landlord')
         ->name('landlord.dashboard');
 
-    Route::get('/business/dashboard', function () {
-        return view('business.dashboard');
-    })
-        ->middleware('role:Business Owner')
-        ->name('business.dashboard');
+   Route::get('/business/dashboard', [BusinessController::class, 'dashboard'])
+    ->middleware('role:Business Owner')
+    ->name('business.dashboard');
 
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');

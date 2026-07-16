@@ -653,41 +653,35 @@
 
                     <td class="px-6">
 
-                        <span class="font-bold text-green-600">
+    <span class="font-bold text-green-600">
 
-                            KES {{ number_format($stats['revenue']) }}
+        KES {{ number_format($rental->price) }}
 
-                        </span>
+    </span>
 
-                    </td>
+</td>
 
                     <td class="px-6">
 
-                        @if($rental->featured)
+                       @if($rental->bookings()->where('status', 'Moved In')->exists())
 
-                            <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+    <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm">
+        🏠 Occupied
+    </span>
 
-                                ⭐ Featured
+@elseif($rental->bookings()->where('status', 'Approved')->exists())
 
-                            </span>
+    <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm">
+        📅 Reserved
+    </span>
 
-                        @elseif($rental->verified)
+@else
 
-                            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm">
+    <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm">
+        🟢 Available
+    </span>
 
-                                ✔ Verified
-
-                            </span>
-
-                        @else
-
-                            <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm">
-
-                                ⏳ Pending
-
-                            </span>
-
-                        @endif
+@endif
 
                     </td>
 
@@ -864,65 +858,35 @@
 
     </div>
 
-    <!-- Occupancy -->
+  <!-- Rentals Occupied -->
 
-    <div class="bg-white rounded-3xl shadow-lg p-8">
+<div class="bg-white rounded-3xl shadow-lg p-8">
 
-        <div class="flex justify-between">
+    <div class="flex justify-between">
 
-            <h2 class="text-2xl font-bold">
+        <h2 class="text-2xl font-bold">
+            🏠 Rentals Occupied
+        </h2>
 
-                📊 Occupancy
-
-            </h2>
-
-            <span class="text-5xl">
-
-                🏘️
-
-            </span>
-
-        </div>
-
-        @php
-
-            $occupancy = $stats['rentals'] > 0
-                ? round(($stats['approved'] / $stats['rentals']) * 100)
-                : 0;
-
-        @endphp
-
-        <div class="mt-10">
-
-            <div class="flex justify-between mb-2">
-
-                <span class="text-gray-500">
-
-                    Occupied
-
-                </span>
-
-                <span class="font-bold text-sky-600">
-
-                    {{ $occupancy }}%
-
-                </span>
-
-            </div>
-
-            <div class="w-full h-4 rounded-full bg-gray-200">
-
-                <div
-                    class="bg-sky-600 h-4 rounded-full"
-                    style="width: {{ $occupancy }}%;">
-
-                </div>
-
-            </div>
-
-        </div>
+        <span class="text-5xl">
+            🏘️
+        </span>
 
     </div>
+
+    <div class="mt-10 text-center">
+
+        <h1 class="text-6xl font-extrabold text-sky-600">
+            {{ $stats['occupiedRentals'] }}
+        </h1>
+
+        <p class="mt-3 text-gray-500">
+            Rental(s) currently occupied
+        </p>
+
+    </div>
+
+</div>
 
     <!-- Revenue -->
 

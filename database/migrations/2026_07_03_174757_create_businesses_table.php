@@ -16,7 +16,9 @@ return new class extends Migration
 
     $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-    $table->string('name');
+    $table->foreignId('university_id')->nullable()->constrained()->nullOnDelete();
+
+    $table->string('business_name');
 
     $table->string('category');
 
@@ -26,15 +28,33 @@ return new class extends Migration
 
     $table->string('whatsapp')->nullable();
 
+    $table->string('email')->nullable();
+
+    $table->string('logo')->nullable();
+
     $table->string('location');
 
-    $table->string('opening_hours')->nullable();
+    $table->string('google_maps')->nullable();
 
-    $table->string('cover_image')->nullable();
+    $table->string('facebook')->nullable();
+
+    $table->string('instagram')->nullable();
+
+    $table->string('tiktok')->nullable();
+
+    $table->string('website')->nullable();
+
+    $table->enum('status', [
+        'Pending',
+        'Approved',
+        'Rejected'
+    ])->default('Pending');
 
     $table->boolean('featured')->default(false);
 
-    $table->boolean('active')->default(true);
+    $table->unsignedInteger('views')->default(0);
+
+    $table->decimal('rating',3,2)->default(0);
 
     $table->timestamps();
 });

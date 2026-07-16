@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Business extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
 
         'user_id',
 
         'university_id',
 
-        'name',
+        'business_name',
 
         'category',
 
@@ -25,23 +22,31 @@ class Business extends Model
 
         'whatsapp',
 
+        'email',
+
+        'logo',
+
         'location',
 
-        'opening_hours',
+        'google_maps',
 
-        'cover_image',
+        'facebook',
 
-        'featured',
+        'instagram',
 
-        'active',
+        'tiktok',
+
+        'website',
+
+        'status',
+
+        'views',
+
+        'rating',
+
+        'featured'
 
     ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
 
     public function user()
     {
@@ -53,8 +58,4 @@ class Business extends Model
         return $this->belongsTo(University::class);
     }
 
-    public function images()
-    {
-        return $this->hasMany(BusinessImage::class);
-    }
 }

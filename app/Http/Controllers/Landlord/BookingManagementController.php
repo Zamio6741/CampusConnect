@@ -11,14 +11,14 @@ class BookingManagementController extends Controller
     public function index()
     {
         $bookings = BookingRequest::with([
-            'student',
-            'accommodation.photos',
-        ])
-        ->whereHas('accommodation', function ($query) {
-            $query->where('user_id', auth()->id());
-        })
-        ->latest()
-        ->get();
+                'student',
+                'accommodation.photos',
+            ])
+            ->whereHas('accommodation', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->latest()
+            ->get();
 
         $totalBookings = $bookings->count();
 
@@ -30,8 +30,8 @@ class BookingManagementController extends Controller
             ->where('status', 'Approved')
             ->count();
 
-        $completedBookings = $bookings
-            ->where('status', 'Completed')
+        $movedInBookings = $bookings
+            ->where('status', 'Moved In')
             ->count();
 
         return view('landlord.bookings.index', compact(
@@ -39,20 +39,49 @@ class BookingManagementController extends Controller
             'totalBookings',
             'pendingBookings',
             'approvedBookings',
-            'completedBookings'
+            'movedInBookings'
         ));
     }
 
     public function update(Request $request, BookingRequest $booking)
     {
         $request->validate([
-            'status' => 'required|in:Pending,Approved,Rejected,Completed',
+            'status' => 'required|in:Pending,Approved,Rejected,Moved In',
         ]);
 
+        // Save previous status
+        $oldStatus = $booking->status;
+
+        // Update booking status
         $booking->update([
             'status' => $request->status,
         ]);
 
-        return back()->with('success', 'Booking updated successfully.');
+        /*
+        |--------------------------------------------------------------------------
+        | Add revenue ONLY once when tenant moves in
+        |--------------------------------------------------------------------------
+        */
+
+        if ($oldStatus !== 'Moved In' && $request->status === 'Moved In') {
+
+    $accommodation = $booking->accommodation;
+
+    // Add revenue
+    $accommodation->increment(
+        'total_revenue',
+        $accommodation->price
+    );
+
+    // Reduce available spaces
+    if ($accommodation->available_spaces > 0) {
+        $accommodation->decrement('available_spaces');
+    }
+}
+
+        return back()->with(
+            'success',
+            'Booking updated successfully.'
+        );
     }
 }

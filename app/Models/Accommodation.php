@@ -40,6 +40,7 @@ class Accommodation extends Model
 
         'views',
         'bookings',
+        'total_revenue',
 
     ];
 
@@ -83,15 +84,15 @@ class Accommodation extends Model
     {
         return $this->hasMany(Facility::class);
     }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
-
+ 
     public function bookingRequests()
     {
     return $this->hasMany(\App\Models\BookingRequest::class);
     }
+
+    public function bookings()
+{
+    return $this->hasMany(BookingRequest::class, 'accommodation_id');
+}
 
 }

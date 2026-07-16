@@ -4,9 +4,7 @@
 
     <div class="max-w-7xl mx-auto px-6">
 
-        <!-- Header -->
         <div class="mb-10">
-
             <h1 class="text-4xl font-extrabold text-slate-800">
                 📅 Booking Management
             </h1>
@@ -14,7 +12,6 @@
             <p class="text-gray-500 mt-2">
                 Manage all property viewing requests from students.
             </p>
-
         </div>
 
         @if(session('success'))
@@ -23,7 +20,6 @@
             </div>
         @endif
 
-        <!-- Statistics -->
         <div class="grid md:grid-cols-4 gap-6 mb-10">
 
             <div class="bg-white rounded-3xl shadow-lg p-6">
@@ -48,26 +44,22 @@
             </div>
 
             <div class="bg-white rounded-3xl shadow-lg p-6">
-                <p class="text-gray-500">Completed</p>
+                <p class="text-gray-500">Moved In</p>
                 <h2 class="text-4xl font-bold text-blue-700 mt-2">
-                    {{ $completedBookings }}
+                    {{ $movedInBookings }}
                 </h2>
             </div>
 
         </div>
 
-        <!-- Search -->
         <div class="mb-8">
-
             <input
                 id="bookingSearch"
                 type="text"
                 placeholder="Search student or property..."
-                class="w-full bg-white rounded-2xl shadow border border-gray-200 px-6 py-4 focus:ring-4 focus:ring-blue-100">
-
+                class="w-full bg-white rounded-2xl shadow border border-gray-200 px-6 py-4">
         </div>
 
-        <!-- Booking Cards -->
         <div id="bookingContainer" class="space-y-8">
 
             @forelse($bookings as $booking)
@@ -76,14 +68,12 @@
 
                 <div class="grid lg:grid-cols-[280px_1fr]">
 
-                    <!-- Image -->
                     <div>
 
                         @if($booking->accommodation->photos->first())
 
-                            <img
-                                src="{{ asset('storage/'.$booking->accommodation->photos->first()->image_path) }}"
-                                class="h-full w-full object-cover">
+                            <img src="{{ asset('storage/'.$booking->accommodation->photos->first()->image_path) }}"
+                                 class="h-full w-full object-cover">
 
                         @else
 
@@ -95,8 +85,7 @@
 
                     </div>
 
-                    <!-- Details -->
-                    <div class="lg:col-span-3 p-8">
+                    <div class="p-8">
 
                         <div class="flex justify-between">
 
@@ -130,125 +119,98 @@
                                     Rejected
                                 </span>
 
-                            @else
+                            @elseif($booking->status=="Moved In")
 
                                 <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-bold">
-                                    Completed
+                                    🏠 Moved In
                                 </span>
 
                             @endif
 
                         </div>
 
-                      <div class="mt-8 space-y-4">
+                        <div class="mt-8 grid md:grid-cols-3 gap-6">
 
-    <div class="grid md:grid-cols-3 gap-6">
+                            <div class="bg-slate-50 rounded-2xl p-4">
+                                <p class="text-gray-500 text-sm">Student</p>
+                                <p class="student-name font-bold text-lg">
+                                    {{ $booking->student->name }}
+                                </p>
+                            </div>
 
-        <div class="bg-slate-50 rounded-2xl p-4">
+                            <div class="bg-slate-50 rounded-2xl p-4">
+                                <p class="text-gray-500 text-sm">Phone</p>
+                                <p class="font-bold">
+                                    {{ $booking->phone }}
+                                </p>
+                            </div>
 
-            <p class="text-gray-500 text-sm">Student</p>
+                            <div class="bg-slate-50 rounded-2xl p-4">
+                                <p class="text-gray-500 text-sm">Visit Date</p>
+                                <p class="font-bold">
+                                    {{ \Carbon\Carbon::parse($booking->visit_date)->format('d M Y') }}
+                                </p>
+                            </div>
 
-            <p class="font-bold text-lg">
-                {{ $booking->student->name }}
-            </p>
+                        </div>
 
-        </div>
+                        @if($booking->message)
 
-        <div class="bg-slate-50 rounded-2xl p-4">
+                        <div class="mt-6 bg-blue-50 border border-blue-100 rounded-2xl p-5">
 
-            <p class="text-gray-500 text-sm">Phone</p>
+                            <h3 class="font-bold mb-2">
+                                💬 Student Message
+                            </h3>
 
-            <p class="font-bold">
-                {{ $booking->phone }}
-            </p>
+                            {{ $booking->message }}
 
-        </div>
+                        </div>
 
-        <div class="bg-slate-50 rounded-2xl p-4">
+                        @endif
 
-            <p class="text-gray-500 text-sm">Visit Date</p>
+                        <div class="mt-8 flex gap-4 flex-wrap">
 
-            <p class="font-bold">
-                {{ \Carbon\Carbon::parse($booking->visit_date)->format('d M Y') }}
-            </p>
+                            @if($booking->status=="Pending")
 
-        </div>
+                            <form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="Approved">
+                                <button class="px-6 py-3 rounded-xl bg-green-600 text-white">
+                                    ✅ Approve
+                                </button>
+                            </form>
 
-    </div>
+                            <form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="Rejected">
+                                <button class="px-6 py-3 rounded-xl bg-red-600 text-white">
+                                    ❌ Reject
+                                </button>
+                            </form>
 
-    @if($booking->message)
+                            @elseif($booking->status=="Approved")
 
-        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                            <form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="Moved In">
+                                <button class="px-6 py-3 rounded-xl bg-blue-600 text-white">
+                                    🏠 Mark Moved In
+                                </button>
+                            </form>
 
-            <h3 class="font-bold text-slate-700 mb-2">
+                            @elseif($booking->status=="Moved In")
 
-                💬 Student Message
+                            <div class="px-6 py-3 rounded-xl bg-blue-100 text-blue-700 font-bold">
+                                🏠 Tenant Moved In
+                            </div>
 
-            </h3>
+                            @endif
 
-            <p class="text-gray-700">
+                        </div>
 
-                {{ $booking->message }}
-
-            </p>
-
-        </div>
-
-    @endif
-
-</div>
-
-                       <div class="mt-8 flex flex-wrap gap-4">
-
-@if($booking->status=="Pending")
-
-<form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
-@csrf
-@method('PATCH')
-
-<input type="hidden" name="status" value="Approved">
-
-<button class="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold">
-✅ Approve
-</button>
-
-</form>
-
-<form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
-@csrf
-@method('PATCH')
-
-<input type="hidden" name="status" value="Rejected">
-
-<button class="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold">
-❌ Reject
-</button>
-
-</form>
-
-@elseif($booking->status=="Approved")
-
-<form method="POST" action="{{ route('landlord.bookings.update',$booking) }}">
-@csrf
-@method('PATCH')
-
-<input type="hidden" name="status" value="Completed">
-
-<button class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold">
-✔ Mark Completed
-</button>
-
-</form>
-
-@elseif($booking->status=="Completed")
-
-<div class="px-6 py-3 rounded-xl bg-green-100 text-green-700 font-bold">
-✔ Booking Completed
-</div>
-
-@endif
-
-</div>
                     </div>
 
                 </div>
@@ -258,11 +220,9 @@
             @empty
 
                 <div class="bg-white rounded-3xl shadow-lg p-16 text-center">
-
                     <h2 class="text-3xl font-bold text-gray-500">
                         📭 No booking requests yet.
                     </h2>
-
                 </div>
 
             @endforelse
@@ -274,21 +234,19 @@
 </div>
 
 <script>
-document.getElementById('bookingSearch').addEventListener('keyup', function(){
+document.getElementById('bookingSearch').addEventListener('keyup', function () {
 
-    let value=this.value.toLowerCase();
+    let value = this.value.toLowerCase();
 
-    document.querySelectorAll('.booking-card').forEach(card=>{
+    document.querySelectorAll('.booking-card').forEach(card => {
 
-        let student=card.querySelector('.student-name').innerText.toLowerCase();
+        let student = card.querySelector('.student-name').innerText.toLowerCase();
+        let property = card.querySelector('.property-title').innerText.toLowerCase();
 
-        let property=card.querySelector('.property-title').innerText.toLowerCase();
-
-        if(student.includes(value)||property.includes(value)){
-            card.style.display='';
-        }else{
-            card.style.display='none';
-        }
+        card.style.display =
+            student.includes(value) || property.includes(value)
+            ? ''
+            : 'none';
 
     });
 

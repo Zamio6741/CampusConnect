@@ -16,6 +16,8 @@ class LandlordDashboardController extends Controller
             ->latest()
             ->get();
 
+        $totalRevenue = $rentals->sum('total_revenue');
+
         $propertyIds = $rentals->pluck('id');
 
         $bookingQuery = BookingRequest::whereIn(
@@ -33,12 +35,21 @@ class LandlordDashboardController extends Controller
             ->get();
 
         $notifications = \App\Models\Notification::where('user_id', $landlord->id)
-    ->latest()
-    ->get();
+            ->latest()
+            ->get();
+        $totalCapacity = $rentals->sum('capacity');
+
+$occupiedRentals = $rentals->where('available_spaces', 0)->count();
+
+$occupancy = $rentals->count() > 0
+    ? round(($occupiedRentals / $rentals->count()) * 100)
+    : 0;
 
         return view('landlord.dashboard', [
 
             'rentals' => $rentals,
+
+            'totalRevenue' => $totalRevenue,
 
             'recentBookings' => $recentBookings,
 
@@ -66,16 +77,12 @@ class LandlordDashboardController extends Controller
 
                 'featured' => $rentals->where('featured', 1)->count(),
 
-                'revenue' => BookingRequest::whereIn(
-    'accommodation_id',
-    $propertyIds
-)
-->where('status', 'Approved')
-->with('accommodation')
-->get()
-->sum(function ($booking) {
-    return $booking->accommodation->price ?? 0;
-}),
+                'revenue' => $totalRevenue,
+
+                'revenue' => $totalRevenue,
+
+                'occupiedRentals' => $occupiedRentals,
+
             ]
 
         ]);

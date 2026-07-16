@@ -3,137 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
-use App\Models\Notification;
-use App\Models\User;
+use App\Models\University;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BusinessController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Business::where(
-            'university_id',
-            Auth::user()->university_id
-        );
+    /*
+    |--------------------------------------------------------------------------
+    | Show Business Dashboard
+    |--------------------------------------------------------------------------
+    */
 
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
+  public function dashboard()
+{
+    $businesses = Business::where('user_id', auth()->id())->get();
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
+    $business = $businesses->first();
 
-        $businesses = $query->latest()->paginate(12);
+    return view('business.dashboard', compact('businesses', 'business'));
+}
 
-        return view('businesses.index', compact('businesses'));
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | Show Registration Form
+    |--------------------------------------------------------------------------
+    */
 
     public function create()
     {
-        return view('businesses.create');
+        $universities = University::orderBy('name')->get();
+
+        return view('business.create', compact('universities'));
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Store Business
+    |--------------------------------------------------------------------------
+    */
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
 
-            'name' => 'required|max:255',
-
-            'category' => 'required',
-
-            'description' => 'required',
-
-            'phone' => 'required',
-
-            'whatsapp' => 'nullable',
-
-            'location' => 'required',
-
-            'opening_hours' => 'nullable',
-
-        ]);
-
-        $business = Business::create([
-
-            'user_id' => Auth::id(),
-
-            'university_id' => Auth::user()->university_id,
-
-            'name' => $validated['name'],
-
-            'category' => $validated['category'],
-
-            'description' => $validated['description'],
-
-            'phone' => $validated['phone'],
-
-            'whatsapp' => $request->whatsapp,
-
-            'location' => $validated['location'],
-
-            'opening_hours' => $request->opening_hours,
-
-        ]);
-
-        // Notify only users from the same university
-        $users = User::where(
-            'university_id',
-            Auth::user()->university_id
-        )->get();
-
-        foreach ($users as $user) {
-
-            Notification::create([
-
-                'user_id' => $user->id,
-
-                'title' => 'New Business',
-
-                'message' => $business->name . ' has been added.',
-
-                'type' => 'business',
-
-            ]);
-
-        }
-
-        return redirect()
-            ->route('businesses.index')
-            ->with('success', 'Business posted successfully.');
-    }
-
-    public function show(Business $business)
-    {
-        abort_if(
-            $business->university_id != Auth::user()->university_id,
-            403
-        );
-
-        return view('businesses.show', compact('business'));
-    }
-
-    public function edit(Business $business)
-    {
-        abort_if(
-            $business->user_id != Auth::id(),
-            403
-        );
-
-        return view('businesses.edit', compact('business'));
-    }
-
-    public function update(Request $request, Business $business)
-    {
-        abort_if(
-            $business->user_id != Auth::id(),
-            403
-        );
-
-        $validated = $request->validate([
-
-            'name' => 'required|max:255',
+            'business_name' => 'required',
 
             'category' => 'required',
 
@@ -141,48 +54,45 @@ class BusinessController extends Controller
 
             'phone' => 'required',
 
-            'whatsapp' => 'nullable',
-
             'location' => 'required',
-
-            'opening_hours' => 'nullable',
 
         ]);
 
-        $business->update([
+        Business::create([
 
-            'name' => $validated['name'],
+            'user_id' => auth()->id(),
 
-            'category' => $validated['category'],
+            'university_id' => $request->university_id,
 
-            'description' => $validated['description'],
+            'business_name' => $request->business_name,
 
-            'phone' => $validated['phone'],
+            'category' => $request->category,
+
+            'description' => $request->description,
+
+            'phone' => $request->phone,
 
             'whatsapp' => $request->whatsapp,
 
-            'location' => $validated['location'],
+            'email' => $request->email,
 
-            'opening_hours' => $request->opening_hours,
+            'location' => $request->location,
+
+            'google_maps' => $request->google_maps,
+
+            'facebook' => $request->facebook,
+
+            'instagram' => $request->instagram,
+
+            'tiktok' => $request->tiktok,
+
+            'website' => $request->website,
+
+            'status' => 'Pending',
 
         ]);
 
-        return redirect()
-            ->route('businesses.show', $business)
-            ->with('success', 'Business updated successfully.');
-    }
-
-    public function destroy(Business $business)
-    {
-        abort_if(
-            $business->user_id != Auth::id(),
-            403
-        );
-
-        $business->delete();
-
-        return redirect()
-            ->route('businesses.index')
-            ->with('success', 'Business deleted successfully.');
+        return redirect()->route('business.dashboard')
+            ->with('success','Business registered successfully.');
     }
 }
