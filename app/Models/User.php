@@ -209,10 +209,7 @@ public function isBusinessOwner()
     |--------------------------------------------------------------------------
     */
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
+    
 /*
 |--------------------------------------------------------------------------
 | Bookings
@@ -222,6 +219,12 @@ public function isBusinessOwner()
 public function bookings()
 {
     return $this->hasMany(Booking::class, 'student_id');
+}
+
+public function notifications()
+{
+    return $this->hasMany(\App\Models\Notification::class)
+                ->latest();
 }
 
 }

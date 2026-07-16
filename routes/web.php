@@ -22,45 +22,119 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\LandlordDashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\RentalWizardController;
+use App\Http\Controllers\Landlord\RentalController;
+use App\Http\Controllers\Student\RentalBrowseController;
+use App\Http\Controllers\BookingRequestController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
-    Route::get('/landlord/rental/create/step1', [RentalWizardController::class, 'step1'])
+    Route::get('/landlord/rental/create/step1',
+        [RentalWizardController::class,'step1'])
         ->name('rental.step1');
 
-    Route::post('/landlord/rental/create/step1', [RentalWizardController::class, 'storeStep1'])
+    Route::post('/landlord/rental/create/step1',
+        [RentalWizardController::class,'storeStep1'])
         ->name('rental.step1.store');
 
-    Route::get('/landlord/rental/create/step2', [RentalWizardController::class, 'step2'])
+
+    Route::get('/landlord/rental/create/step2',
+        [RentalWizardController::class,'step2'])
         ->name('rental.step2');
 
-    Route::post('/landlord/rental/create/step2', [RentalWizardController::class, 'storeStep2'])
+    Route::post('/landlord/rental/create/step2',
+        [RentalWizardController::class,'storeStep2'])
         ->name('rental.step2.store');
-    Route::get('/landlord/rental/create/step3', [RentalWizardController::class, 'step3'])
+
+
+    Route::get('/landlord/rental/create/step3',
+        [RentalWizardController::class,'step3'])
         ->name('rental.step3');
 
-    Route::get('/landlord/rental/create/step4', [RentalWizardController::class, 'step4'])
+    Route::post('/landlord/rental/create/step3',
+        [RentalWizardController::class,'storeStep3'])
+        ->name('rental.step3.store');
+
+
+    Route::get('/landlord/rental/create/step4',
+        [RentalWizardController::class,'step4'])
         ->name('rental.step4');
 
-    Route::get('/landlord/rental/create/step5', [RentalWizardController::class, 'step5'])
+    Route::post('/landlord/rental/create/step4',
+        [RentalWizardController::class,'storeStep4'])
+        ->name('rental.step4.store');
+
+
+    Route::get('/landlord/rental/create/step5',
+        [RentalWizardController::class,'step5'])
         ->name('rental.step5');
+
+    Route::post('/landlord/rental/publish',
+        [RentalWizardController::class,'publish'])
+        ->name('rental.publish');
+    
+Route::get('/landlord/rentals', [RentalController::class, 'index'])
+    ->name('rentals.index');
+
+Route::get('/landlord/rentals/{accommodation}', [RentalController::class, 'show'])
+    ->name('rentals.show');
+
+Route::get('/landlord/rentals/{accommodation}/edit', [RentalController::class, 'edit'])
+    ->name('rentals.edit');
+
+Route::put('/landlord/rentals/{accommodation}', [RentalController::class, 'update'])
+    ->name('rentals.update');
+
+Route::delete('/landlord/rentals/{accommodation}', [RentalController::class, 'destroy'])
+    ->name('rentals.destroy');    
+
+Route::get('/landlord/rentals/{accommodation}', [RentalController::class, 'show'])
+    ->name('rentals.show');
+Route::put('/landlord/rentals/{accommodation}', [RentalController::class, 'update'])
+    ->name('rentals.update');  
+Route::delete('/landlord/rental/photo/{photo}', [RentalController::class, 'deletePhoto'])
+    ->name('rentals.photo.delete');
+
+Route::post('/landlord/rental/{accommodation}/photos', [RentalController::class, 'uploadPhotos'])
+    ->name('rentals.photos.upload');    
+    
+Route::get('/landlord/notifications', [NotificationController::class, 'index'])
+    ->middleware(['auth','role:Landlord'])
+    ->name('landlord.notifications');
+
+
+Route::get('/landlord/notifications', [NotificationController::class, 'index'])
+    ->name('landlord.notifications');
+
+Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.read');
+
+Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+    ->name('notifications.readAll');
+
+Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])
+    ->name('notifications.destroy');    
+
 });
+Route::get('/rentals/{accommodation}', [AccommodationController::class, 'show'])
+    ->name('rentals.public.show');
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware(['auth', 'role:Landlord'])->group(function () {
+
+    Route::get('/landlord/bookings', [App\Http\Controllers\Landlord\BookingManagementController::class, 'index'])
+        ->name('landlord.bookings');
+
+    Route::patch('/landlord/bookings/{booking}', [App\Http\Controllers\Landlord\BookingManagementController::class, 'update'])
+        ->name('landlord.bookings.update');
+
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     /*
-|--------------------------------------------------------------------------
-| Bookings
-|--------------------------------------------------------------------------
-*/
-
-Route::post(
-    '/accommodation/{accommodation}/book',
-    [BookingController::class, 'store']
-)->name('bookings.store');
+|---------
 
     /*
     |--------------------------------------------------------------------------
@@ -142,15 +216,15 @@ Route::patch('/marketplace/{marketplace}/sold', [MarketplaceController::class, '
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/rentals', [AccommodationController::class, 'rentals'])
-        ->name('rentals.index');
+   Route::middleware(['auth'])->group(function () {
 
-    Route::get('/rentals/create', [AccommodationController::class, 'createRental'])
-        ->name('rentals.create');
+    Route::get('/rentals', [RentalBrowseController::class, 'index'])
+        ->name('browse.rentals');
 
-    Route::post('/rentals', [AccommodationController::class, 'storeRental'])
-        ->name('rentals.store');
+    Route::get('/rentals/{accommodation}', [RentalBrowseController::class, 'show'])
+        ->name('browse.rental.show');
 
+});
     /*
     |--------------------------------------------------------------------------
     | Shared Accommodation Routes
@@ -326,6 +400,19 @@ Route::middleware(['auth'])->group(function () {
     })
         ->middleware('role:Admin')
         ->name('admin.dashboard');
+    Route::post(
+    '/rentals/{accommodation}/request',
+    [BookingRequestController::class, 'store']
+)->name('booking.request');    
+    Route::get(
+    '/bookings/{accommodation}/create',
+    [BookingRequestController::class, 'create']
+)->name('bookings.create');
+
+Route::post(
+    '/bookings/{accommodation}',
+    [BookingRequestController::class, 'store']
+)->name('bookings.store'); 
 
 });
 Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])

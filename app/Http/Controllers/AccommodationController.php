@@ -152,21 +152,8 @@ class AccommodationController extends Controller
     |--------------------------------------------------------------------------
     */
 
-   public function rentals()
-{
-    $rentals = Accommodation::where('listing_type', 'rental')
-        ->where('university_id', auth()->user()->university_id)
-        ->latest()
-        ->paginate(9);
 
-    $areas = NearbyArea::orderBy('name')->get();
-
-    return view('accommodation.rentals', compact(
-        'rentals',
-        'areas'
-    ));
-}
-
+    
     public function createRental()
     {
         $universities = University::orderBy('name')->get();

@@ -137,7 +137,7 @@
     </div>
 
 </form>
-                @csrf
+
 
         </div>
 

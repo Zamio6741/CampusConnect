@@ -10,15 +10,9 @@ class AccommodationImage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'accommodation_id',
-        'image_path',
-    ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
+    'accommodation_id',
+    'image_path',
+];
 
     public function accommodation()
     {

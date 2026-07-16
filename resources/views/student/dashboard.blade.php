@@ -54,7 +54,7 @@
 
     </a>
 
-    <a href="{{ route('rentals.index') }}"
+    <a href="{{ route('browse.rentals') }}"
        class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
 
         <span class="text-xl">🏡</span>
@@ -711,7 +711,7 @@
 
         <!-- RENTALS -->
 
-        <a href="{{ route('rentals.index') }}"
+        <a href="{{ route('browse.rentals') }}"
            class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 duration-300">
 
             <div class="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center text-4xl">

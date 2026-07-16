@@ -24,7 +24,7 @@
 
         <div class="bg-white rounded-3xl shadow-xl p-10">
 
-            <form method="POST">
+            <form method="POST" action="{{ route('rental.step4.store') }}">
 
                 @csrf
 
@@ -38,11 +38,12 @@
 
                     </label>
 
-                    <input
-                        type="number"
-                        class="w-full rounded-xl border-gray-300"
-                        placeholder="6000">
-
+                   <input
+                    type="number"
+                    name="price"
+                    class="w-full rounded-xl border-gray-300"
+                    placeholder="6000"
+                    required>
                 </div>
 
                 <!-- Phone -->
@@ -56,9 +57,10 @@
                     </label>
 
                     <input
-                        type="text"
-                        class="w-full rounded-xl border-gray-300"
-                        placeholder="+254712345678">
+type="text"
+name="phone"
+class="w-full rounded-xl border-gray-300"
+placeholder="+254712345678">
 
                 </div>
 
@@ -72,44 +74,56 @@
 
                     </label>
 
-                    <input
-                        type="text"
-                        class="w-full rounded-xl border-gray-300"
-                        placeholder="+254712345678">
-
+                   <input
+type="text"
+name="whatsapp"
+class="w-full rounded-xl border-gray-300"
+placeholder="+254712345678">
                 </div>
 
-                <!-- Facilities -->
+                <div class="grid grid-cols-2 gap-4">
 
-                <div class="mt-10">
+<label>
+<input type="checkbox" name="facilities[]" value="WiFi">
+WiFi
+</label>
 
-                    <h2 class="font-bold text-xl mb-5">
+<label>
+<input type="checkbox" name="facilities[]" value="Water">
+Water
+</label>
 
-                        Available Facilities
+<label>
+<input type="checkbox" name="facilities[]" value="Electricity">
+Electricity
+</label>
 
-                    </h2>
+<label>
+<input type="checkbox" name="facilities[]" value="CCTV">
+CCTV
+</label>
 
-                    <div class="grid grid-cols-2 gap-4">
+<label>
+<input type="checkbox" name="facilities[]" value="Parking">
+Parking
+</label>
 
-                        <label><input type="checkbox"> WiFi</label>
+<label>
+<input type="checkbox" name="facilities[]" value="Security Guard">
+Security Guard
+</label>
 
-                        <label><input type="checkbox"> Water</label>
+<label>
+<input type="checkbox" name="facilities[]" value="Laundry">
+Laundry
+</label>
 
-                        <label><input type="checkbox"> Electricity</label>
+<label>
+<input type="checkbox" name="facilities[]" value="Kitchen">
+Kitchen
+</label>
 
-                        <label><input type="checkbox"> CCTV</label>
-
-                        <label><input type="checkbox"> Parking</label>
-
-                        <label><input type="checkbox"> Security Guard</label>
-
-                        <label><input type="checkbox"> Laundry</label>
-
-                        <label><input type="checkbox"> Kitchen</label>
-
-                    </div>
-
-                </div>
+</div>
 
                 <div class="flex justify-between mt-12">
 
@@ -121,13 +135,13 @@
 
                     </a>
 
-                    <a
-                        href="{{ route('rental.step5') }}"
-                        class="px-8 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold">
+                   <button
+type="submit"
+class="px-8 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold">
 
-                        Next →
+Next →
 
-                    </a>
+</button>
 
                 </div>
 

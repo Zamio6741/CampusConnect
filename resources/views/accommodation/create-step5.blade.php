@@ -51,7 +51,7 @@
                         <h3 class="font-bold text-gray-700">Monthly Rent</h3>
 
                         <p class="text-3xl font-bold text-green-600">
-                            KES {{ number_format($step3['price'] ?? 0) }}
+                            KES {{ number_format($step4['price'] ?? 0) }}
                         </p>
                     </div>
 

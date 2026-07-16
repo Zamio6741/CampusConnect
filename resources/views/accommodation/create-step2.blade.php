@@ -2,110 +2,64 @@
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
 
-<div class="max-w-5xl mx-auto py-14">
+    <div class="max-w-5xl mx-auto py-14">
 
-<h1 class="text-5xl font-extrabold text-center text-orange-600">
-📍 Property Location
-</h1>
+        <h1 class="text-5xl font-extrabold text-center text-orange-600">
+            📍 Property Location
+        </h1>
 
-<p class="text-center text-gray-600 mt-3 text-lg">
-Step 2 of 5 • Tell students where your property is located
-</p>
+        <p class="text-center text-gray-600 mt-3 text-lg">
+            Step 2 of 5 • Tell students exactly where your property is located
+        </p>
 
-<div class="w-full bg-gray-200 rounded-full h-3 mt-8">
-    <div class="bg-orange-600 h-3 rounded-full w-2/5"></div>
-</div>
+        <div class="w-full bg-gray-200 rounded-full h-3 mt-8">
+            <div class="bg-orange-600 h-3 rounded-full" style="width:40%"></div>
+        </div>
 
-<div class="bg-white rounded-3xl shadow-xl mt-10 p-10">
+        <div class="bg-white rounded-3xl shadow-xl mt-10 p-10">
 
-<form>
+            <form method="POST" action="{{ route('rental.step2.store') }}">
+                @csrf
 
-<div class="mb-8">
+                <div class="mb-8">
 
-<label class="block font-bold mb-2">
+                    <label class="block font-bold mb-2">
+                        Exact Location
+                    </label>
 
-University
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ old('location') }}"
+                        placeholder="Example: Opposite QuickMart, 100m from Gate B"
+                        class="w-full rounded-xl border-gray-300">
 
-</label>
+                </div>
 
-<select
-class="w-full rounded-xl border-gray-300">
+                <div class="flex justify-between mt-10">
 
-<option>Kenyatta University</option>
+                    <a href="{{ route('rental.step1') }}"
+                       class="px-8 py-4 rounded-xl bg-gray-300 hover:bg-gray-400 font-bold">
 
-</select>
+                        ← Back
 
-<p class="text-sm text-gray-500 mt-2">
+                    </a>
 
-Students from this university will see your listing.
+                    <button
+                        type="submit"
+                        class="px-8 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold">
 
-</p>
+                        Next →
 
-</div>
+                    </button>
 
-<div class="mb-8">
+                </div>
 
-<label class="block font-bold mb-2">
+            </form>
 
-Nearby Area
+        </div>
 
-</label>
-
-<select
-class="w-full rounded-xl border-gray-300">
-
-<option>Select Area</option>
-
-<option>Kahawa Wendani</option>
-
-<option>Kahawa Sukari</option>
-
-<option>Zimmerman</option>
-
-<option>Roysambu</option>
-
-</select>
-
-</div>
-
-<div class="mb-8">
-
-<label class="block font-bold mb-2">
-
-Exact Location
-
-</label>
-
-<input
-type="text"
-placeholder="Example: Opposite QuickMart, 100m from Gate B"
-class="w-full rounded-xl border-gray-300">
-
-</div>
-
-<div class="flex justify-between mt-10">
-
-<a href="{{ route('rental.step1') }}"
-class="px-8 py-4 rounded-xl bg-gray-200 hover:bg-gray-300 font-bold">
-
-← Back
-
-</a>
-
-<a href="{{ route('rental.step3') }}"
-class="px-8 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold">
-
-Next →
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 

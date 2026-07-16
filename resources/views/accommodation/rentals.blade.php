@@ -53,7 +53,7 @@
 
         <div class="bg-white rounded-3xl shadow-xl p-8">
 
-            <form method="GET" action="{{ route('rentals.index') }}">
+            <form method="GET" action="{{ route('browse.rentals') }}">
 
                 <div class="grid lg:grid-cols-5 gap-5">
 
@@ -116,10 +116,10 @@
 
                         <!-- Image -->
 
-                        @if($rental->images->count())
+                        @if($rental->photos->count())
 
                             <img
-                                src="{{ asset('storage/'.$rental->images->first()->image_path) }}"
+                                src="{{ asset('storage/'.$rental->photos->first()->image_path) }}"
                                 class="h-64 w-full object-cover">
 
                         @else
@@ -191,7 +191,7 @@
                                 </span>
 
                                 <a
-                                    href="{{ route('rentals.show', $rental) }}"
+                                    href="{{ route('browse.rental.show', $rental) }}"
                                     class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-xl font-bold">
 
                                     View Details →

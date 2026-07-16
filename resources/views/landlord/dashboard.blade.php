@@ -4,7 +4,7 @@
 
     <div class="flex">
 
-        <!-- ================= SIDEBAR ================= -->
+        {{-- ================= SIDEBAR ================= --}}
 
         <aside class="w-80 bg-slate-900 text-white min-h-screen shadow-2xl">
 
@@ -20,113 +20,88 @@
 
             </div>
 
-            <div class="px-5 py-6">
+            <nav class="p-6 space-y-2">
 
-                <p class="text-xs uppercase text-slate-500 font-bold tracking-wider mb-4">
-                    Main Menu
-                </p>
+                <a href="{{ route('landlord.dashboard') }}"
+                   class="flex items-center gap-4 px-5 py-4 rounded-xl bg-sky-600">
 
-                <nav class="space-y-2">
+                    <span class="text-2xl">🏠</span>
 
-                    <a href="{{ route('landlord.dashboard') }}"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl bg-sky-600 hover:bg-sky-700 transition">
+                    <span class="font-semibold">
+                        Dashboard
+                    </span>
 
-                        <span class="text-xl">🏘️</span>
+                </a>
 
-                        <span class="font-semibold">
-                            Dashboard
-                        </span>
+                <a href="{{ route('rental.step1') }}"
+                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
 
-                    </a>
+                    <span class="text-2xl">➕</span>
 
-                    <a href="{{ route('rental.step1') }}"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 hover:translate-x-1 transition-all duration-200">
+                    <span>Add Rental</span>
 
-                        <span class="text-xl">➕</span>
+                </a>
 
-                        <span>
-                            Add Rental
-                        </span>
+                <a href="{{ route('rentals.index') }}"
+                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
 
-                    </a>
+                    <span class="text-2xl">🏢</span>
 
-                    <a href="{{ route('rentals.index') }}"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 hover:translate-x-1 transition-all duration-200">
+                    <span>My Rentals</span>
 
-                        <span class="text-xl">🏢</span>
+                </a>
 
-                        <span>
-                            My Rentals
-                        </span>
+                <a href="{{ route('landlord.bookings') }}"
+                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
 
-                    </a>
+                    <span class="text-2xl">📅</span>
 
-                    <a href="#"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 hover:translate-x-1 transition-all duration-200">
+                    <span>Bookings</span>
 
-                        <span class="text-xl">📅</span>
+                </a>
 
-                        <span>
-                            Bookings
-                        </span>
+                <a href="{{ route('profile.edit') }}"
+                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
 
-                    </a>
+                    <span class="text-2xl">👤</span>
 
-                    <a href="#"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 hover:translate-x-1 transition-all duration-200">
+                    <span>Profile</span>
 
-                        <span class="text-xl">📈</span>
+                </a>
 
-                        <span>
-                            Analytics
-                        </span>
-
-                    </a>
-
-                    <a href="{{ route('profile.edit') }}"
-                       class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 hover:translate-x-1 transition-all duration-200">
-
-                        <span class="text-xl">👤</span>
-
-                        <span>
-                            Profile
-                        </span>
-
-                    </a>
-
-                </nav>
-
-            </div>
+            </nav>
 
         </aside>
 
-        <!-- ================= MAIN CONTENT ================= -->
+        {{-- ================= MAIN CONTENT ================= --}}
 
         <main class="flex-1">
 
-            <!-- TOP NAVBAR -->
+            {{-- TOP BAR --}}
 
             <div class="bg-white shadow-sm border-b">
 
-                <div class="flex items-center justify-between px-10 py-6">
+                <div class="px-10 py-6 flex justify-between items-center">
 
                     <div>
 
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800">
+                        <h1 class="text-4xl font-extrabold text-slate-800">
 
-                            Welcome back,
+                            Welcome,
 
                             <span class="text-sky-600">
+
                                 {{ Auth::user()->name }}
+
                             </span>
 
                             👋
 
-                        </h2>
+                        </h1>
 
-                        <p class="text-slate-500 mt-1">
+                        <p class="text-gray-500 mt-2">
 
-                            Manage your rentals, bookings and tenants from one place.
+                            Manage all your rentals from one place.
 
                         </p>
 
@@ -134,18 +109,131 @@
 
                     <div class="flex items-center gap-5">
 
-                        <button class="relative bg-slate-100 p-3 rounded-xl hover:bg-slate-200 transition hover:scale-105">
+                        <div class="relative">
 
-                            🔔
+    <button id="notificationBtn"
+        class="bg-gray-100 rounded-xl p-3 hover:bg-gray-200 relative">
 
-                            <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                                3
-                            </span>
+        🔔
 
-                        </button>
+        @if($notifications->where('is_read', false)->count())
+            <span
+                class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">
+
+                {{ $notifications->where('is_read', false)->count() }}
+
+            </span>
+        @endif
+
+    </button>
+
+    <div
+        id="notificationMenu"
+        class="hidden absolute right-0 mt-3 w-96 bg-white rounded-2xl shadow-2xl border z-50">
+
+        <div class="flex justify-between items-center p-5 border-b">
+
+            <h2 class="font-bold text-lg">
+                Notifications
+            </h2>
+
+            <form method="POST"
+                  action="{{ route('notifications.readAll') }}">
+
+                @csrf
+                @method('PATCH')
+
+                <button
+                    class="text-sky-600 text-sm font-semibold">
+
+                    Mark all read
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="max-h-96 overflow-y-auto">
+
+            @forelse($notifications->take(8) as $notification)
+
+                <div class="p-4 border-b">
+
+                    <div class="flex justify-between">
+
+                        <div>
+
+                            <h3 class="font-bold">
+
+                                {{ $notification->title }}
+
+                            </h3>
+
+                            <p class="text-gray-500 text-sm">
+
+                                {{ $notification->message }}
+
+                            </p>
+
+                        </div>
+
+                        <div class="flex gap-2">
+
+                            @unless($notification->is_read)
+
+                            <form
+                                method="POST"
+                                action="{{ route('notifications.read',$notification) }}">
+
+                                @csrf
+                                @method('PATCH')
+
+                                <button>
+                                    ✔
+                                </button>
+
+                            </form>
+
+                            @endunless
+
+                            <form
+                                method="POST"
+                                action="{{ route('notifications.destroy',$notification) }}">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="text-red-600">
+                                    🗑
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @empty
+
+                <div class="p-10 text-center text-gray-500">
+
+                    No notifications.
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</div>
 
                         <a href="{{ route('rental.step1') }}"
-                           class="bg-sky-600 hover:bg-sky-700 text-white px-7 py-3 rounded-xl font-semibold shadow">
+                           class="bg-sky-600 hover:bg-sky-700 text-white px-7 py-3 rounded-xl font-semibold">
 
                             + Add Rental
 
@@ -157,205 +245,301 @@
 
             </div>
 
-            <!-- PAGE CONTENT START -->
+            {{-- PAGE CONTENT --}}
 
-<div class="p-8 lg:p-10">
+            <div class="p-10">
 
-<div class="mb-8">
+                <div class="mb-8">
 
-    <p class="text-gray-400 text-sm">
+                    <p class="text-gray-500">
 
-        Dashboard /
-        <span class="text-sky-600 font-semibold">
-            Landlord
-        </span>
+                        Dashboard /
 
-    </p>
+                        <span class="text-sky-600 font-bold">
 
-</div>
+                            Landlord
 
-    <!-- DASHBOARD STATS -->
+                        </span>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-
-        <!-- Rentals -->
-
-        <div class="bg-white rounded-3xl shadow-lg p-8 border-l-8 border-sky-500">
-
-            <div class="flex justify-between items-center">
-
-                <div>
-
-                    <p class="text-gray-500 text-sm uppercase">
-                        Total Rentals
                     </p>
 
-                    <h2 class="text-5xl font-bold mt-4 text-slate-800">
-                        {{ $stats['rentals'] }}
-                    </h2>
+                </div>
+
+                {{-- ================= STATISTICS ================= --}}
+
+                <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                    <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                        <div class="text-5xl mb-4">
+                            🏠
+                        </div>
+
+                        <h2 class="text-5xl font-bold text-blue-600">
+
+                            {{ $stats['rentals'] }}
+
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+
+                            Properties
+
+                        </p>
+
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                        <div class="text-5xl mb-4">
+                            📅
+                        </div>
+
+                        <h2 class="text-5xl font-bold text-orange-600">
+
+                            {{ $stats['bookings'] }}
+
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+
+                            Bookings
+
+                        </p>
+
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                        <div class="text-5xl mb-4">
+                            ⏳
+                        </div>
+
+                        <h2 class="text-5xl font-bold text-yellow-500">
+
+                            {{ $stats['pending'] }}
+
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+
+                            Pending
+
+                        </p>
+
+                    </div>
+
+                    <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                        <div class="text-5xl mb-4">
+                            ✅
+                        </div>
+
+                        <h2 class="text-5xl font-bold text-green-600">
+
+                            {{ $stats['approved'] }}
+
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+
+                            Approved
+
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <div class="text-5xl">
-                   🏘️
-                </div>
+                                <!-- ================================================= -->
+                <!-- QUICK ACTIONS -->
+                <!-- ================================================= -->
 
-            </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
-        </div>
+                    <a href="{{ route('rental.step1') }}"
+                       class="bg-gradient-to-r from-sky-600 to-blue-700 text-white rounded-3xl p-8 shadow-lg hover:scale-105 transition">
 
-        <!-- Views -->
+                        <div class="text-5xl mb-4">
+                            ➕
+                        </div>
 
-        <div class="bg-white rounded-3xl shadow-lg p-8 border-l-8 border-purple-500">
+                        <h2 class="text-2xl font-bold">
+                            Add Property
+                        </h2>
 
-            <div class="flex justify-between items-center">
+                        <p class="mt-2 text-sky-100">
+                            Publish a new rental property.
+                        </p>
 
-                <div>
+                    </a>
 
-                    <p class="text-gray-500 text-sm uppercase">
-                        Property Views
-                    </p>
+                    <a href="{{ route('rentals.index') }}"
+                       class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
 
-                    <h2 class="text-5xl font-bold mt-4 text-purple-600">
-                        {{ $stats['views'] }}
-                    </h2>
+                        <div class="text-5xl mb-4">
+                            🏘️
+                        </div>
 
-                </div>
+                        <h2 class="text-2xl font-bold text-slate-800">
+                            My Rentals
+                        </h2>
 
-                <div class="text-5xl">
-                    👀
-                </div>
+                        <p class="mt-2 text-gray-500">
+                            Manage your listed properties.
+                        </p>
 
-            </div>
+                    </a>
 
-        </div>
+                    <a href="{{ route('landlord.bookings') }}"
+                       class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
 
-        <!-- Bookings -->
+                        <div class="text-5xl mb-4">
+                            📅
+                        </div>
 
-        <div class="bg-white rounded-3xl shadow-lg p-8 border-l-8 border-orange-500">
+                        <h2 class="text-2xl font-bold text-slate-800">
+                            Booking Requests
+                        </h2>
 
-            <div class="flex justify-between items-center">
+                        <p class="mt-2 text-gray-500">
+                            Review student booking requests.
+                        </p>
 
-                <div>
-
-                    <p class="text-gray-500 text-sm uppercase">
-                        Bookings
-                    </p>
-
-                    <h2 class="text-5xl font-bold mt-4 text-orange-500">
-                        {{ $stats['bookings'] }}
-                    </h2>
-
-                </div>
-
-                <div class="text-5xl">
-                    📅
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Revenue -->
-
-        <div class="bg-white rounded-3xl shadow-lg p-8 border-l-8 border-green-500">
-
-            <div class="flex justify-between items-center">
-
-                <div>
-
-                    <p class="text-gray-500 text-sm uppercase">
-                        Revenue
-                    </p>
-
-                    <h2 class="text-4xl font-bold mt-4 text-green-600">
-
-                        KES {{ number_format($stats['revenue'] ?? 0) }}
-
-                    </h2>
+                    </a>
 
                 </div>
 
-                <div class="text-5xl">
-                    💰
+                <!-- ================================================= -->
+                <!-- RECENT BOOKINGS -->
+                <!-- ================================================= -->
+
+                <div class="bg-white rounded-3xl shadow-lg mt-10 overflow-hidden">
+
+                    <div class="px-8 py-6 border-b flex justify-between items-center">
+
+                        <div>
+
+                            <h2 class="text-2xl font-bold text-slate-800">
+
+                                📅 Recent Booking Requests
+
+                            </h2>
+
+                            <p class="text-gray-500 mt-1">
+
+                                Latest booking activity.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    @forelse($recentBookings as $booking)
+
+                        <div class="flex justify-between items-center px-8 py-5 border-b hover:bg-slate-50">
+
+                            <div>
+
+                                <h3 class="font-bold text-lg">
+
+                                    {{ $booking->student->name ?? 'Student' }}
+
+                                </h3>
+
+                                <p class="text-gray-500">
+
+                                    {{ $booking->accommodation->title ?? 'Rental' }}
+
+                                </p>
+
+                            </div>
+
+                            <div>
+
+                                @if($booking->status == 'Pending')
+
+                                    <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full">
+
+                                        Pending
+
+                                    </span>
+
+                                @elseif($booking->status == 'Approved')
+
+                                    <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full">
+
+                                        Approved
+
+                                    </span>
+
+                                @elseif($booking->status == 'Rejected')
+
+                                    <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full">
+
+                                        Rejected
+
+                                    </span>
+
+                                @else
+
+                                    <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+
+                                        {{ $booking->status }}
+
+                                    </span>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                    @empty
+
+                        <div class="text-center py-16">
+
+                            <div class="text-6xl">
+
+                                📭
+
+                            </div>
+
+                            <h3 class="text-2xl font-bold mt-4">
+
+                                No Booking Requests Yet
+
+                            </h3>
+
+                            <p class="text-gray-500 mt-2">
+
+                                Booking requests will appear here.
+
+                            </p>
+
+                        </div>
+
+                    @endforelse
+
                 </div>
 
-            </div>
+                <!-- ================================================= -->
+<!-- MY RENTALS -->
+<!-- ================================================= -->
 
-        </div>
-
-    </div>
-
-    <!-- QUICK ACTIONS -->
-
-    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <a href="{{ route('rental.step1') }}"
-           class="bg-sky-600 hover:bg-sky-700 text-white rounded-2xl p-6 shadow-lg transition">
-
-            <div class="text-4xl mb-3">
-                ➕
-            </div>
-
-            <h3 class="text-xl font-bold">
-                Add New Rental
-            </h3>
-
-            <p class="mt-2 text-sky-100">
-                Publish a new rental property.
-            </p>
-
-        </a>
-
-        <a href="{{ route('rentals.index') }}"
-           class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
-
-            <div class="text-4xl mb-3">
-                🏢
-            </div>
-
-            <h3 class="text-xl font-bold text-slate-800">
-                Manage Rentals
-            </h3>
-
-            <p class="mt-2 text-gray-500">
-                Edit or remove existing listings.
-            </p>
-
-        </a>
-
-        <div class="bg-white rounded-2xl p-6 shadow-lg">
-
-            <div class="text-4xl mb-3">
-                ⭐
-            </div>
-
-            <h3 class="text-xl font-bold text-slate-800">
-                Performance
-            </h3>
-
-            <p class="mt-2 text-gray-500">
-                Your rentals are performing well.
-            </p>
-
-        </div>
-
-    </div>
-
-    <!-- ================= RECENT RENTALS ================= -->
-
-<div class="mt-12 bg-white rounded-3xl shadow-lg overflow-hidden">
+<div class="bg-white rounded-3xl shadow-lg overflow-hidden mt-10">
 
     <div class="flex justify-between items-center px-8 py-6 border-b">
 
         <div>
 
             <h2 class="text-2xl font-bold text-slate-800">
-               🏘️ Recent Rentals
+                🏘️ My Rentals
             </h2>
 
             <p class="text-gray-500 mt-1">
-                Manage all your published properties.
+                Manage all your listed properties.
             </p>
 
         </div>
@@ -409,25 +593,23 @@
 
             @forelse($rentals as $rental)
 
-                <tr class="border-b hover:bg-sky-50 transition duration-200">
+                <tr class="border-b hover:bg-sky-50 transition">
 
-                    <!-- Property -->
-
-                    <td class="px-8 py-6">
+                    <td class="px-8 py-5">
 
                         <div class="flex items-center gap-4">
 
-                            @if($rental->photos && $rental->photos->count())
+                            @if($rental->photos->count())
 
                                 <img
-                                    src="{{ asset('storage/'.$rental->photos->first()->photo_path) }}"
+                                    src="{{ asset('storage/'.$rental->photos->first()->image_path) }}"
                                     class="w-20 h-20 rounded-xl object-cover shadow">
 
                             @else
 
                                 <div class="w-20 h-20 rounded-xl bg-slate-200 flex items-center justify-center">
 
-                                    🏘️
+                                    🏠
 
                                 </div>
 
@@ -435,17 +617,21 @@
 
                             <div>
 
-                                <h3 class="font-bold text-slate-800">
+                                <h3 class="font-bold text-lg">
 
                                     {{ $rental->title }}
 
                                 </h3>
 
-                                <p class="text-gray-500 text-sm">
+                                <div class="flex gap-2 mt-2">
 
-                                    {{ ucfirst(str_replace('_',' ', $rental->property_type)) }}
+                                    <span class="text-xs bg-sky-100 text-sky-700 px-2 py-1 rounded-full">
 
-                                </p>
+                                        {{ ucfirst(str_replace('_',' ',$rental->property_type)) }}
+
+                                    </span>
+
+                                </div>
 
                             </div>
 
@@ -453,15 +639,11 @@
 
                     </td>
 
-                    <!-- University -->
-
                     <td class="px-6">
 
                         {{ $rental->university->name ?? '-' }}
 
                     </td>
-
-                    <!-- Location -->
 
                     <td class="px-6">
 
@@ -469,25 +651,29 @@
 
                     </td>
 
-                    <!-- Price -->
-
                     <td class="px-6">
 
                         <span class="font-bold text-green-600">
 
-                            KES {{ number_format($rental->price) }}
+                            KES {{ number_format($stats['revenue']) }}
 
                         </span>
 
                     </td>
 
-                    <!-- Status -->
-
                     <td class="px-6">
 
-                        @if($rental->verified)
+                        @if($rental->featured)
 
-                            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+                            <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+
+                                ⭐ Featured
+
+                            </span>
+
+                        @elseif($rental->verified)
+
+                            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm">
 
                                 ✔ Verified
 
@@ -495,9 +681,9 @@
 
                         @else
 
-                            <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-semibold">
+                            <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm">
 
-                                Pending
+                                ⏳ Pending
 
                             </span>
 
@@ -505,27 +691,40 @@
 
                     </td>
 
-                    <!-- Actions -->
-
                     <td class="px-6">
 
                         <div class="flex justify-center gap-3">
 
-                            <button
-                                class="px-4 py-2 rounded-lg bg-slate-200 text-slate-600 cursor-not-allowed"
-                                disabled>
+                            <a href="{{ route('rentals.show',$rental) }}"
+                               class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg">
+
+                                View
+
+                            </a>
+
+                            <a href="{{ route('rentals.edit',$rental) }}"
+                               class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg">
 
                                 Edit
 
-                            </button>
+                            </a>
 
-                            <button
-                                class="px-4 py-2 rounded-lg bg-red-100 text-red-600 cursor-not-allowed"
-                                disabled>
+                            <form
+                                action="{{ route('rentals.destroy',$rental) }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this property?')">
 
-                                Delete
+                                @csrf
+                                @method('DELETE')
 
-                            </button>
+                                <button
+                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
 
                         </div>
 
@@ -537,15 +736,15 @@
 
                 <tr>
 
-                    <td colspan="6" class="py-20 text-center">
+                    <td colspan="6" class="text-center py-20">
 
-                        <div class="text-6xl mb-4">
+                        <div class="text-6xl">
 
-                           🏘️
+                            🏘️
 
                         </div>
 
-                        <h3 class="text-2xl font-bold text-slate-700">
+                        <h3 class="text-2xl font-bold mt-4">
 
                             No Rentals Yet
 
@@ -553,7 +752,7 @@
 
                         <p class="text-gray-500 mt-2">
 
-                            Publish your first property and begin receiving booking requests.
+                            Publish your first property to begin receiving bookings.
 
                         </p>
 
@@ -578,91 +777,13 @@
 
 </div>
 
-<!-- ================= BOOKINGS + NOTIFICATIONS ================= -->
+<!-- ================================================= -->
+<!-- DASHBOARD FOOTER WIDGETS -->
+<!-- ================================================= -->
 
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mt-10">
 
-    <!-- ================= RECENT BOOKINGS ================= -->
-
-    <div class="xl:col-span-2 bg-white rounded-3xl shadow-lg">
-
-        <div class="px-8 py-6 border-b">
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                📅 Recent Bookings
-            </h2>
-
-            <p class="text-gray-500 mt-1">
-                Latest booking activity.
-            </p>
-
-        </div>
-
-        <div class="divide-y">
-
-            @forelse($recentBookings ?? [] as $booking)
-
-                <div class="flex items-center justify-between px-8 py-5">
-
-                    <div>
-
-                        <h3 class="font-bold text-slate-800">
-
-                            {{ $booking->user->name ?? 'Student' }}
-
-                        </h3>
-
-                        <p class="text-gray-500 text-sm">
-
-                            {{ $booking->accommodation->title ?? 'Rental' }}
-
-                        </p>
-
-                    </div>
-
-                    <div class="text-right">
-
-                        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm">
-
-                            {{ ucfirst($booking->status ?? 'Pending') }}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="text-center py-16">
-
-                    <div class="text-6xl">
-
-                        📭
-
-                    </div>
-
-                    <h3 class="text-xl font-bold mt-4">
-
-                        No bookings yet
-
-                    </h3>
-
-                    <p class="text-gray-500 mt-2">
-
-                        Booking requests will appear here.
-
-                    </p>
-
-                </div>
-
-            @endforelse
-
-        </div>
-
-    </div>
-
-    <!-- ================= NOTIFICATIONS ================= -->
+    <!-- Notifications -->
 
     <div class="bg-white rounded-3xl shadow-lg">
 
@@ -678,17 +799,17 @@
 
         <div class="divide-y">
 
-            @forelse($notifications ?? [] as $notification)
+            @forelse($notifications as $notification)
 
                 <div class="px-8 py-5">
 
-                    <p class="font-semibold text-slate-800">
+                    <h3 class="font-bold">
 
                         {{ $notification->title }}
 
-                    </p>
+                    </h3>
 
-                    <p class="text-gray-500 text-sm mt-2">
+                    <p class="text-gray-500 mt-2">
 
                         {{ $notification->message }}
 
@@ -700,17 +821,40 @@
 
                 <div class="text-center py-16">
 
-                    <div class="text-6xl">
+                    @if($notifications->count())
 
-                        🎉
+    @foreach($notifications->take(5) as $notification)
 
-                    </div>
+        <div class="border-b py-3">
 
-                    <p class="text-gray-500 mt-4">
+            <p class="font-semibold">
 
-                        You're all caught up.
+                {{ $notification->title }}
 
-                    </p>
+            </p>
+
+            <p class="text-gray-500 text-sm">
+
+                {{ $notification->message }}
+
+            </p>
+
+        </div>
+
+    @endforeach
+
+@else
+
+    <div class="text-center py-10">
+
+
+        <p class="text-gray-500">
+            No new notifications.
+        </p>
+
+    </div>
+
+@endif
 
                 </div>
 
@@ -720,34 +864,35 @@
 
     </div>
 
-</div>
-<!-- ================= PERFORMANCE & INSIGHTS ================= -->
-
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
-
     <!-- Occupancy -->
 
     <div class="bg-white rounded-3xl shadow-lg p-8">
 
-        <div class="flex items-center justify-between">
+        <div class="flex justify-between">
 
-            <h2 class="text-2xl font-bold text-slate-800">
+            <h2 class="text-2xl font-bold">
+
                 📊 Occupancy
+
             </h2>
 
-            <span class="text-4xl">
+            <span class="text-5xl">
+
                 🏘️
+
             </span>
 
         </div>
 
         @php
-            $occupied = $stats['bookings'] ?? 0;
-            $rentalsCount = max($stats['rentals'] ?? 1, 1);
-            $occupancy = min(100, round(($occupied / $rentalsCount) * 100));
+
+            $occupancy = $stats['rentals'] > 0
+                ? round(($stats['approved'] / $stats['rentals']) * 100)
+                : 0;
+
         @endphp
 
-        <div class="mt-8">
+        <div class="mt-10">
 
             <div class="flex justify-between mb-2">
 
@@ -765,7 +910,7 @@
 
             </div>
 
-            <div class="w-full bg-gray-200 rounded-full h-4">
+            <div class="w-full h-4 rounded-full bg-gray-200">
 
                 <div
                     class="bg-sky-600 h-4 rounded-full"
@@ -781,63 +926,29 @@
 
     <!-- Revenue -->
 
-    <div class="bg-white rounded-3xl shadow-lg p-8">
-
-        <div class="flex justify-between items-center">
-
-            <h2 class="text-2xl font-bold">
-
-                💰 Revenue
-
-            </h2>
-
-            <span class="text-4xl">
-
-                💵
-
-            </span>
-
-        </div>
-
-        <h1 class="text-4xl font-extrabold text-green-600 mt-8">
-
-            KES {{ number_format($stats['revenue'] ?? 0) }}
-
-        </h1>
-
-        <p class="text-gray-500 mt-2">
-
-            Total revenue generated.
-
-        </p>
-
-    </div>
-
-    <!-- Performance -->
-
-    <div class="bg-gradient-to-br from-sky-600 to-blue-700 text-white rounded-3xl shadow-lg p-8">
+    <div class="bg-gradient-to-br from-sky-600 to-blue-700 rounded-3xl shadow-lg text-white p-8">
 
         <div class="text-5xl">
 
-            ⭐
+            💰
 
         </div>
 
         <h2 class="text-2xl font-bold mt-6">
 
-            Performance Score
+            Revenue
 
         </h2>
 
-        <h1 class="text-6xl font-extrabold mt-6">
+        <h1 class="text-5xl font-extrabold mt-6">
 
-            {{ min(100, 70 + ($stats['rentals'] * 3)) }}
+            KES {{ number_format($stats['revenue']) }}
 
         </h1>
 
-        <p class="mt-3 text-sky-100">
+        <p class="mt-4 text-sky-100">
 
-            Great work! Keep your listings active.
+            Estimated earnings from approved bookings.
 
         </p>
 
@@ -845,26 +956,64 @@
 
 </div>
 
-<!-- ================= FOOTER ================= -->
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
 
-<footer class="mt-16 border-t pt-6 text-center text-gray-500">
+<footer class="mt-16 border-t pt-8 pb-10 text-center text-gray-500">
 
-    <p class="font-semibold">
+    <h3 class="font-bold text-lg">
+
         CampusConnect Landlord Portal
+
+    </h3>
+
+    <p class="mt-2">
+
+        Manage rentals, bookings and tenants efficiently.
+
     </p>
 
-    <p class="text-sm mt-1">
-        Helping landlords manage rentals efficiently.
+    <p class="mt-5 text-sm">
+
+        © {{ date('Y') }} CampusConnect. All Rights Reserved.
+
     </p>
 
 </footer>
+                               
+            </div>
 
-</div>
+            </div>
 
         </main>
 
     </div>
 
 </div>
+
+<script>
+
+const btn=document.getElementById('notificationBtn');
+
+const menu=document.getElementById('notificationMenu');
+
+btn.addEventListener('click',()=>{
+
+menu.classList.toggle('hidden');
+
+});
+
+document.addEventListener('click',function(e){
+
+if(!btn.contains(e.target)&&!menu.contains(e.target)){
+
+menu.classList.add('hidden');
+
+}
+
+});
+
+</script>
 
 </x-app-layout>
