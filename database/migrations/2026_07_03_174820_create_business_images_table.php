@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('business_images', function (Blueprint $table) {
+            $table->id();
 
-    $table->id();
+            $table->foreignId('business_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
 
-    $table->foreignId('business_id')
-          ->constrained()
-          ->cascadeOnDelete();
+            $table->string('image');
 
-    $table->string('image');
+            $table->boolean('cover')->default(false);
 
-    $table->timestamps();
-
-});
+            $table->timestamps();
+        });
     }
 
     /**

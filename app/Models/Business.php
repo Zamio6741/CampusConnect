@@ -58,4 +58,9 @@ class Business extends Model
         return $this->belongsTo(University::class);
     }
 
+    public function images()
+{
+    return $this->hasMany(BusinessImage::class);
+}
+
 }

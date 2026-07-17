@@ -26,6 +26,7 @@ use App\Http\Controllers\Landlord\RentalController;
 use App\Http\Controllers\Student\RentalBrowseController;
 use App\Http\Controllers\BookingRequestController;
 use App\Http\Controllers\BusinessDashboardController;
+use App\Http\Controllers\BusinessGalleryController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -380,6 +381,23 @@ Route::put('/businesses/{business}', [BusinessController::class, 'update'])
 
 Route::delete('/businesses/{business}', [BusinessController::class, 'destroy'])
     ->name('businesses.destroy');
+
+Route::get('/business/{business}/edit', [BusinessController::class, 'edit'])
+    ->name('businesses.edit');
+
+Route::put('/business/{business}', [BusinessController::class, 'update'])
+    ->name('businesses.update');  
+Route::get('/businesses/{business}/gallery', [BusinessGalleryController::class, 'index'])
+    ->name('business.gallery');
+
+Route::post('/businesses/{business}/gallery', [BusinessGalleryController::class, 'store'])
+    ->name('business.gallery.store');
+
+Route::delete('/gallery/{image}', [BusinessGalleryController::class, 'destroy'])
+    ->name('business.gallery.destroy');
+
+Route::patch('/gallery/{image}/cover', [BusinessGalleryController::class, 'cover'])
+    ->name('business.gallery.cover');     
     
 /*
 |--------------------------------------------------------------------------

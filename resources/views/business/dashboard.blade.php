@@ -178,7 +178,7 @@
                 <!-- Statistics will go here -->
                 <!-- ================= Statistics ================= -->
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-10">
 
                     <div class="bg-white rounded-3xl shadow-lg p-8">
 
@@ -303,201 +303,7 @@
                 </div>
 
 
-                <!-- ================= Business Card ================= -->
 
-                <div class="mt-10 bg-white rounded-3xl shadow-xl overflow-hidden">
-
-                    <div class="bg-gradient-to-r from-sky-600 to-blue-600 p-10 text-white">
-
-                        <div class="flex justify-between items-center">
-
-                            <div class="flex items-center gap-6">
-
-                                <div class="w-28 h-28 rounded-3xl bg-white text-6xl flex items-center justify-center shadow-lg">
-
-                                    🏪
-
-                                </div>
-
-                                <div>
-
-                                    <h2 class="text-5xl font-bold">
-
-                                        {{ $business->business_name }}
-
-                                    </h2>
-
-                                    <p class="text-blue-100 mt-2 text-xl">
-
-                                        {{ $business->category }}
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <span class="bg-white/20 px-6 py-3 rounded-full font-bold">
-
-                                {{ $business->status }}
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <div class="p-10">
-
-                        <div class="grid md:grid-cols-2 gap-12">
-
-                            <div>
-
-                                <h3 class="font-bold text-xl mb-5">
-
-                                    Business Information
-
-                                </h3>
-
-                                <div class="space-y-5">
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            Description
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ $business->description }}
-
-                                        </p>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            Location
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ $business->location }}
-
-                                        </p>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            University
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ optional($business->university)->name ?? 'N/A' }}
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="font-bold text-xl mb-5">
-
-                                    Contact Details
-
-                                </h3>
-
-                                <div class="space-y-5">
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            Phone
-
-                                        </span>
-
-                                        <p class="font-semibold text-green-700">
-
-                                            {{ $business->phone }}
-
-                                        </p>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            WhatsApp
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ $business->whatsapp }}
-
-                                        </p>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            Email
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ $business->email }}
-
-                                        </p>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span class="text-gray-500">
-
-                                            Website
-
-                                        </span>
-
-                                        <p class="font-semibold">
-
-                                            {{ $business->website ?: 'Not added yet' }}
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- Quick Actions start below -->
                  <!-- My Businesses -->
 
 <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
@@ -517,176 +323,206 @@
 
     </div>
 
-    @if($businesses->count())
+   @if($businesses->count())
 
-        <table class="w-full">
+<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-            <thead class="bg-slate-100">
+@foreach($businesses as $business)
 
-                <tr>
+<div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition">
 
-                    <th class="text-left px-6 py-4">Business</th>
+    <div class="p-6">
 
-                    <th class="text-left px-6 py-4">Category</th>
+        <div class="flex items-center gap-5">
 
-                    <th class="text-left px-6 py-4">Status</th>
+            @php
+    $cover = $business->images()->where('cover', true)->first();
+@endphp
 
-                    <th class="text-left px-6 py-4">Views</th>
+@if($cover)
 
-                    <th class="text-left px-6 py-4">Rating</th>
+    <img
+        src="{{ asset('storage/'.$cover->image) }}"
+        class="w-24 h-24 rounded-2xl object-cover border">
 
-                    <th class="text-left px-6 py-4">Actions</th>
+@elseif($business->logo)
 
-                </tr>
+    <img
+        src="{{ asset('storage/'.$business->logo) }}"
+        class="w-24 h-24 rounded-2xl object-cover border">
 
-            </thead>
+@else
+                <div class="w-24 h-24 rounded-2xl bg-sky-100 flex items-center justify-center text-5xl">
 
-            <tbody>
+                    🏪
 
-            @foreach($businesses as $business)
+                </div>
 
-                <tr class="border-b hover:bg-slate-50">
+            @endif
 
-                    <td class="px-6 py-5">
+            <div>
 
-                        <div class="font-bold">
+                <h2 class="text-2xl font-bold">
 
-                            {{ $business->business_name }}
+                    {{ $business->business_name }}
 
-                        </div>
+                </h2>
 
-                        <div class="text-gray-500 text-sm">
+                <p class="text-gray-500">
 
-                            {{ $business->location }}
+                    {{ $business->category }}
 
-                        </div>
+                </p>
 
-                    </td>
+                <p class="text-sm text-gray-400">
 
-                    <td class="px-6">
+                    {{ $business->location }}
 
-                        {{ $business->category }}
-
-                    </td>
-
-                    <td class="px-6">
-
-                        @if($business->status=='Approved')
-
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
-
-                                Approved
-
-                            </span>
-
-                        @elseif($business->status=='Rejected')
-
-                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full">
-
-                                Rejected
-
-                            </span>
-
-                        @else
-
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
-
-                                Pending
-
-                            </span>
-
-                        @endif
-
-                    </td>
-
-                    <td class="px-6">
-
-                        {{ $business->views }}
-
-                    </td>
-
-                    <td class="px-6">
-
-                        ⭐ {{ number_format($business->rating,1) }}
-
-                    </td>
-
-                    <td class="px-6">
-
-                        <div class="flex gap-2">
-
-                            <a href="{{ route('businesses.edit',$business) }}"
-
-                               class="bg-sky-600 text-white px-3 py-2 rounded-lg">
-
-                                Edit
-
-                            </a>
-
-                            <form method="POST"
-
-                                  action="{{ route('businesses.destroy',$business) }}">
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-
-                                    onclick="return confirm('Delete business?')"
-
-                                    class="bg-red-600 text-white px-3 py-2 rounded-lg">
-
-                                    Delete
-
-                                </button>
-
-                            </form>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            @endforeach
-
-            </tbody>
-
-        </table>
-
-    @else
-
-        <div class="text-center py-24">
-
-            <div class="text-7xl">
-
-                🏪
+                </p>
 
             </div>
 
-            <h2 class="text-3xl font-bold mt-6">
+        </div>
 
-                No businesses yet
+        <div class="grid grid-cols-2 gap-4 mt-8">
 
-            </h2>
+            <div class="bg-slate-100 rounded-xl p-4 text-center">
 
-            <p class="text-gray-500 mt-3">
+                👀
 
-                Register your first business.
+                <div class="font-bold text-xl">
 
-            </p>
+                    {{ $business->views }}
 
-            <a href="{{ route('businesses.create') }}"
+                </div>
 
-               class="inline-block mt-8 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold">
+                <div class="text-sm text-gray-500">
 
-                Register Business
+                    Views
 
-            </a>
+                </div>
+
+            </div>
+
+            <div class="bg-slate-100 rounded-xl p-4 text-center">
+
+                ⭐
+
+                <div class="font-bold text-xl">
+
+                    {{ number_format($business->rating,1) }}
+
+                </div>
+
+                <div class="text-sm text-gray-500">
+
+                    Rating
+
+                </div>
+
+            </div>
 
         </div>
 
-    @endif
+        <div class="mt-6">
+
+            @if($business->status=='Approved')
+
+                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full">
+
+                    ✅ Approved
+
+                </span>
+
+            @elseif($business->status=='Rejected')
+
+                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full">
+
+                    ❌ Rejected
+
+                </span>
+
+            @else
+
+                <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full">
+
+                    ⏳ Pending Review
+
+                </span>
+
+            @endif
+
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-8">
+
+            <a href="{{ route('businesses.edit',$business) }}"
+               class="bg-sky-600 text-white py-3 rounded-xl text-center font-semibold">
+
+                ✏ Edit
+
+            </a>
+
+            <a href="{{ route('business.gallery', $business) }}"
+                class="bg-orange-500 text-white py-3 rounded-xl text-center font-semibold">
+                        🖼 Gallery
+            </a>
+
+            <a href="#"
+               class="bg-green-600 text-white py-3 rounded-xl text-center font-semibold">
+
+                👁 Preview
+
+            </a>
+
+            <form
+                action="{{ route('businesses.destroy',$business) }}"
+                method="POST">
+
+                @csrf
+                @method('DELETE')
+
+                <button
+                    onclick="return confirm('Delete business?')"
+                    class="w-full bg-red-600 text-white py-3 rounded-xl font-semibold">
+
+                    🗑 Delete
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endforeach
+@else
+
+<div class="text-center py-20">
+
+    <div class="text-7xl">🏪</div>
+
+    <h2 class="text-3xl font-bold mt-5">
+        No businesses yet
+    </h2>
+
+    <p class="text-gray-500 mt-3">
+        Register your first business.
+    </p>
+
+    <a href="{{ route('businesses.create') }}"
+       class="inline-block mt-8 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold">
+        Register Business
+    </a>
+
+</div>
+
+@endif
+
+</div>
 
 </div>
 <!-- ================= Analytics ================= -->
