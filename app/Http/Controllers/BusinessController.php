@@ -145,4 +145,17 @@ $business->update($validated);
         ->with('success', 'Business updated successfully.');
 }
 
+public function show(Business $business)
+{
+    $business->load([
+        'images',
+        'products',
+        'university',
+    ]);
+
+    $business->increment('views');
+
+   return view('business.preview', compact('business'));
+}
+
 }

@@ -63,4 +63,14 @@ class Business extends Model
     return $this->hasMany(BusinessImage::class);
 }
 
+public function products()
+{
+    return $this->hasMany(Product::class);
+}
+
+public function messages()
+{
+    return $this->hasMany(Message::class);
+}
+
 }

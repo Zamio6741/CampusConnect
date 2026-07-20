@@ -62,13 +62,13 @@
 
     </a>
 
-    <a href="{{ route('marketplace.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+   <a href="{{ route('student.marketplace') }}"
+   class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
 
-        <span class="text-xl">🛒</span>
-        <span>Marketplace</span>
+    <span class="text-xl">🛒</span>
+    <span>Marketplace</span>
 
-    </a>
+</a>
 
     <a href="{{ route('lostfound.index') }}"
        class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
@@ -388,7 +388,7 @@
 
                 </a>
 
-                <a href="{{ route('marketplace.index') }}"
+                <a href="{{ route('student.marketplace')  }}"
                    class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-xl font-bold transition">
 
                     Marketplace
@@ -686,7 +686,7 @@
 
         <!-- MARKETPLACE -->
 
-        <a href="{{ route('marketplace.index') }}"
+        <a href="{{ route('student.marketplace') }}"
            class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 duration-300">
 
             <div class="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center text-4xl">

@@ -27,6 +27,11 @@ use App\Http\Controllers\Student\RentalBrowseController;
 use App\Http\Controllers\BookingRequestController;
 use App\Http\Controllers\BusinessDashboardController;
 use App\Http\Controllers\BusinessGalleryController;
+use App\Http\Controllers\BusinessPreviewController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StudentBusinessController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\BusinessMessageController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -114,7 +119,7 @@ Route::patch('/notifications/read-all', [NotificationController::class, 'markAll
     ->name('notifications.readAll');
 
 Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])
-    ->name('notifications.destroy');    
+    ->name('notifications.destroy');      
 
 });
 
@@ -397,7 +402,32 @@ Route::delete('/gallery/{image}', [BusinessGalleryController::class, 'destroy'])
     ->name('business.gallery.destroy');
 
 Route::patch('/gallery/{image}/cover', [BusinessGalleryController::class, 'cover'])
-    ->name('business.gallery.cover');     
+    ->name('business.gallery.cover');   
+    
+// Student sends message
+Route::post('/businesses/{business}/message', [MessageController::class, 'store'])
+    ->name('messages.store');
+
+// Business owner views inbox
+Route::get('/business/messages', [MessageController::class, 'index'])
+    ->name('messages.index');
+
+// Business owner replies
+Route::post('/messages/{message}/reply', [MessageController::class, 'reply'])
+    ->name('messages.reply');    
+     
+Route::get('/business/messages', [BusinessMessageController::class, 'index'])
+    ->name('business.messages');   
+
+Route::get('/business/messages', [BusinessMessageController::class, 'index'])
+    ->name('business.messages');
+
+Route::get('/business/messages/{message}', [BusinessMessageController::class, 'show'])
+    ->name('business.messages.show');
+
+Route::post('/business/messages/{message}/reply', [BusinessMessageController::class, 'reply'])
+    ->name('business.messages.reply');     
+    
     
 /*
 |--------------------------------------------------------------------------
@@ -444,7 +474,52 @@ Route::patch('/notifications/{notification}/read', [NotificationController::clas
 
 Route::post('/landlord/rental/publish',
     [RentalWizardController::class, 'publish'])
-    ->name('rental.publish');    
+    ->name('rental.publish');        
+
+Route::resource('products', ProductController::class);
+
+Route::patch('/products/{product}/featured',
+    [ProductController::class, 'featured'])
+    ->name('products.featured');    
+Route::get('/marketplace', [StudentBusinessController::class, 'index'])
+    ->name('student.marketplace');
+
+Route::middleware(['auth','student'])->group(function () {
+
+    Route::get('/marketplace',
+        [StudentBusinessController::class,'index'])
+        ->name('student.marketplace');
+
+});    
+
+Route::middleware(['auth', 'role:Student'])->group(function () {
+
+    Route::get('/businesses', [StudentBusinessController::class, 'index'])
+        ->name('businesses.index');
+}); 
+
+Route::middleware(['auth', 'student'])->group(function () {
+
+    Route::get('/businesses', [StudentBusinessController::class, 'index'])
+        ->name('businesses.index');
+
+    Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
+        ->name('businesses.show');
 
 });
+
+Route::middleware(['auth', 'verified', 'student'])->group(function () {
+
+    Route::get('/businesses', [StudentBusinessController::class, 'index'])
+        ->name('businesses.index');
+
+    Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
+        ->name('business.preview');
+
+});
+
+Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
+    ->name('business.preview');
+});
+
 require __DIR__.'/auth.php';

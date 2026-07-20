@@ -69,7 +69,7 @@
 
                 </a>
 
-                <a href="#"
+                <a href="{{ route('products.index') }}"
                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
 
                     🛍 Products
@@ -467,14 +467,7 @@
                 class="bg-orange-500 text-white py-3 rounded-xl text-center font-semibold">
                         🖼 Gallery
             </a>
-
-            <a href="#"
-               class="bg-green-600 text-white py-3 rounded-xl text-center font-semibold">
-
-                👁 Preview
-
-            </a>
-
+            
             <form
                 action="{{ route('businesses.destroy',$business) }}"
                 method="POST">
