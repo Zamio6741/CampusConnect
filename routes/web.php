@@ -32,6 +32,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StudentBusinessController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\BusinessMessageController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\BusinessReviewController;
+use App\Http\Controllers\StudentMessageController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -520,6 +523,47 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
 Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
     ->name('business.preview');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/student/messages', [StudentMessageController::class, 'index'])
+        ->name('student.messages');
+
+    Route::get('/student/messages/{message}', [StudentMessageController::class, 'show'])
+        ->name('student.messages.show');
+
+    Route::post('/student/messages/{message}/send',
+    [StudentMessageController::class, 'send'])
+    ->name('student.messages.send');    
+
 });
+
+});
+
+Route::middleware(['auth', 'role:Business Owner'])->group(function () {
+
+    Route::resource('business/advertisements', AdvertisementController::class)
+        ->names([
+            'index'   => 'business.advertisements.index',
+            'create'  => 'business.advertisements.create',
+            'store'   => 'business.advertisements.store',
+            'show'    => 'business.advertisements.show',
+            'edit'    => 'business.advertisements.edit',
+            'update'  => 'business.advertisements.update',
+            'destroy' => 'business.advertisements.destroy',
+        ]);
+
+});
+
+Route::post('/businesses/{business}/reviews', [BusinessReviewController::class, 'store'])
+    ->name('business.reviews.store');
+Route::post(
+    '/businesses/{business}/reviews',
+    [BusinessReviewController::class, 'store']
+)->name('business.reviews.store');  
+
+Route::post('/business/messages/{message}/reply',
+    [BusinessMessageController::class, 'reply'])
+    ->name('business.messages.reply');
 
 require __DIR__.'/auth.php';

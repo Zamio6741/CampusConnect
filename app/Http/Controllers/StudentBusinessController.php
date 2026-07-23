@@ -40,6 +40,7 @@ public function show(Business $business)
         'images',
         'products',
         'user',
+        'reviews.user',
     ]);
 
     return view(

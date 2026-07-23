@@ -232,4 +232,9 @@ public function messages()
     return $this->hasMany(Message::class, 'student_id');
 }
 
+public function businessReviews()
+{
+    return $this->hasMany(BusinessReview::class);
+}
+
 }

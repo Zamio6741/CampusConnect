@@ -1,4 +1,7 @@
 <x-app-layout>
+    <div class="bg-red-600 text-white text-4xl p-8 text-center">
+    TEST VIEW LOADED
+</div>
 
 <div class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
 
@@ -335,22 +338,190 @@
 
 </div>
 
-        {{-- Reviews --}}
-        <div class="bg-white rounded-3xl shadow-xl mt-10 mb-20 p-8">
+       {{-- Reviews --}}
+<div class="bg-white rounded-3xl shadow-xl mt-10 mb-20 p-8">
 
-            <h2 class="text-3xl font-bold">
+    <h2 class="text-3xl font-bold mb-8">
+        ⭐ Customer Reviews
+    </h2>
 
-                Reviews
+  @auth
 
-            </h2>
+<form method="POST"
+      action="{{ route('business.reviews.store', $business) }}"
+      class="mb-10">
 
-            <div class="mt-8 text-gray-500">
+    @csrf
 
-                Reviews module coming next...
+    <div class="mb-6">
+        <label class="font-semibold">
+            Rating
+        </label>
+
+        <select
+            name="rating"
+            class="w-full mt-2 border rounded-xl p-4"
+            required>
+
+            <option value="">Select Rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+            <option value="4">⭐⭐⭐⭐ Good</option>
+            <option value="3">⭐⭐⭐ Average</option>
+            <option value="2">⭐⭐ Poor</option>
+            <option value="1">⭐ Very Poor</option>
+
+        </select>
+    </div>
+
+    <div class="mb-6">
+        <label class="font-semibold">
+            Review
+        </label>
+
+        <textarea
+            name="review"
+            rows="5"
+            class="w-full border rounded-xl p-4"
+            placeholder="Share your experience..."
+            required></textarea>
+    </div>
+
+    <button
+        class="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 rounded-xl font-bold">
+
+        Submit Review
+
+    </button>
+
+</form>
+
+@endauth
+
+@auth
+
+<form method="POST"
+      action="{{ route('business.reviews.store', $business) }}"
+      class="mb-10">
+
+    @csrf
+
+    <div class="mb-6">
+        <label class="font-semibold">
+            Rating
+        </label>
+
+        <select
+            name="rating"
+            class="w-full mt-2 border rounded-xl p-4"
+            required>
+
+            <option value="">Select Rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+            <option value="4">⭐⭐⭐⭐ Good</option>
+            <option value="3">⭐⭐⭐ Average</option>
+            <option value="2">⭐⭐ Poor</option>
+            <option value="1">⭐ Very Poor</option>
+
+        </select>
+    </div>
+
+    <div class="mb-6">
+        <label class="font-semibold">
+            Review
+        </label>
+
+        <textarea
+            name="review"
+            rows="5"
+            class="w-full border rounded-xl p-4"
+            placeholder="Share your experience..."
+            required></textarea>
+    </div>
+
+    <button
+        class="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 rounded-xl font-bold">
+
+        Submit Review
+
+    </button>
+
+</form>
+
+@endauth
+
+    @forelse($business->reviews()->with('user')->latest()->get() as $review)
+
+        <div class="border-t pt-6 mt-6">
+
+            <div class="flex justify-between">
+
+                <div>
+
+                    <h3 class="font-bold">
+
+                        {{ $review->user->name }}
+
+                    </h3>
+
+                    <div class="text-yellow-500">
+
+                        @for($i=1;$i<=5;$i++)
+
+                            {{ $i <= $review->rating ? '★' : '☆' }}
+
+                        @endfor
+
+                    </div>
+
+                </div>
+
+                <span class="text-gray-400">
+
+                    {{ $review->created_at->diffForHumans() }}
+
+                </span>
 
             </div>
 
+            <p class="mt-4 text-gray-700">
+
+                {{ $review->review }}
+
+            </p>
+
+            @if($review->reply)
+
+                <div class="mt-4 bg-sky-50 p-4 rounded-xl">
+
+                    <strong class="text-sky-700">
+
+                        Business Reply
+
+                    </strong>
+
+                    <p class="mt-2">
+
+                        {{ $review->reply }}
+
+                    </p>
+
+                </div>
+
+            @endif
+
         </div>
+
+    @empty
+
+        <div class="text-center py-12 text-gray-500">
+
+            No reviews yet.
+
+        </div>
+
+    @endforelse
+
+</div>
 
     </div>
 

@@ -6,6 +6,8 @@ use App\Models\Business;
 use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessController extends Controller
 {
@@ -21,7 +23,27 @@ class BusinessController extends Controller
 
     $business = $businesses->first();
 
-    return view('business.dashboard', compact('businesses', 'business'));
+    $unreadMessages = 0;
+
+    if ($business) {
+        $unreadMessages = Message::where('business_id', $business->id)
+            ->where('sender_id', '!=', auth()->id())
+            ->where('is_read', false)
+            ->count();
+    }
+
+   $unreadMessages = Message::whereHas('business', function ($q) {
+        $q->where('user_id', auth()->id());
+    })
+    ->where('sender_id', '!=', auth()->id())
+    ->where('is_read', false)
+    ->count();
+
+return view(
+    'business.dashboard',
+    compact('businesses', 'business', 'unreadMessages')
+);
+
 }
 
     /*

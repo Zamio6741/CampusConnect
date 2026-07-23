@@ -229,7 +229,7 @@
                     @endif
 
                 </a>
-
+                
                 <!-- User Dropdown -->
                 <x-dropdown align="right" width="56">
 

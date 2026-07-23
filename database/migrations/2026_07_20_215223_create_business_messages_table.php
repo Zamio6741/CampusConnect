@@ -6,32 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
-{
-    Schema::create('business_messages', function (Blueprint $table) {
-        $table->id();
+    {
+        Schema::create('business_messages', function (Blueprint $table) {
 
-        $table->foreignId('business_id')->constrained()->cascadeOnDelete();
-        $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
+            $table->id();
 
-        $table->string('name');
-        $table->string('email');
-        $table->string('phone')->nullable();
+            $table->foreignId('business_id')->constrained()->cascadeOnDelete();
 
-        $table->text('message');
+            $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
 
-        $table->boolean('is_read')->default(false);
+            // Who actually sent this message
+            $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
 
-        $table->timestamps();
-    });
-}
+            $table->text('message');
 
-    /**
-     * Reverse the migrations.
-     */
+            $table->boolean('is_read')->default(false);
+
+            $table->timestamps();
+
+        });
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('business_messages');

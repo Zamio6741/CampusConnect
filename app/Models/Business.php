@@ -73,4 +73,19 @@ public function messages()
     return $this->hasMany(Message::class);
 }
 
+public function advertisements()
+{
+    return $this->hasMany(Advertisement::class);
+}
+
+public function reviews()
+{
+    return $this->hasMany(BusinessReview::class);
+}
+
+public function replies()
+{
+    return $this->hasMany(MessageReply::class);
+}
+
 }

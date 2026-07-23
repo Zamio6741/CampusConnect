@@ -9,8 +9,8 @@ class Message extends Model
     protected $fillable = [
         'business_id',
         'student_id',
+        'sender_id',
         'message',
-        'reply',
         'is_read',
     ];
 
@@ -22,5 +22,10 @@ class Message extends Model
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
     }
 }

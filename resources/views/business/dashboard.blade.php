@@ -54,21 +54,19 @@
                     🏠 Dashboard
 
                 </a>
+<a href="{{ route('business.preview', $business) }}"
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
 
-                <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    🏪 My Business
 
-                    🏪 My Business
+</a>
 
-                </a>
+                <a href="{{ route('business.advertisements.index') }}"
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
 
-                <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    📢 Advertisements
 
-                    📢 Advertisements
-
-                </a>
-
+</a>
                 <a href="{{ route('products.index') }}"
                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
 
@@ -77,39 +75,26 @@
                 </a>
 
                 <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    📈 Analytics
+<a href="{{ route('business.messages') }}"
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    💬 Messages
+</a>
 
-                    📈 Analytics
-
-                </a>
+<a href="#"
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    ⭐ Reviews
+</a>
+                <a href="#"
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    🔔 Notifications
+</a>
 
                 <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-                    💬 Messages
-
-                </a>
-
-                <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-                    ⭐ Reviews
-
-                </a>
-
-                <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-                    🔔 Notifications
-
-                </a>
-
-                <a href="#"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-                    ⚙ Settings
-
-                </a>
+   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+    ⚙ Settings
+</a>
 
             </nav>
 
@@ -687,44 +672,36 @@
 
         </a>
 
-        <a href="#"
-           class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl p-6 text-center transition">
+        <a href="{{ route('business.advertisements.index') }}"
+   class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl p-6 text-center transition">
 
-            <div class="text-4xl mb-3">📢</div>
+    <div class="text-4xl mb-3">📢</div>
 
-            <div class="font-bold">
+    <div class="font-bold">
+        Advertisements
+    </div>
 
-                Advertisements
+<a href="{{ route('business.messages') }}"
+   class="bg-green-600 hover:bg-green-700 text-white rounded-2xl p-6 text-center transition">
 
-            </div>
+    <div class="text-4xl mb-3">💬</div>
 
-        </a>
+    <div class="font-bold">
+        Messages
+    </div>
 
-        <a href="#"
-           class="bg-green-600 hover:bg-green-700 text-white rounded-2xl p-6 text-center transition">
+</a>
 
-            <div class="text-4xl mb-3">💬</div>
+<a href="#"
+   class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-6 text-center transition">
 
-            <div class="font-bold">
+    <div class="text-4xl mb-3">⭐</div>
 
-                Messages
+    <div class="font-bold">
+        Reviews
+    </div>
 
-            </div>
-
-        </a>
-
-        <a href="#"
-           class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-6 text-center transition">
-
-            <div class="text-4xl mb-3">⭐</div>
-
-            <div class="font-bold">
-
-                Reviews
-
-            </div>
-
-        </a>
+</a>
 
     </div>
 

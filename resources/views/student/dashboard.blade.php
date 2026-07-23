@@ -19,103 +19,220 @@
                 </p>
 
             </div>
+<nav class="mt-6 px-4">
 
-            <nav class="mt-8 px-4 space-y-2">
+    <style>
+        .sidebar-link{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            padding:14px 20px;
+            border-radius:18px;
+            color:#374151;
+            font-weight:500;
+            transition:.25s;
+        }
+
+        .sidebar-link:hover{
+            background:#eff6ff;
+            color:#0284c7;
+            transform:translateX(4px);
+        }
+    </style>
+
+    <!-- Dashboard -->
 
     <a href="{{ route('dashboard') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg transition duration-300 hover:scale-[1.02]">
+       class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-sky-600 to-blue-700 text-white font-semibold shadow-lg mb-6">
 
         <span class="text-xl">🏠</span>
         <span>Dashboard</span>
 
     </a>
 
-    <a href="{{ route('notes.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+    <!-- Academic -->
 
-        <span class="text-xl">📚</span>
-        <span>Notes</span>
+    <p class="px-5 mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
 
-    </a>
+        📚 Academic
 
-    <a href="{{ route('pastpapers.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+    </p>
 
-        <span class="text-xl">📄</span>
-        <span>Past Papers</span>
+    <div class="space-y-2 mb-6">
 
-    </a>
+        <a href="{{ route('notes.index') }}" class="sidebar-link">
 
-    <a href="{{ route('campus.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+            📖 <span>Notes</span>
 
-        <span class="text-xl">🏫</span>
-        <span>Campus Hostels</span>
+        </a>
 
-    </a>
+        <a href="{{ route('pastpapers.index') }}" class="sidebar-link">
 
-    <a href="{{ route('browse.rentals') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+            📄 <span>Past Papers</span>
 
-        <span class="text-xl">🏡</span>
-        <span>Rentals</span>
+        </a>
 
-    </a>
+        <a href="{{ route('announcements.index') }}" class="sidebar-link">
 
-   <a href="{{ route('student.marketplace') }}"
-   class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+            📢 <span>Announcements</span>
 
-    <span class="text-xl">🛒</span>
-    <span>Marketplace</span>
+        </a>
 
-</a>
+    </div>
 
-    <a href="{{ route('lostfound.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+    <!-- Student Life -->
 
-        <span class="text-xl">🔍</span>
-        <span>Lost & Found</span>
+    <p class="px-5 mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
 
-    </a>
+        🏡 Student Life
 
-    <a href="{{ route('student-services.index') }}"
-       class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300">
+    </p>
 
-        <span class="text-xl">🎓</span>
-        <span>Student Services</span>
+    <div class="space-y-2 mb-6">
 
-    </a>
+        <a href="{{ route('campus.index') }}" class="sidebar-link">
+
+            🏫 <span>Campus Hostels</span>
+
+        </a>
+
+        <a href="{{ route('browse.rentals') }}" class="sidebar-link">
+
+            🏠 <span>Rentals</span>
+
+        </a>
+
+        <a href="{{ route('student.marketplace') }}" class="sidebar-link">
+
+            🛒 <span>Marketplace</span>
+
+        </a>
+
+        <a href="{{ route('lostfound.index') }}" class="sidebar-link">
+
+            🔍 <span>Lost & Found</span>
+
+        </a>
+
+    </div>
+
+    <!-- Services -->
+
+    <p class="px-5 mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+
+        💼 Services
+
+    </p>
+
+    <div class="space-y-2 mb-6">
+
+        <a href="{{ route('student-services.index') }}" class="sidebar-link">
+
+            🎓 <span>Student Services</span>
+
+        </a>
+
+        <a href="{{ route('businesses.index') }}" class="sidebar-link">
+
+            🏢 <span>Businesses</span>
+
+        </a>
+
+    </div>
+
+    <!-- Communication -->
+
+    <p class="px-5 mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+
+        💬 Communication
+
+    </p>
+
+    <div class="space-y-2">
+
+        <a href="{{ route('student.messages') }}" class="sidebar-link flex justify-between">
+
+            <span>💬 Messages</span>
+
+        </a>
+
+    </div>
 
 </nav>
-<div class="mt-10 px-8">
+<div class="mt-10 px-6">
 
-    <div class="border-t pt-8">
+    <div class="rounded-3xl bg-slate-50 border p-6">
 
-        <h3 class="text-xs font-bold tracking-widest text-gray-400 uppercase mb-5">
-            Your Activity
+        <h3 class="font-bold text-gray-700 mb-5">
+
+            📊 Your Activity
+
         </h3>
 
         <div class="space-y-4">
 
             <div class="flex justify-between">
-                <span class="text-gray-600">📚 Notes</span>
+                <span>📚 Notes</span>
                 <span class="font-bold text-blue-600">{{ $stats['notes'] ?? 0 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-600">🏡 Rentals</span>
+                <span>🏡 Rentals</span>
                 <span class="font-bold text-green-600">{{ $stats['accommodations'] ?? 0 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-600">🛒 Marketplace</span>
+                <span>🛒 Marketplace</span>
                 <span class="font-bold text-orange-500">{{ $stats['marketplace'] ?? 0 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-gray-600">📢 Announcements</span>
+                <span>📢 Announcements</span>
                 <span class="font-bold text-red-500">{{ $stats['announcements'] ?? 0 }}</span>
             </div>
+
+            <div class="flex justify-between">
+                <span>💬 Messages</span>
+                <span class="font-bold text-sky-600">{{ $stats['messages'] ?? 0 }}</span>
+            </div>
+
+        </div>
+
+        <div class="mt-8">
+
+            <p class="text-sm text-gray-500 mb-2">
+
+                Semester Progress
+
+            </p>
+
+            <div class="w-full bg-gray-200 rounded-full h-2">
+
+                <div class="bg-blue-600 h-2 rounded-full" style="width:78%"></div>
+
+            </div>
+
+            <p class="text-right text-sm text-gray-500 mt-2">
+
+                78%
+
+            </p>
+
+        </div>
+
+        <div class="mt-8 bg-blue-50 rounded-2xl p-5">
+
+            <h4 class="font-bold text-blue-700">
+
+                💡 Daily Tip
+
+            </h4>
+
+            <p class="text-sm text-gray-600 mt-2">
+
+                Stay consistent. Small progress every day becomes huge success.
+
+            </p>
 
         </div>
 
@@ -124,45 +241,7 @@
 </div>
 <div class="px-8 mt-8">
 
-    <!-- Semester Progress -->
 
-    <div class="mb-8">
-
-        <div class="flex justify-between text-xs text-gray-500 mb-2">
-
-            <span>Semester Progress</span>
-
-            <span>78%</span>
-
-        </div>
-
-        <div class="w-full h-2 bg-gray-200 rounded-full">
-
-            <div class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"
-                 style="width:78%">
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Daily Tip -->
-
-    <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-5 shadow-sm border">
-
-        <div class="text-blue-600 font-bold mb-2">
-            💡 Daily Tip
-        </div>
-
-        <p class="text-sm text-gray-600 leading-6">
-
-            Stay consistent.
-
-            Small progress every day becomes huge success.
-
-        </p>
-
-    </div>
 
     <!-- Footer -->
 

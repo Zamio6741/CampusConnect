@@ -16,7 +16,12 @@
 
     </div>
 
-    @forelse($messages as $message)
+    @forelse($messages as $conversation)
+
+        @php
+            $first = $conversation->first();
+            $last = $conversation->last();
+        @endphp
 
         <div class="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-gray-100 hover:shadow-xl transition">
 
@@ -25,17 +30,17 @@
                 <div>
 
                     <h2 class="text-xl font-bold">
-                        {{ $message->student->name }}
+                        {{ $first->student->name }}
                     </h2>
 
                     <p class="text-gray-500">
-                        {{ $message->student->email }}
+                        {{ $first->student->email }}
                     </p>
 
                 </div>
 
                 <span class="text-sm text-gray-400">
-                    {{ $message->created_at->diffForHumans() }}
+                    {{ $last->created_at->diffForHumans() }}
                 </span>
 
             </div>
@@ -43,45 +48,23 @@
             <div class="mt-5">
 
                 <p class="text-gray-700 leading-7">
-                    {{ $message->message }}
+                    {{ Str::limit($last->message, 120) }}
                 </p>
 
             </div>
 
-            @if($message->reply)
-
-                <div class="mt-5 bg-green-50 border-l-4 border-green-500 rounded-xl p-4">
-
-                    <div class="font-semibold text-green-700 mb-2">
-                        Your Reply
-                    </div>
-
-                    <p class="text-gray-700">
-                        {{ $message->reply }}
-                    </p>
-
-                </div>
-
-            @else
-
-                <div class="mt-5 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl p-4">
-
-                    <span class="font-semibold text-yellow-700">
-                        Waiting for your reply
-                    </span>
-
-                </div>
-
-            @endif
+            <div class="mt-4 text-sm text-gray-500">
+                {{ $conversation->count() }} messages
+            </div>
 
             <div class="mt-6">
 
-                <a href="{{ route('business.messages.show',$message) }}"
-class="inline-flex items-center px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl">
+                <a href="{{ route('business.messages.show', $first) }}"
+                   class="inline-flex items-center px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl">
 
-Open Conversation
+                    Open Conversation
 
-</a>
+                </a>
 
             </div>
 

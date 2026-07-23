@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Accommodation;
 use App\Models\Announcement;
 use App\Models\Business;
+use App\Models\Message;
 use App\Models\Note;
 use App\Models\Notification;
 use App\Models\PastPaper;
@@ -91,6 +92,17 @@ class DashboardController extends Controller
             ->where('is_read', false)
             ->count();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Unread Messages
+        |--------------------------------------------------------------------------
+        */
+
+        $unreadMessages = Message::where('student_id', $user->id)
+            ->where('sender_id', '!=', $user->id)
+            ->where('is_read', false)
+            ->count();
+
         return view('student.dashboard', [
 
             'user' => $user,
@@ -108,6 +120,8 @@ class DashboardController extends Controller
             'notifications' => $notifications,
 
             'notificationCount' => $notificationCount,
+
+            'unreadMessages' => $unreadMessages,
 
         ]);
     }
