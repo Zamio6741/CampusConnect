@@ -16,6 +16,13 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs
+
+RUN chmod -R 775 storage bootstrap/cache
+
 RUN php artisan storage:link || true
 
 EXPOSE 8080
