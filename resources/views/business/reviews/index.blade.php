@@ -45,7 +45,7 @@
 
                     <h2 class="text-5xl font-black text-yellow-500">
 
-                        {{ number_format($reviews->avg('rating') ?? 0,1) }}
+                        {{ number_format($averageRating,1) }}
 
                     </h2>
 
@@ -72,7 +72,7 @@
 
                 <h2 class="text-5xl font-black mt-4 text-slate-800">
 
-                    {{ $reviews->count() }}
+                    {{ $totalReviews }}
 
                 </h2>
 
@@ -141,7 +141,7 @@
 
                 <h2 class="text-5xl font-black mt-4 text-sky-600">
 
-                    {{ $reviews->where('rating',5)->count() }}
+                    {{ $fiveStar }}
 
                 </h2>
 
@@ -250,9 +250,9 @@
 
         @php
 
-            $count = $reviews->where('rating',$i)->count();
+            $count = $distribution[$i];
 
-            $percentage = $reviews->count()
+            $percentage = $totalReviews
                 ? ($count/$reviews->count())*100
                 : 0;
 

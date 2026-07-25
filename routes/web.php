@@ -35,6 +35,9 @@ use App\Http\Controllers\BusinessMessageController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\BusinessReviewController;
 use App\Http\Controllers\StudentMessageController;
+use App\Http\Controllers\BusinessAnalyticsController;
+use App\Http\Controllers\BusinessNotificationController;
+use App\Http\Controllers\BusinessSettingsController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -552,6 +555,8 @@ Route::middleware(['auth', 'role:Business Owner'])->group(function () {
             'update'  => 'business.advertisements.update',
             'destroy' => 'business.advertisements.destroy',
         ]);
+        Route::get('/business/reviews', [BusinessReviewController::class, 'index'])
+    ->name('business.reviews');
 
 });
 
@@ -565,5 +570,23 @@ Route::post(
 Route::post('/business/messages/{message}/reply',
     [BusinessMessageController::class, 'reply'])
     ->name('business.messages.reply');
+
+Route::get(
+    '/business/analytics',
+    [BusinessAnalyticsController::class, 'index']
+)->name('business.analytics');    
+
+Route::middleware(['auth','role:Business Owner'])->group(function () {
+
+    Route::get('/business/notifications',
+        [BusinessNotificationController::class, 'index'])
+        ->name('business.notifications');
+
+   Route::get('/business/settings', [BusinessSettingsController::class, 'index'])
+    ->name('business.settings');
+
+Route::put('/business/settings', [BusinessSettingsController::class, 'update'])
+    ->name('business.settings.update');
+});
 
 require __DIR__.'/auth.php';

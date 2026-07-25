@@ -74,26 +74,33 @@
 
                 </a>
 
-                <a href="#"
+                <a href="{{ route('business.analytics') }}"
    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    📈 Analytics
+    📈
+    <span>Analytics</span>
+</a>
+
 <a href="{{ route('business.messages') }}"
    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    💬 Messages
+    💬
+    <span>Messages</span>
 </a>
 
-<a href="#"
+<a href="{{ route('business.reviews') }}"
    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    ⭐ Reviews
+    ⭐
+    <span>Reviews</span>
 </a>
-                <a href="#"
+                <a href="{{ route('business.notifications') }}"
    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    🔔 Notifications
+    🔔
+    <span>Notifications</span>
 </a>
 
-                <a href="#"
+               <a href="{{ route('business.settings') }}"
    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    ⚙ Settings
+    ⚙️
+    <span>Settings</span>
 </a>
 
             </nav>
@@ -507,138 +514,162 @@
 
 <div class="grid lg:grid-cols-2 gap-8 mt-10">
 
-    <!-- Recent Activity -->
-
+    {{-- Recent Activity --}}
     <div class="bg-white rounded-3xl shadow-xl p-8">
 
         <h2 class="text-2xl font-bold mb-6">
-
             📋 Recent Activity
-
         </h2>
 
         <div class="space-y-5">
 
+            @if($productsCount > 0)
             <div class="flex items-start gap-4">
-
-                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-
-                    ✔
-
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                    📦
                 </div>
-
                 <div>
-
                     <p class="font-semibold">
-
-                        Business Registered
-
+                        Products Uploaded
                     </p>
-
                     <p class="text-gray-500 text-sm">
-
-                        Your business profile has been created successfully.
-
+                        You currently have <strong>{{ $productsCount }}</strong> products listed.
                     </p>
-
                 </div>
-
             </div>
+            @endif
 
+            @if($reviewsCount > 0)
             <div class="flex items-start gap-4">
-
                 <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
-
-                    ⏳
-
+                    ⭐
                 </div>
-
                 <div>
-
                     <p class="font-semibold">
-
-                        Waiting for Approval
-
+                        Customer Reviews
                     </p>
-
                     <p class="text-gray-500 text-sm">
-
-                        Your business is pending administrator approval.
-
+                        Your business has received <strong>{{ $reviewsCount }}</strong> reviews.
                     </p>
-
                 </div>
-
             </div>
+            @endif
+
+            @if($unreadMessages > 0)
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                    💬
+                </div>
+                <div>
+                    <p class="font-semibold">
+                        New Messages
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                        You have <strong>{{ $unreadMessages }}</strong> unread customer messages.
+                    </p>
+                </div>
+            </div>
+            @endif
+
+            @if($advertisementsCount > 0)
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                    📢
+                </div>
+                <div>
+                    <p class="font-semibold">
+                        Advertisements Running
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                        You have <strong>{{ $advertisementsCount }}</strong> active advertisements.
+                    </p>
+                </div>
+            </div>
+            @endif
+
+            @if($productsCount==0 && $reviewsCount==0 && $unreadMessages==0 && $advertisementsCount==0)
+            <div class="text-center py-10 text-gray-500">
+                No recent activity yet.
+            </div>
+            @endif
 
         </div>
 
     </div>
 
-    <!-- Performance -->
 
+    {{-- Performance Overview --}}
     <div class="bg-white rounded-3xl shadow-xl p-8">
 
         <h2 class="text-2xl font-bold mb-6">
-
             📈 Performance Overview
-
         </h2>
 
         <div class="space-y-6">
 
             <div>
-
                 <div class="flex justify-between">
-
                     <span>Total Views</span>
-
                     <span>{{ $business->views }}</span>
-
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-
-                    <div class="bg-sky-600 h-3 rounded-full" style="width:10%"></div>
-
+                    <div class="bg-sky-600 h-3 rounded-full"
+                         style="width: {{ min($business->views,100) }}%">
+                    </div>
                 </div>
-
             </div>
 
             <div>
-
                 <div class="flex justify-between">
-
-                    <span>Business Rating</span>
-
-                    <span>{{ number_format($business->rating,1) }}/5</span>
-
+                    <span>Average Rating</span>
+                    <span>{{ $averageRating }}/5</span>
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-
-                    <div class="bg-yellow-400 h-3 rounded-full" style="width:5%"></div>
-
+                    <div class="bg-yellow-400 h-3 rounded-full"
+                         style="width: {{ $averageRating*20 }}%">
+                    </div>
                 </div>
-
             </div>
 
             <div>
-
                 <div class="flex justify-between">
-
-                    <span>Profile Completion</span>
-
-                    <span>80%</span>
-
+                    <span>Total Reviews</span>
+                    <span>{{ $reviewsCount }}</span>
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
+                    <div class="bg-green-500 h-3 rounded-full"
+                         style="width: {{ min($reviewsCount*10,100) }}%">
+                    </div>
+                </div>
+            </div>
 
-                    <div class="bg-green-500 h-3 rounded-full" style="width:80%"></div>
-
+            <div>
+                <div class="flex justify-between">
+                    <span>Products</span>
+                    <span>{{ $productsCount }}</span>
                 </div>
 
+                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
+                    <div class="bg-indigo-500 h-3 rounded-full"
+                         style="width: {{ min($productsCount*10,100) }}%">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between">
+                    <span>Advertisements</span>
+                    <span>{{ $advertisementsCount }}</span>
+                </div>
+
+                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
+                    <div class="bg-purple-500 h-3 rounded-full"
+                         style="width: {{ min($advertisementsCount*10,100) }}%">
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -692,7 +723,7 @@
 
 </a>
 
-<a href="#"
+<a href="{{ route('business.reviews') }}"
    class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-6 text-center transition">
 
     <div class="text-4xl mb-3">⭐</div>

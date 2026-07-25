@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use App\Models\University;
+use App\Models\Product;
+use App\Models\BusinessReview;
+use App\Models\Advertisement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Message;
@@ -24,28 +27,43 @@ class BusinessController extends Controller
     $business = $businesses->first();
 
     $unreadMessages = 0;
+    $productsCount = 0;
+    $reviewsCount = 0;
+    $averageRating = 0;
+    $advertisementsCount = 0;
 
     if ($business) {
+
         $unreadMessages = Message::where('business_id', $business->id)
             ->where('sender_id', '!=', auth()->id())
             ->where('is_read', false)
             ->count();
+
+        $productsCount = Product::where('business_id', $business->id)->count();
+
+        $reviewsCount = BusinessReview::where('business_id', $business->id)->count();
+
+        $averageRating = round(
+            BusinessReview::where('business_id', $business->id)->avg('rating') ?? 0,
+            1
+        );
+
+        $advertisementsCount = Advertisement::where('business_id', $business->id)->count();
     }
 
-   $unreadMessages = Message::whereHas('business', function ($q) {
-        $q->where('user_id', auth()->id());
-    })
-    ->where('sender_id', '!=', auth()->id())
-    ->where('is_read', false)
-    ->count();
-
-return view(
-    'business.dashboard',
-    compact('businesses', 'business', 'unreadMessages')
-);
-
+    return view(
+        'business.dashboard',
+        compact(
+            'businesses',
+            'business',
+            'unreadMessages',
+            'productsCount',
+            'reviewsCount',
+            'averageRating',
+            'advertisementsCount'
+        )
+    );
 }
-
     /*
     |--------------------------------------------------------------------------
     | Show Registration Form
