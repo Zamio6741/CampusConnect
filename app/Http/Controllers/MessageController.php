@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 
 class MessageController extends Controller
 {
@@ -20,6 +21,14 @@ class MessageController extends Controller
             'student_id' => auth()->id(),
             'message' => $request->message,
         ]);
+
+        Notification::create([
+    'user_id' => $business->user_id,
+    'title' => 'New Message',
+    'message' => auth()->user()->name . ' sent you a message.',
+    'type' => 'message',
+    'link' => route('business.messages'),
+]);
 
         return back()->with('success', 'Message sent successfully.');
     }

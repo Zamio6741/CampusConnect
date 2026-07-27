@@ -97,12 +97,6 @@
     <span>Notifications</span>
 </a>
 
-               <a href="{{ route('business.settings') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    ⚙️
-    <span>Settings</span>
-</a>
-
             </nav>
 
         </aside>

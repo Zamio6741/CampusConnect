@@ -582,11 +582,6 @@ Route::middleware(['auth','role:Business Owner'])->group(function () {
         [BusinessNotificationController::class, 'index'])
         ->name('business.notifications');
 
-   Route::get('/business/settings', [BusinessSettingsController::class, 'index'])
-    ->name('business.settings');
-
-Route::put('/business/settings', [BusinessSettingsController::class, 'update'])
-    ->name('business.settings.update');
 });
 
 require __DIR__.'/auth.php';

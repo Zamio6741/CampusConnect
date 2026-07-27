@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
-    protected $fillable = [
+   protected $fillable = [
 
-        'user_id',
+    'user_id',
+    'title',
+    'message',
+    'type',
+    'link',
+    'is_read',
 
-        'title',
-
-        'message',
-
-        'type',
-
-        'is_read',
-
-    ];
-
+];
     /*
     |--------------------------------------------------------------------------
     | Relationships
