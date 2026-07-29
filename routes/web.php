@@ -38,6 +38,8 @@ use App\Http\Controllers\StudentMessageController;
 use App\Http\Controllers\BusinessAnalyticsController;
 use App\Http\Controllers\BusinessNotificationController;
 use App\Http\Controllers\BusinessSettingsController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminAuthController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -455,11 +457,6 @@ Route::middleware(['auth'])->group(function () {
     ->middleware('role:Business Owner')
     ->name('business.dashboard');
 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })
-        ->middleware('role:Admin')
-        ->name('admin.dashboard');
     Route::post(
     '/rentals/{accommodation}/request',
     [BookingRequestController::class, 'store']
@@ -582,6 +579,31 @@ Route::middleware(['auth','role:Business Owner'])->group(function () {
         [BusinessNotificationController::class, 'index'])
         ->name('business.notifications');
 
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+
+});
+
+Route::prefix('admin')->group(function () {
+
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])
+        ->name('admin.login');
+
+    Route::post('/login', [AdminAuthController::class, 'login'])
+        ->name('admin.login.submit');
+
+    Route::post('/logout', [AdminAuthController::class, 'logout'])
+        ->name('admin.logout');
 });
 
 require __DIR__.'/auth.php';

@@ -21,7 +21,7 @@ class User extends Authenticatable
         'department_id',
         'programme_id',
         'semester_id',
-
+        'is_admin',
         'profile_photo',
         'bio',
     ];
