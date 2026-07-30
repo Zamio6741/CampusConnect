@@ -35,6 +35,7 @@ class Accommodation extends Model
         'room_number',
 
         'verified',
+        'status',
         'featured',
         'available',
 

@@ -39,7 +39,7 @@
                 Users
             </a>
 
-            <a href="{{ route('admin.users') }}"
+           <a href="{{ route('admin.businesses') }}"
                class="block px-4 py-3 rounded-xl hover:bg-slate-800">
                 Businesses
             </a>

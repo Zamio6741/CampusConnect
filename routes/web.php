@@ -40,6 +40,8 @@ use App\Http\Controllers\BusinessNotificationController;
 use App\Http\Controllers\BusinessSettingsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\BusinessManagementController;
+use App\Http\Controllers\Admin\AccommodationManagementController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -616,6 +618,17 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     [BusinessManagementController::class,'reject'])
     ->name('admin.businesses.reject');
 
+    Route::get('/admin/accommodations', [AccommodationManagementController::class, 'index'])
+    ->name('admin.accommodations');
+
+    Route::patch('/admin/accommodations/{accommodation}/approve',
+    [AccommodationManagementController::class, 'approve'])
+    ->name('admin.accommodations.approve');
+
+    Route::patch('/admin/accommodations/{accommodation}/reject',
+    [AccommodationManagementController::class, 'reject'])
+    ->name('admin.accommodations.reject');
+
 });
 
 Route::prefix('admin')->group(function () {
@@ -628,6 +641,22 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/logout', [AdminAuthController::class, 'logout'])
         ->name('admin.logout');
+});
+
+Route::prefix('admin')->middleware(['auth','role:Admin'])->group(function () {
+
+    Route::get('/accommodations', [AccommodationManagementController::class, 'index'])
+        ->name('admin.accommodations');
+
+    Route::get('/accommodations/{accommodation}', [AccommodationManagementController::class, 'show'])
+        ->name('admin.accommodations.show');
+
+    Route::post('/accommodations/{accommodation}/approve', [AccommodationManagementController::class, 'approve'])
+        ->name('admin.accommodations.approve');
+
+    Route::post('/accommodations/{accommodation}/reject', [AccommodationManagementController::class, 'reject'])
+        ->name('admin.accommodations.reject');
+
 });
 
 require __DIR__.'/auth.php';

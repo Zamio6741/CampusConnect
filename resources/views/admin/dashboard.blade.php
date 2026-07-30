@@ -20,11 +20,24 @@
 
     </div>
 
-    <div class="bg-white shadow rounded-xl px-5 py-3">
+<div class="bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-2xl rounded-2xl px-6 py-4 text-center min-w-[280px]">
 
-        {{ now()->format('F d, Y') }}
-
+    <div class="flex items-center justify-center gap-2 mb-1">
+        <span class="text-2xl">🕒</span>
+        <span class="text-sm uppercase tracking-widest opacity-80">
+            Current Time
+        </span>
     </div>
+
+    <div id="liveDate"
+         class="text-lg font-semibold">
+    </div>
+
+    <div id="liveTime"
+         class="text-3xl font-bold tracking-wide mt-1">
+    </div>
+
+</div>
 
 </div>
 
@@ -32,17 +45,18 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <div class="bg-white rounded-2xl shadow-lg p-6">
+  <a href="{{ route('admin.users') }}"
+   class="block bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition duration-300">
 
-        <p class="text-gray-500">
-            Total Users
-        </p>
+    <p class="text-gray-500">
+        Total Users
+    </p>
 
-        <h2 class="text-4xl font-bold mt-2">
-            {{ number_format($users) }}
-        </h2>
+    <h2 class="text-4xl font-bold mt-2">
+        {{ number_format($users) }}
+    </h2>
 
-    </div>
+</a>
 
     <div class="bg-white rounded-2xl shadow-lg p-6">
 
@@ -402,39 +416,45 @@
         ⚡ Admin Control Center
     </h2>
 
-    <div class="grid grid-cols-2 gap-4">
+   <div class="grid grid-cols-2 gap-4">
 
-        <a href="#" class="bg-blue-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            👥
-            <div class="mt-2 font-semibold">Users</div>
-        </a>
+   <a href="{{ route('admin.users') }}"
+       class="bg-blue-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
+        👥
+        <div class="mt-2 font-semibold">Users</div>
+    </a>
 
-        <a href="#" class="bg-green-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            🏪
-            <div class="mt-2 font-semibold">Businesses</div>
-        </a>
+    <a href="{{ route('admin.businesses') }}"
+       class="bg-green-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
+        🏪
+        <div class="mt-2 font-semibold">Businesses</div>
+    </a>
 
-        <a href="#" class="bg-purple-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            🏠
-            <div class="mt-2 font-semibold">Rentals</div>
-        </a>
+   <a href="{{ route('admin.accommodations') }}"
+   class="bg-purple-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
 
-        <a href="#" class="bg-orange-500 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            📚
-            <div class="mt-2 font-semibold">Notes</div>
-        </a>
+    🏠
+    <div class="mt-2 font-semibold">Rentals</div>
 
-        <a href="#" class="bg-red-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            📢
-            <div class="mt-2 font-semibold">Announcements</div>
-        </a>
+</a>
 
-        <a href="#" class="bg-slate-700 text-white rounded-xl p-5 text-center hover:scale-105 transition">
-            📊
-            <div class="mt-2 font-semibold">Reports</div>
-        </a>
+<div class="bg-orange-500 text-white rounded-xl p-5 text-center hover:scale-105 transition cursor-pointer">
+    📚
+    <div class="mt-2 font-semibold">Notes</div>
+    <div class="text-xs opacity-80 mt-1">Coming Soon</div>
+</div>
 
-    </div>
+<div class="bg-red-600 text-white rounded-xl p-5 text-center hover:scale-105 transition cursor-pointer">
+    📢
+    <div class="mt-2 font-semibold">Announcements</div>
+    <div class="text-xs opacity-80 mt-1">Coming Soon</div>
+</div>
+
+<div class="bg-slate-700 text-white rounded-xl p-5 text-center hover:scale-105 transition cursor-pointer">
+    📊
+    <div class="mt-2 font-semibold">Reports</div>
+    <div class="text-xs opacity-80 mt-1">Coming Soon</div>
+</div>
 
 </div>
 
@@ -510,5 +530,30 @@ new Chart(document.getElementById('rolesChart'), {
         }]
     }
 });
+
+function updateDateTime() {
+
+    const now = new Date();
+
+    document.getElementById('liveDate').innerHTML =
+        now.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+    document.getElementById('liveTime').innerHTML =
+        now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+}
+
+updateDateTime();
+
+setInterval(updateDateTime, 1000);
 </script>
 @endpush
