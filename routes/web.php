@@ -591,6 +591,30 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
         ->name('admin.dashboard');
+    
+    Route::get('/admin/users', [App\Http\Controllers\Admin\UserManagementController::class, 'index'])
+    ->name('admin.users');
+
+    Route::get('/admin/users/{user}', [App\Http\Controllers\Admin\UserManagementController::class, 'show'])
+    ->name('admin.users.show');  
+    
+    Route::patch('/admin/users/{user}/toggle', [App\Http\Controllers\Admin\UserManagementController::class, 'toggle'])
+    ->name('admin.users.toggle');
+
+    Route::delete('/admin/users/{user}', [App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])
+    ->name('admin.users.destroy');
+
+    Route::get('/admin/businesses',
+    [BusinessManagementController::class,'index'])
+    ->name('admin.businesses');
+
+    Route::patch('/admin/businesses/{business}/approve',
+    [BusinessManagementController::class,'approve'])
+    ->name('admin.businesses.approve');
+
+    Route::patch('/admin/businesses/{business}/reject',
+    [BusinessManagementController::class,'reject'])
+    ->name('admin.businesses.reject');
 
 });
 
