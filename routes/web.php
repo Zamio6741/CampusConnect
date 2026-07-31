@@ -656,7 +656,9 @@ Route::prefix('admin')->middleware(['auth','role:Admin'])->group(function () {
 
     Route::post('/accommodations/{accommodation}/reject', [AccommodationManagementController::class, 'reject'])
         ->name('admin.accommodations.reject');
-
+    Route::get('/businesses/{business}', [BusinessManagementController::class, 'show'])
+    ->name('admin.businesses.show');
+    
 });
 
 require __DIR__.'/auth.php';

@@ -44,7 +44,7 @@ class Business extends Model
 
         'rating',
 
-        'featured'
+        'featured',
 
     ];
 
