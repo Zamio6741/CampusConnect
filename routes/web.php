@@ -556,6 +556,12 @@ Route::middleware(['auth', 'role:Business Owner'])->group(function () {
         ]);
         Route::get('/business/reviews', [BusinessReviewController::class, 'index'])
     ->name('business.reviews');
+    Route::post('/business/reviews/{review}/reply',
+    [BusinessReviewController::class, 'reply'])
+    ->name('business.reviews.reply');
+
+    Route::get('/business/profile', [BusinessController::class, 'profile'])
+    ->name('business.profile');
 
 });
 

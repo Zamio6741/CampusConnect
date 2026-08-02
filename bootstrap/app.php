@@ -11,17 +11,20 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-   ->withMiddleware(function ($middleware) {
 
-    $middleware->alias([
+    ->withMiddleware(function (Middleware $middleware) {
 
-        'student' => \App\Http\Middleware\StudentMiddleware::class,
+        $middleware->alias([
+            'student' => \App\Http\Middleware\StudentMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
 
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        $middleware->web(append: [
+            \App\Http\Middleware\UpdateLastSeen::class,
+        ]);
 
-    ]);
+    })
 
-})
     ->withExceptions(function (Exceptions $exceptions): void {
 
         $exceptions->shouldRenderJsonWhen(
@@ -29,4 +32,5 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
     })
+
     ->create();

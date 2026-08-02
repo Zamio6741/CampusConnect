@@ -249,14 +249,12 @@
     @for($i=5;$i>=1;$i--)
 
         @php
+$count = $distribution[$i];
 
-            $count = $distribution[$i];
-
-            $percentage = $totalReviews
-                ? ($count/$reviews->count())*100
-                : 0;
-
-        @endphp
+$percentage = $totalReviews > 0
+    ? ($count / $totalReviews) * 100
+    : 0;
+@endphp
 
         <div class="flex items-center gap-5 mb-5">
 

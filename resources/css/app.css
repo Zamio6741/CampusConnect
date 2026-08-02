@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.admin-link{
+    @apply flex items-center gap-4 px-5 py-3 rounded-xl
+    text-slate-300
+    transition-all duration-300;
+}
+
+.admin-link:hover{
+    @apply bg-slate-800 text-white;
+    transform: translateX(8px);
+}
+
+.admin-link-active{
+    @apply bg-sky-600 text-white shadow-xl;
+}

@@ -70,12 +70,21 @@ class BusinessController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function create()
-    {
-        $universities = University::orderBy('name')->get();
+   public function create()
+{
+    // Check if the logged-in user already owns a business
+    $existingBusiness = Business::where('user_id', auth()->id())->first();
 
-        return view('business.create', compact('universities'));
+    if ($existingBusiness) {
+        return redirect()
+            ->route('business.dashboard')
+            ->with('info', 'You already have a registered business.');
     }
+
+    $universities = University::orderBy('name')->get();
+
+    return view('business.create', compact('universities'));
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -85,6 +94,12 @@ class BusinessController extends Controller
 
     public function store(Request $request)
     {
+            if (Business::where('user_id', auth()->id())->exists()) {
+        return redirect()
+            ->route('business.dashboard')
+            ->with('error', 'You can only register one business account.');
+    }
+
         $request->validate([
 
             'business_name' => 'required',
@@ -135,6 +150,8 @@ class BusinessController extends Controller
 
         return redirect()->route('business.dashboard')
             ->with('success','Business registered successfully.');
+
+
     }
 
     public function edit(Business $business)
@@ -196,6 +213,24 @@ public function show(Business $business)
     $business->increment('views');
 
    return view('business.preview', compact('business'));
+}
+
+public function index()
+{
+    $business = Business::where('user_id', auth()->id())->first();
+
+    if (!$business) {
+        return redirect()->route('business.create');
+    }
+
+    return view('business.dashboard', compact('business'));
+}
+
+public function profile()
+{
+    $business = auth()->user()->businesses()->firstOrFail();
+
+    return view('business.profile', compact('business'));
 }
 
 }

@@ -1,143 +1,273 @@
 <x-app-layout>
 
-<div class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
+<div
+    x-data="{ sidebarOpen: true }"
+    class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
 
     <div class="flex">
 
-        <!-- ===================== SIDEBAR ===================== -->
+        <!-- ================= SIDEBAR ================= -->
 
-        <aside class="w-72 min-h-screen bg-white shadow-2xl">
+        <aside
+            :class="sidebarOpen ? 'w-72' : 'w-24'"
+            class="bg-white shadow-2xl min-h-screen transition-all duration-300 overflow-hidden">
 
             <!-- Logo -->
 
-            <div class="h-24 flex items-center justify-center border-b">
+            <div class="h-20 border-b flex items-center justify-center">
 
-                <h1 class="text-3xl font-extrabold text-sky-700">
+                <h1
+                    x-show="sidebarOpen"
+                    x-transition
+                    class="text-3xl font-extrabold text-sky-700">
 
                     CampusConnect
 
                 </h1>
 
+                <span
+                    x-show="!sidebarOpen"
+                    x-transition
+                    class="text-4xl">
+
+                    🏫
+
+                </span>
+
             </div>
 
             <!-- User -->
 
-            <div class="py-8 text-center border-b">
+            <div class="py-8 border-b text-center">
 
-                <div class="w-24 h-24 rounded-full bg-sky-100 mx-auto flex items-center justify-center text-5xl">
+                <div class="w-20 h-20 rounded-full bg-sky-100 flex items-center justify-center text-5xl mx-auto">
 
                     🏪
 
                 </div>
 
-                <h2 class="mt-5 text-2xl font-bold">
+                <div
+                    x-show="sidebarOpen"
+                    x-transition>
 
-                    {{ auth()->user()->name }}
+                    <h2 class="mt-5 text-2xl font-bold">
 
-                </h2>
+                        {{ auth()->user()->name }}
 
-                <p class="text-gray-500">
+                    </h2>
 
-                    Business Owner
+                    <p class="text-gray-500">
 
-                </p>
+                        Business Owner
+
+                    </p>
+
+                </div>
 
             </div>
 
-            <!-- Menu -->
+            <!-- MENU -->
 
             <nav class="mt-6 space-y-2">
 
-                <a href="{{ route('business.dashboard') }}"
-                   class="flex items-center gap-4 px-8 py-4 bg-sky-600 text-white font-semibold">
+                <a
+                    href="{{ route('business.dashboard') }}"
+                    class="flex items-center gap-4 px-8 py-4 bg-sky-600 text-white font-semibold">
 
-                    🏠 Dashboard
+                    <span class="text-xl">🏠</span>
 
-                </a>
-<a href="{{ route('business.preview', $business) }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
 
-    🏪 My Business
+                        Dashboard
 
-</a>
-
-                <a href="{{ route('business.advertisements.index') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-    📢 Advertisements
-
-</a>
-                <a href="{{ route('products.index') }}"
-                   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-
-                    🛍 Products
+                    </span>
 
                 </a>
 
-                <a href="{{ route('business.analytics') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    📈
-    <span>Analytics</span>
-</a>
+                <a
 
-<a href="{{ route('business.messages') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    💬
-    <span>Messages</span>
-</a>
+                    href="{{ route('business.profile') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
 
-<a href="{{ route('business.reviews') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    ⭐
-    <span>Reviews</span>
-</a>
-                <a href="{{ route('business.notifications') }}"
-   class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
-    🔔
-    <span>Notifications</span>
-</a>
+                    <span class="text-xl">🏪</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Business Profile
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.gallery',$business) }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">🖼</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Gallery
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('products.index') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">🛍</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Products
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.advertisements.index') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">📢</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Advertisements
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.analytics') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">📈</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Analytics
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.messages') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">💬</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Messages
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.reviews') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">⭐</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Reviews
+
+                    </span>
+
+                </a>
+
+                <a
+                    href="{{ route('business.notifications') }}"
+                    class="flex items-center gap-4 px-8 py-4 hover:bg-slate-100 transition">
+
+                    <span class="text-xl">🔔</span>
+
+                    <span
+                        x-show="sidebarOpen"
+                        x-transition>
+
+                        Notifications
+
+                    </span>
+
+                </a>
 
             </nav>
 
         </aside>
 
-        <!-- ===================== MAIN CONTENT ===================== -->
+        <!-- ================= MAIN ================= -->
 
         <main class="flex-1">
 
-            <!-- Header -->
+            <!-- HEADER -->
 
             <div class="bg-white shadow-sm">
 
-                <div class="px-12 py-8 flex justify-between items-center">
+                <div class="px-10 py-8 flex justify-between items-center">
 
-                    <div>
+                    <div class="flex items-center gap-5">
 
-                        <h1 class="text-4xl font-bold text-slate-800">
+                        <button
+                            @click="sidebarOpen=!sidebarOpen"
+                            class="bg-sky-100 hover:bg-sky-200 p-3 rounded-xl transition">
 
-                            Business Dashboard
+                            ☰
 
-                        </h1>
+                        </button>
 
-                        <p class="text-gray-500 mt-2">
+                        <div>
 
-                            Welcome back,
+                            <h1 class="text-4xl font-bold text-slate-800">
 
-                            <span class="font-bold">
+                                Business Dashboard
 
-                                {{ auth()->user()->name }}
+                            </h1>
 
-                            </span>
+                            <p class="text-gray-500 mt-2">
 
-                        </p>
+                                Welcome back,
+
+                                <span class="font-semibold">
+
+                                    {{ auth()->user()->name }}
+
+                                </span>
+
+                            </p>
+
+                        </div>
 
                     </div>
 
                     <div class="flex items-center gap-4">
 
-                        <span class="bg-yellow-100 text-yellow-700 px-6 py-3 rounded-full font-semibold">
+                        <span class="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-full font-semibold">
 
-                            ⏳ Pending Approval
+                            {{ $business->status }}
 
                         </span>
 
@@ -147,13 +277,13 @@
 
             </div>
 
-            <!-- Content -->
+            <!-- CONTENT -->
 
             <div class="p-10">
 
                 @if(session('success'))
 
-                    <div class="mb-8 bg-green-100 text-green-700 px-6 py-4 rounded-xl">
+                    <div class="mb-8 bg-green-100 text-green-700 p-5 rounded-xl">
 
                         {{ session('success') }}
 
@@ -161,315 +291,248 @@
 
                 @endif
 
-                <!-- Statistics will go here -->
-                <!-- ================= Statistics ================= -->
+                <!-- Statistics -->
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
 
                     <div class="bg-white rounded-3xl shadow-lg p-8">
 
-                        <div class="flex justify-between items-center">
+                        <p class="text-gray-500">
 
-                            <div>
+                            Views
 
-                                <p class="text-gray-500">
+                        </p>
 
-                                    Total Views
+                        <h2 class="text-5xl font-bold mt-4">
 
-                                </p>
+                            {{ number_format($business->views) }}
 
-                                <h2 class="text-5xl font-extrabold mt-3">
-
-                                    {{ $business->views }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="text-6xl">
-
-                                👀
-
-                            </div>
-
-                        </div>
+                        </h2>
 
                     </div>
 
                     <div class="bg-white rounded-3xl shadow-lg p-8">
 
-                        <div class="flex justify-between items-center">
+                        <p class="text-gray-500">
 
-                            <div>
+                            Rating
 
-                                <p class="text-gray-500">
+                        </p>
 
-                                    Rating
+                        <h2 class="text-5xl font-bold mt-4">
 
-                                </p>
+                            {{ number_format($business->rating,1) }}
 
-                                <h2 class="text-5xl font-extrabold mt-3">
-
-                                    {{ number_format($business->rating,1) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="text-6xl text-yellow-400">
-
-                                ⭐
-
-                            </div>
-
-                        </div>
+                        </h2>
 
                     </div>
 
                     <div class="bg-white rounded-3xl shadow-lg p-8">
 
-                        <div class="flex justify-between items-center">
+                        <p class="text-gray-500">
 
-                            <div>
+                            Products
 
-                                <p class="text-gray-500">
+                        </p>
 
-                                    Status
+                        <h2 class="text-5xl font-bold mt-4">
 
-                                </p>
+                            {{ $productsCount }}
 
-                                <h2 class="text-3xl font-bold mt-4 text-sky-700">
-
-                                    {{ $business->status }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="text-6xl">
-
-                                📢
-
-                            </div>
-
-                        </div>
+                        </h2>
 
                     </div>
 
                     <div class="bg-white rounded-3xl shadow-lg p-8">
 
-                        <div class="flex justify-between items-center">
+                        <p class="text-gray-500">
 
-                            <div>
+                            Reviews
 
-                                <p class="text-gray-500">
+                        </p>
 
-                                    Featured
+                        <h2 class="text-5xl font-bold mt-4">
 
-                                </p>
+                            {{ $reviewsCount }}
 
-                                <h2 class="text-3xl font-bold mt-4">
-
-                                    {{ $business->featured ? 'YES' : 'NO' }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="text-6xl">
-
-                                🚀
-
-                            </div>
-
-                        </div>
+                        </h2>
 
                     </div>
 
                 </div>
 
+                <!-- SECTION 2 STARTS HERE -->
+                 <!-- ================= MY BUSINESS ================= -->
 
+<div class="mt-10 bg-white rounded-3xl shadow-xl overflow-hidden">
 
-                 <!-- My Businesses -->
+    <div class="px-8 py-6 border-b">
 
-<div class="bg-white rounded-3xl shadow-xl overflow-hidden">
-
-    <div class="flex justify-between items-center px-8 py-6 border-b">
-
-        <h2 class="text-3xl font-bold">
-            🏪 My Businesses
+        <h2 class="text-3xl font-bold text-slate-800">
+            🏪 My Business
         </h2>
 
-        <a href="{{ route('businesses.create') }}"
-           class="bg-sky-600 hover:bg-sky-700 text-white px-5 py-3 rounded-xl font-semibold">
-
-            + Add Business
-
-        </a>
+        <p class="text-gray-500 mt-2">
+            Manage your business profile, gallery and products.
+        </p>
 
     </div>
 
-   @if($businesses->count())
+    <div class="p-8">
 
-<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div class="flex flex-col lg:flex-row gap-8">
 
-@foreach($businesses as $business)
+            <!-- Cover / Logo -->
 
-<div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition">
+            <div class="lg:w-1/3">
 
-    <div class="p-6">
+                @php
+                    $cover = $business->images()->where('cover', true)->first();
+                @endphp
 
-        <div class="flex items-center gap-5">
+                @if($cover)
 
-            @php
-    $cover = $business->images()->where('cover', true)->first();
-@endphp
+                    <img
+                        src="{{ asset('storage/'.$cover->image) }}"
+                        class="w-full h-72 object-cover rounded-3xl shadow-lg">
 
-@if($cover)
+                @elseif($business->logo)
 
-    <img
-        src="{{ asset('storage/'.$cover->image) }}"
-        class="w-24 h-24 rounded-2xl object-cover border">
+                    <img
+                        src="{{ asset('storage/'.$business->logo) }}"
+                        class="w-full h-72 object-cover rounded-3xl shadow-lg">
 
-@elseif($business->logo)
+                @else
 
-    <img
-        src="{{ asset('storage/'.$business->logo) }}"
-        class="w-24 h-24 rounded-2xl object-cover border">
+                    <div class="w-full h-72 rounded-3xl bg-sky-100 flex items-center justify-center text-8xl">
 
-@else
-                <div class="w-24 h-24 rounded-2xl bg-sky-100 flex items-center justify-center text-5xl">
+                        🏪
 
-                    🏪
+                    </div>
 
-                </div>
+                @endif
 
-            @endif
+            </div>
 
-            <div>
+            <!-- Details -->
 
-                <h2 class="text-2xl font-bold">
+            <div class="flex-1">
+
+                <h2 class="text-4xl font-bold">
 
                     {{ $business->business_name }}
 
                 </h2>
 
-                <p class="text-gray-500">
+                <p class="text-sky-600 text-xl mt-2">
 
                     {{ $business->category }}
 
                 </p>
 
-                <p class="text-sm text-gray-400">
+                <p class="text-gray-600 mt-5 leading-8">
 
-                    {{ $business->location }}
+                    {{ $business->description }}
 
                 </p>
 
-            </div>
+                <div class="grid md:grid-cols-2 gap-5 mt-8">
 
-        </div>
+                    <div>
 
-        <div class="grid grid-cols-2 gap-4 mt-8">
+                        <p class="text-gray-400 text-sm">
 
-            <div class="bg-slate-100 rounded-xl p-4 text-center">
+                            Phone
 
-                👀
+                        </p>
 
-                <div class="font-bold text-xl">
+                        <p class="font-semibold">
 
-                    {{ $business->views }}
+                            {{ $business->phone }}
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-gray-400 text-sm">
+
+                            WhatsApp
+
+                        </p>
+
+                        <p class="font-semibold">
+
+                            {{ $business->whatsapp }}
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-gray-400 text-sm">
+
+                            Email
+
+                        </p>
+
+                        <p class="font-semibold">
+
+                            {{ $business->email }}
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-gray-400 text-sm">
+
+                            Location
+
+                        </p>
+
+                        <p class="font-semibold">
+
+                            {{ $business->location }}
+
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <div class="text-sm text-gray-500">
+                <div class="flex flex-wrap gap-4 mt-10">
 
-                    Views
+                    <a
+    href="{{ route('business.profile') }}"
+    class="bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-xl font-semibold">
 
-                </div>
+    👤 Business Profile
 
-            </div>
+</a>
 
-            <div class="bg-slate-100 rounded-xl p-4 text-center">
+                    <a
+                        href="{{ route('business.gallery',$business) }}"
+                        class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold">
 
-                ⭐
-
-                <div class="font-bold text-xl">
-
-                    {{ number_format($business->rating,1) }}
-
-                </div>
-
-                <div class="text-sm text-gray-500">
-
-                    Rating
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="mt-6">
-
-            @if($business->status=='Approved')
-
-                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full">
-
-                    ✅ Approved
-
-                </span>
-
-            @elseif($business->status=='Rejected')
-
-                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full">
-
-                    ❌ Rejected
-
-                </span>
-
-            @else
-
-                <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full">
-
-                    ⏳ Pending Review
-
-                </span>
-
-            @endif
-
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 mt-8">
-
-            <a href="{{ route('businesses.edit',$business) }}"
-               class="bg-sky-600 text-white py-3 rounded-xl text-center font-semibold">
-
-                ✏ Edit
-
-            </a>
-
-            <a href="{{ route('business.gallery', $business) }}"
-                class="bg-orange-500 text-white py-3 rounded-xl text-center font-semibold">
                         🖼 Gallery
-            </a>
-            
-            <form
-                action="{{ route('businesses.destroy',$business) }}"
-                method="POST">
 
-                @csrf
-                @method('DELETE')
+                    </a>
 
-                <button
-                    onclick="return confirm('Delete business?')"
-                    class="w-full bg-red-600 text-white py-3 rounded-xl font-semibold">
+                    <a
+                        href="{{ route('products.index') }}"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold">
 
-                    🗑 Delete
+                        🛍 Products
 
-                </button>
+                    </a>
 
-            </form>
+                </div>
+
+            </div>
 
         </div>
 
@@ -477,193 +540,180 @@
 
 </div>
 
-@endforeach
-@else
-
-<div class="text-center py-20">
-
-    <div class="text-7xl">🏪</div>
-
-    <h2 class="text-3xl font-bold mt-5">
-        No businesses yet
-    </h2>
-
-    <p class="text-gray-500 mt-3">
-        Register your first business.
-    </p>
-
-    <a href="{{ route('businesses.create') }}"
-       class="inline-block mt-8 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold">
-        Register Business
-    </a>
-
-</div>
-
-@endif
-
-</div>
-
-</div>
-<!-- ================= Analytics ================= -->
+<!-- ================= ANALYTICS ================= -->
 
 <div class="grid lg:grid-cols-2 gap-8 mt-10">
 
-    {{-- Recent Activity --}}
     <div class="bg-white rounded-3xl shadow-xl p-8">
 
-        <h2 class="text-2xl font-bold mb-6">
-            📋 Recent Activity
+        <h2 class="text-2xl font-bold mb-8">
+
+            📊 Performance
+
         </h2>
 
-        <div class="space-y-5">
+        <div class="space-y-8">
 
-            @if($productsCount > 0)
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    📦
-                </div>
-                <div>
-                    <p class="font-semibold">
-                        Products Uploaded
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        You currently have <strong>{{ $productsCount }}</strong> products listed.
-                    </p>
-                </div>
-            </div>
-            @endif
+            <div>
 
-            @if($reviewsCount > 0)
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
-                    ⭐
-                </div>
-                <div>
-                    <p class="font-semibold">
-                        Customer Reviews
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        Your business has received <strong>{{ $reviewsCount }}</strong> reviews.
-                    </p>
-                </div>
-            </div>
-            @endif
+                <div class="flex justify-between mb-2">
 
-            @if($unreadMessages > 0)
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                    💬
-                </div>
-                <div>
-                    <p class="font-semibold">
-                        New Messages
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        You have <strong>{{ $unreadMessages }}</strong> unread customer messages.
-                    </p>
-                </div>
-            </div>
-            @endif
+                    <span>Views</span>
 
-            @if($advertisementsCount > 0)
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                    📢
-                </div>
-                <div>
-                    <p class="font-semibold">
-                        Advertisements Running
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        You have <strong>{{ $advertisementsCount }}</strong> active advertisements.
-                    </p>
-                </div>
-            </div>
-            @endif
+                    <span>{{ number_format($business->views) }}</span>
 
-            @if($productsCount==0 && $reviewsCount==0 && $unreadMessages==0 && $advertisementsCount==0)
-            <div class="text-center py-10 text-gray-500">
-                No recent activity yet.
+                </div>
+
+                <div class="h-3 rounded-full bg-gray-200">
+
+                    <div
+                        class="bg-sky-600 h-3 rounded-full"
+                        style="width: {{ min($business->views,100) }}%"></div>
+
+                </div>
+
             </div>
-            @endif
+
+            <div>
+
+                <div class="flex justify-between mb-2">
+
+                    <span>Rating</span>
+
+                    <span>{{ number_format($averageRating,1) }}/5</span>
+
+                </div>
+
+                <div class="h-3 rounded-full bg-gray-200">
+
+                    <div
+                        class="bg-yellow-400 h-3 rounded-full"
+                        style="width: {{ $averageRating*20 }}%"></div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="flex justify-between mb-2">
+
+                    <span>Products</span>
+
+                    <span>{{ $productsCount }}</span>
+
+                </div>
+
+                <div class="h-3 rounded-full bg-gray-200">
+
+                    <div
+                        class="bg-green-500 h-3 rounded-full"
+                        style="width: {{ min($productsCount*10,100) }}%"></div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="flex justify-between mb-2">
+
+                    <span>Advertisements</span>
+
+                    <span>{{ $advertisementsCount }}</span>
+
+                </div>
+
+                <div class="h-3 rounded-full bg-gray-200">
+
+                    <div
+                        class="bg-purple-500 h-3 rounded-full"
+                        style="width: {{ min($advertisementsCount*10,100) }}%"></div>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
+    <!-- Recent Activity -->
 
-    {{-- Performance Overview --}}
     <div class="bg-white rounded-3xl shadow-xl p-8">
 
-        <h2 class="text-2xl font-bold mb-6">
-            📈 Performance Overview
+        <h2 class="text-2xl font-bold mb-8">
+
+            📋 Recent Activity
+
         </h2>
 
         <div class="space-y-6">
 
-            <div>
-                <div class="flex justify-between">
-                    <span>Total Views</span>
-                    <span>{{ $business->views }}</span>
+            <div class="flex gap-4">
+
+                <div class="w-12 h-12 rounded-full bg-sky-100 flex items-center justify-center">
+
+                    👀
+
                 </div>
 
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-                    <div class="bg-sky-600 h-3 rounded-full"
-                         style="width: {{ min($business->views,100) }}%">
-                    </div>
+                <div>
+
+                    <p class="font-semibold">
+
+                        {{ number_format($business->views) }} profile views
+
+                    </p>
+
+                    <span class="text-gray-500 text-sm">
+
+                        Total profile visits
+
+                    </span>
+
                 </div>
+
             </div>
 
-            <div>
-                <div class="flex justify-between">
-                    <span>Average Rating</span>
-                    <span>{{ $averageRating }}/5</span>
+            <div class="flex gap-4">
+
+                <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+
+                    ⭐
+
                 </div>
 
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-                    <div class="bg-yellow-400 h-3 rounded-full"
-                         style="width: {{ $averageRating*20 }}%">
-                    </div>
+                <div>
+
+                    <p class="font-semibold">
+
+                        {{ $reviewsCount }} customer reviews
+
+                    </p>
+
                 </div>
+
             </div>
 
-            <div>
-                <div class="flex justify-between">
-                    <span>Total Reviews</span>
-                    <span>{{ $reviewsCount }}</span>
+            <div class="flex gap-4">
+
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+
+                    💬
+
                 </div>
 
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-                    <div class="bg-green-500 h-3 rounded-full"
-                         style="width: {{ min($reviewsCount*10,100) }}%">
-                    </div>
-                </div>
-            </div>
+                <div>
 
-            <div>
-                <div class="flex justify-between">
-                    <span>Products</span>
-                    <span>{{ $productsCount }}</span>
+                    <p class="font-semibold">
+
+                        {{ $unreadMessages }} unread messages
+
+                    </p>
+
                 </div>
 
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-                    <div class="bg-indigo-500 h-3 rounded-full"
-                         style="width: {{ min($productsCount*10,100) }}%">
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="flex justify-between">
-                    <span>Advertisements</span>
-                    <span>{{ $advertisementsCount }}</span>
-                </div>
-
-                <div class="w-full bg-gray-200 rounded-full h-3 mt-2">
-                    <div class="bg-purple-500 h-3 rounded-full"
-                         style="width: {{ min($advertisementsCount*10,100) }}%">
-                    </div>
-                </div>
             </div>
 
         </div>
@@ -672,72 +722,86 @@
 
 </div>
 
-<!-- ================= Quick Actions ================= -->
+<!-- SECTION 3 STARTS HERE -->
+ <!-- ================= QUICK ACTIONS ================= -->
 
 <div class="bg-white rounded-3xl shadow-xl mt-10 p-8">
 
     <h2 class="text-2xl font-bold mb-8">
-
         ⚡ Quick Actions
-
     </h2>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <a href="{{ route('businesses.edit',$business) }}"
-           class="bg-sky-600 hover:bg-sky-700 text-white rounded-2xl p-6 text-center transition">
+       <a href="{{ route('business.profile') }}"
+   class="bg-sky-600 hover:bg-sky-700 text-white rounded-2xl p-6 text-center transition hover:scale-105">
 
-            <div class="text-4xl mb-3">✏</div>
+    <div class="text-5xl mb-3">👤</div>
 
-            <div class="font-bold">
+    <div class="font-bold text-lg">
+        Business Profile
+    </div>
 
-                Edit Business
+</a>
+        <a href="{{ route('business.gallery',$business) }}"
+           class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl p-6 text-center transition hover:scale-105">
 
+            <div class="text-5xl mb-3">🖼</div>
+
+            <div class="font-bold text-lg">
+                Gallery
+            </div>
+
+        </a>
+
+        <a href="{{ route('products.index') }}"
+           class="bg-green-600 hover:bg-green-700 text-white rounded-2xl p-6 text-center transition hover:scale-105">
+
+            <div class="text-5xl mb-3">🛍</div>
+
+            <div class="font-bold text-lg">
+                Products
             </div>
 
         </a>
 
         <a href="{{ route('business.advertisements.index') }}"
-   class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl p-6 text-center transition">
+           class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-6 text-center transition hover:scale-105">
 
-    <div class="text-4xl mb-3">📢</div>
+            <div class="text-5xl mb-3">📢</div>
 
-    <div class="font-bold">
-        Advertisements
-    </div>
+            <div class="font-bold text-lg">
+                Advertisements
+            </div>
 
-<a href="{{ route('business.messages') }}"
-   class="bg-green-600 hover:bg-green-700 text-white rounded-2xl p-6 text-center transition">
-
-    <div class="text-4xl mb-3">💬</div>
-
-    <div class="font-bold">
-        Messages
-    </div>
-
-</a>
-
-<a href="{{ route('business.reviews') }}"
-   class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-6 text-center transition">
-
-    <div class="text-4xl mb-3">⭐</div>
-
-    <div class="font-bold">
-        Reviews
-    </div>
-
-</a>
+        </a>
 
     </div>
 
 </div>
 
+<!-- ================= FOOTER ================= -->
+
+<div class="mt-10 text-center text-gray-500 pb-10">
+
+    <p class="text-lg">
+
+        CampusConnect Business Dashboard
+
+    </p>
+
+    <p class="mt-2 text-sm">
+
+        Built with ❤️ for CampusConnect
+
+    </p>
+
 </div>
 
+</div>
 </main>
 
 </div>
-
 </div>
 
 </x-app-layout>

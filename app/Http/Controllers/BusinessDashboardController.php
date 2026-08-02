@@ -10,6 +10,13 @@ class BusinessDashboardController extends Controller
     {
         $business = Business::where('user_id', auth()->id())->first();
 
+if (!$business) {
+    return redirect()
+        ->route('business.create')
+        ->with('info', 'Please register your business first.');
+}
+        $business = Business::where('user_id', auth()->id())->first();
+
         if (!$business) {
             return redirect()->route('business.create');
         }

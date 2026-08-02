@@ -18,7 +18,7 @@
 
             </div>
 
-            <<form method="POST"
+            <form method="POST"
       action="{{ route('businesses.update',$business) }}"
       enctype="multipart/form-data"
       class="p-10">
