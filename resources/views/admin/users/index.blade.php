@@ -13,7 +13,7 @@
         <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
             <p class="text-gray-500 text-sm">Total Users</p>
             <h2 class="text-4xl font-bold mt-3">
-                {{ $users->count() }}
+                {{ $users->total() }}
             </h2>
         </div>
 
@@ -46,21 +46,50 @@
 
         <div class="flex flex-col lg:flex-row gap-4">
 
-            <input
-                type="text"
-                placeholder="Search by name or email..."
-                class="flex-1 rounded-xl border-gray-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+            <form method="GET" class="flex flex-col lg:flex-row gap-4 w-full">
 
-            <select
-                class="w-full lg:w-64 rounded-xl border-gray-300 focus:ring-2 focus:ring-sky-500">
+                <input
+                        name="search"
+                         value="{{ request('search') }}"
+                         type="text"
+                        placeholder="Search name or email..."
+                        class="flex-1 rounded-xl border-gray-300">
+                         <select
+                             name="role"
+                            class="w-full lg:w-64 rounded-xl border-gray-300">
 
-                <option>All Roles</option>
-                <option>Student</option>
-                <option>Landlord</option>
-                <option>Business Owner</option>
-                <option>Admin</option>
+                            <option value="">All Roles</option>
 
-            </select>
+                             <option value="Student"
+                                  {{ request('role')=='Student'?'selected':'' }}>
+                                     Student
+                            </option>
+
+                            <option value="Landlord"
+                                 {{ request('role')=='Landlord'?'selected':'' }}>
+                                      Landlord
+                             </option>
+
+                              <option value="Business Owner"
+                                  {{ request('role')=='Business Owner'?'selected':'' }}>
+                                     Business Owner
+                             </option>
+
+                               <option value="Admin"
+                                {{ request('role')=='Admin'?'selected':'' }}>
+                                      Admin
+                              </option>
+
+</select>
+
+<button
+class="bg-sky-600 text-white px-6 rounded-xl">
+
+Search
+
+</button>
+
+</form>
 
         </div>
 
@@ -75,37 +104,54 @@
             <table class="w-full">
 
                 <thead class="bg-slate-100">
+<tr class="text-gray-700">
 
-                    <tr class="text-gray-700">
+    <th class="px-8 py-5 text-left font-semibold">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort'=>'name',
+            'direction'=>request('direction')=='asc'?'desc':'asc'
+        ]) }}" class="hover:text-sky-600">
+            User ↕
+        </a>
+    </th>
 
-                        <th class="px-8 py-5 text-left font-semibold">
-                            User
-                        </th>
+    <th class="px-6 py-5 text-left font-semibold">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort'=>'email',
+            'direction'=>request('direction')=='asc'?'desc':'asc'
+        ]) }}" class="hover:text-sky-600">
+            Email ↕
+        </a>
+    </th>
 
-                        <th class="px-6 py-5 text-left font-semibold">
-                            Email
-                        </th>
+    <th class="px-6 py-5 text-center font-semibold">
+        Role
+    </th>
 
-                        <th class="px-6 py-5 text-center font-semibold">
-                            Role
-                        </th>
+    <th class="px-6 py-5 text-center font-semibold">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort'=>'active',
+            'direction'=>request('direction')=='asc'?'desc':'asc'
+        ]) }}" class="hover:text-sky-600">
+            Account ↕
+        </a>
+    </th>
 
-                        <th class="px-6 py-5 text-center font-semibold">
-                                         Account
-                                </th>
+    <th class="px-6 py-5 text-center font-semibold">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort'=>'last_seen',
+            'direction'=>request('direction')=='asc'?'desc':'asc'
+        ]) }}" class="hover:text-sky-600">
+            Activity ↕
+        </a>
+    </th>
 
-                                <th class="px-6 py-5 text-center font-semibold">
-                                         Active status
-                        </th>
+    <th class="px-8 py-5 text-center font-semibold">
+        Actions
+    </th>
 
-                        <th class="px-8 py-5 text-center font-semibold">
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
+</tr>
+</thead>
                 <tbody>
 
                 @foreach($users as $user)
@@ -120,7 +166,21 @@
 
                                 <div class="w-14 h-14 rounded-full bg-sky-100 flex items-center justify-center text-2xl">
 
-                                    👤
+                                   @if($user->profile_photo)
+
+<img
+src="{{ asset('storage/'.$user->profile_photo) }}"
+class="w-14 h-14 rounded-full object-cover">
+
+@else
+
+<div class="w-14 h-14 rounded-full bg-sky-100 flex items-center justify-center text-lg font-bold text-sky-700">
+
+{{ strtoupper(substr($user->name,0,1)) }}
+
+</div>
+
+@endif
 
                                 </div>
 
@@ -206,26 +266,37 @@
 
 <td class="px-6 py-6 text-center">
 
-    @if($user->last_seen && $user->last_seen->gt(now()->subMinutes(5)))
+    @if($user->isOnline())
 
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold">
+        <div class="flex flex-col items-center">
 
-            🟢 Online
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold">
+                🟢 Online
+            </span>
 
-        </span>
+            <span class="text-xs text-gray-500 mt-2">
+                Active now
+            </span>
+
+        </div>
 
     @else
 
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold">
+        <div class="flex flex-col items-center">
 
-            ⚪ Offline
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold">
+                ⚪ Offline
+            </span>
 
-        </span>
+            <span class="text-xs text-gray-500 mt-2">
+                {{ $user->last_seen ? $user->last_seen->diffForHumans() : 'Never logged in' }}
+            </span>
+
+        </div>
 
     @endif
 
 </td>
-
                         {{-- ACTIONS --}}
 
                        <td class="px-8 py-6">
@@ -284,6 +355,10 @@
 
     </div>
 
+</div>
+
+<div class="mt-8">
+    {{ $users->links() }}
 </div>
 
 @endsection

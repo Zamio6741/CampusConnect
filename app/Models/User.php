@@ -10,34 +10,40 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+   protected $fillable = [
+    'name',
+    'email',
+    'password',
 
-        'role_id',
-        'university_id',
-        'faculty_id',
-        'department_id',
-        'programme_id',
-        'semester_id',
-        'is_admin',
-        'profile_photo',
-        'bio',
-    ];
+    'role_id',
+    'university_id',
+    'faculty_id',
+    'department_id',
+    'programme_id',
+    'semester_id',
+
+    'is_admin',
+
+    'profile_photo',
+
+    'bio',
+
+    'last_seen',
+];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+   protected function casts(): array
+{
+    return [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'last_seen' => 'datetime',
+    ];
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -235,6 +241,15 @@ public function messages()
 public function businessReviews()
 {
     return $this->hasMany(BusinessReview::class);
+}
+
+/**
+ * Determine if the user is currently online.
+ */
+public function isOnline(): bool
+{
+    return $this->last_seen &&
+           $this->last_seen->gt(now()->subMinutes(5));
 }
 
 }
