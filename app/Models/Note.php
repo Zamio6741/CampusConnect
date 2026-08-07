@@ -9,10 +9,25 @@ class Note extends Model
     protected $fillable = [
         'user_id',
         'university_id',
+        'faculty_id',
+        'department_id',
+        'programme_id',
+        'semester_id',
         'unit_id',
+
         'title',
         'description',
         'file_path',
+        'thumbnail',
+
+        'downloads',
+        'price',
+        'is_premium',
+        'status',
+    ];
+
+    protected $casts = [
+        'is_premium' => 'boolean',
     ];
 
     /*
@@ -29,6 +44,26 @@ class Note extends Model
     public function university()
     {
         return $this->belongsTo(University::class);
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function programme()
+    {
+        return $this->belongsTo(Programme::class);
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class);
     }
 
     public function unit()
@@ -48,10 +83,8 @@ class Note extends Model
 
     public function favoritedBy()
     {
-        return $this->belongsToMany(
-            User::class,
-            'favorites'
-        )->withTimestamps();
+        return $this->belongsToMany(User::class, 'favorites')
+            ->withTimestamps();
     }
 
     /*
@@ -75,5 +108,15 @@ class Note extends Model
         return $this->favorites()
             ->where('user_id', $user->id)
             ->exists();
+    }
+
+    public function isFree()
+    {
+        return !$this->is_premium;
+    }
+
+    public function incrementDownloads()
+    {
+        $this->increment('downloads');
     }
 }

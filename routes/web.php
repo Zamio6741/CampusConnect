@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\BusinessManagementController;
 use App\Http\Controllers\Admin\AccommodationManagementController;
+use App\Http\Controllers\Admin\NoteManagementController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -664,7 +665,36 @@ Route::prefix('admin')->middleware(['auth','role:Admin'])->group(function () {
         ->name('admin.accommodations.reject');
     Route::get('/businesses/{business}', [BusinessManagementController::class, 'show'])
     ->name('admin.businesses.show');
-    
+
+   Route::get('/notes', [NoteManagementController::class, 'index'])
+    ->name('admin.notes');
+
+Route::get('/notes/{note}', [NoteManagementController::class, 'show'])
+    ->name('admin.notes.show');
+
+Route::patch('/notes/{note}/approve', [NoteManagementController::class, 'approve'])
+    ->name('admin.notes.approve');
+
+Route::patch('/notes/{note}/reject', [NoteManagementController::class, 'reject'])
+    ->name('admin.notes.reject');
+
+Route::delete('/notes/{note}', [NoteManagementController::class, 'destroy'])
+    ->name('admin.notes.destroy');
+
+Route::post('/notes/bulk/approve', [NoteManagementController::class, 'bulkApprove'])
+    ->name('admin.notes.bulk.approve');
+
+Route::post('/notes/bulk/reject', [NoteManagementController::class, 'bulkReject'])
+    ->name('admin.notes.bulk.reject');
+
+Route::post('/notes/bulk/delete', [NoteManagementController::class, 'bulkDelete'])
+    ->name('admin.notes.bulk.delete');
+
+Route::get('/notes/export/excel', [NoteManagementController::class, 'exportExcel'])
+    ->name('admin.notes.export.excel');
+
+Route::get('/notes/export/pdf', [NoteManagementController::class, 'exportPdf'])
+    ->name('admin.notes.export.pdf');
 });
 
 require __DIR__.'/auth.php';

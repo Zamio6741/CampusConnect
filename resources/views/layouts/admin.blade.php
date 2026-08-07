@@ -156,7 +156,7 @@ class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300
 
             </a>
 
-            <a href="#"
+           <a href="{{ route('admin.notes') }}"
                class="flex items-center gap-4 px-5 py-3 rounded-xl hover:bg-slate-800 transition">
 
                 <span class="text-xl">📚</span>
