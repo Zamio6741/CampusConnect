@@ -20,49 +20,40 @@ class BusinessController extends Controller
     |--------------------------------------------------------------------------
     */
 
-  public function dashboard()
+public function dashboard()
 {
-    $businesses = Business::where('user_id', auth()->id())->get();
+    $business = Business::where('user_id', auth()->id())->first();
 
-    $business = $businesses->first();
-
-    $unreadMessages = 0;
-    $productsCount = 0;
-    $reviewsCount = 0;
-    $averageRating = 0;
-    $advertisementsCount = 0;
-
-    if ($business) {
-
-        $unreadMessages = Message::where('business_id', $business->id)
-            ->where('sender_id', '!=', auth()->id())
-            ->where('is_read', false)
-            ->count();
-
-        $productsCount = Product::where('business_id', $business->id)->count();
-
-        $reviewsCount = BusinessReview::where('business_id', $business->id)->count();
-
-        $averageRating = round(
-            BusinessReview::where('business_id', $business->id)->avg('rating') ?? 0,
-            1
-        );
-
-        $advertisementsCount = Advertisement::where('business_id', $business->id)->count();
+    if (!$business) {
+        return redirect()
+            ->route('businesses.create')
+            ->with('info', 'Please register your business first.');
     }
 
-    return view(
-        'business.dashboard',
-        compact(
-            'businesses',
-            'business',
-            'unreadMessages',
-            'productsCount',
-            'reviewsCount',
-            'averageRating',
-            'advertisementsCount'
-        )
+    $unreadMessages = Message::where('business_id', $business->id)
+        ->where('sender_id', '!=', auth()->id())
+        ->where('is_read', false)
+        ->count();
+
+    $productsCount = Product::where('business_id', $business->id)->count();
+
+    $reviewsCount = BusinessReview::where('business_id', $business->id)->count();
+
+    $averageRating = round(
+        BusinessReview::where('business_id', $business->id)->avg('rating') ?? 0,
+        1
     );
+
+    $advertisementsCount = Advertisement::where('business_id', $business->id)->count();
+
+    return view('business.dashboard', compact(
+        'business',
+        'unreadMessages',
+        'productsCount',
+        'reviewsCount',
+        'averageRating',
+        'advertisementsCount'
+    ));
 }
     /*
     |--------------------------------------------------------------------------
