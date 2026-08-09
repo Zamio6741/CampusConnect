@@ -12,17 +12,41 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
 
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(function (Middleware $middleware): void {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trust Render's Reverse Proxy
+        |--------------------------------------------------------------------------
+        |
+        | Render terminates HTTPS before forwarding the request to Laravel.
+        | Trusting the proxy allows Laravel to correctly detect the original
+        | HTTPS connection and generate HTTPS URLs for Vite assets.
+        |
+        */
+
+        $middleware->trustProxies(at: '*');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Application Middleware Aliases
+        |--------------------------------------------------------------------------
+        */
 
         $middleware->alias([
             'student' => \App\Http\Middleware\StudentMiddleware::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Web Middleware
+        |--------------------------------------------------------------------------
+        */
+
         $middleware->web(append: [
             \App\Http\Middleware\UpdateLastSeen::class,
         ]);
-
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {
@@ -30,7 +54,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
-
     })
 
     ->create();
