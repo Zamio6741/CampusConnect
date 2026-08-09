@@ -34,6 +34,7 @@ RUN npm install
 RUN npm run build
 
 RUN php artisan migrate --force
+RUN php artisan db:seed --class=RoleSeeder --force
 RUN php artisan db:seed --class=AdminSeeder --force
 
 RUN mkdir -p storage/framework/cache \
