@@ -33,10 +33,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 RUN npm run build
 
-RUN php artisan migrate --force
-RUN php artisan db:seed --class=RoleSeeder --force
-RUN php artisan db:seed --class=AdminSeeder --force
-
 RUN mkdir -p storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
@@ -48,4 +44,7 @@ RUN php artisan storage:link || true
 
 EXPOSE 8080
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT}
+CMD php artisan migrate --force && \
+    php artisan db:seed --class=RoleSeeder --force && \
+    php artisan db:seed --class=AdminSeeder --force && \
+    php artisan serve --host=0.0.0.0 --port=${PORT}
