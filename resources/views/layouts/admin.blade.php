@@ -125,6 +125,20 @@ class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300
 
             </a>
 
+            <a href="{{ route('admin.marketplace') }}"
+   class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+   {{ request()->routeIs('admin.marketplace*')
+       ? 'bg-orange-600 text-white shadow-lg'
+       : 'hover:bg-slate-800 text-slate-200' }}">
+
+    <span class="text-xl">🛒</span>
+
+    <span class="font-medium">
+        Marketplace
+    </span>
+
+</a>
+
             <a href="{{ route('admin.accommodations') }}"
                class="flex items-center gap-4 px-5 py-3 rounded-xl transition
                {{ request()->routeIs('admin.accommodations*') ? 'bg-sky-600 text-white shadow-lg' : 'hover:bg-slate-800 text-slate-200' }}">
@@ -136,21 +150,6 @@ class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300
                     x-transition>
 
                     Accommodations
-
-                </span>
-
-            </a>
-
-            <a href="#"
-               class="flex items-center gap-4 px-5 py-3 rounded-xl hover:bg-slate-800 transition">
-
-                <span class="text-xl">🛒</span>
-
-                <span
-                    x-show="sidebar"
-                    x-transition>
-
-                    Marketplace
 
                 </span>
 

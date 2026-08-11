@@ -102,7 +102,7 @@
 
         </a>
 
-        <a href="{{ route('student.marketplace') }}" class="sidebar-link">
+        <a href="{{ route('marketplace.index') }}" class="sidebar-link">
 
             🛒 <span>Marketplace</span>
 
@@ -467,7 +467,7 @@
 
                 </a>
 
-                <a href="{{ route('student.marketplace')  }}"
+                <a href="{{ route('marketplace.index')  }}"
                    class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-xl font-bold transition">
 
                     Marketplace
@@ -765,7 +765,7 @@
 
         <!-- MARKETPLACE -->
 
-        <a href="{{ route('student.marketplace') }}"
+        <a href="{{ route('marketplace.index') }}"
            class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 duration-300">
 
             <div class="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center text-4xl">

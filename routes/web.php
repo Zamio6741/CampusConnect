@@ -487,16 +487,7 @@ Route::resource('products', ProductController::class);
 Route::patch('/products/{product}/featured',
     [ProductController::class, 'featured'])
     ->name('products.featured');    
-Route::get('/marketplace', [StudentBusinessController::class, 'index'])
-    ->name('student.marketplace');
-
-Route::middleware(['auth','student'])->group(function () {
-
-    Route::get('/marketplace',
-        [StudentBusinessController::class,'index'])
-        ->name('student.marketplace');
-
-});    
+    
 
 Route::middleware(['auth', 'role:Student'])->group(function () {
 
@@ -695,6 +686,32 @@ Route::get('/notes/export/excel', [NoteManagementController::class, 'exportExcel
 
 Route::get('/notes/export/pdf', [NoteManagementController::class, 'exportPdf'])
     ->name('admin.notes.export.pdf');
+
+        /*
+    |--------------------------------------------------------------------------
+    | Marketplace Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/marketplace',
+        [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'index'])
+        ->name('admin.marketplace');
+
+    Route::get('/marketplace/{marketplace}',
+        [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'show'])
+        ->name('admin.marketplace.show');
+
+    Route::patch('/marketplace/{marketplace}/sold',
+        [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'markSold'])
+        ->name('admin.marketplace.sold');
+
+    Route::patch('/marketplace/{marketplace}/available',
+        [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'markAvailable'])
+        ->name('admin.marketplace.available');
+
+    Route::delete('/marketplace/{marketplace}',
+        [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'destroy'])
+        ->name('admin.marketplace.destroy');
 });
 
 require __DIR__.'/auth.php';

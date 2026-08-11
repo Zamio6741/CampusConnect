@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class MarketplaceItem extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'title',
@@ -13,58 +16,23 @@ class MarketplaceItem extends Model
         'price',
         'category',
         'condition',
-        'phone',
         'location',
-        'status',
+        'phone',
+        'sold',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Seller
-    |--------------------------------------------------------------------------
-    */
+    protected $casts = [
+        'sold' => 'boolean',
+        'price' => 'decimal:2',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Images
-    |--------------------------------------------------------------------------
-    */
-
     public function images()
     {
-        return $this->hasMany(MarketplaceImage::class);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Favorites
-    |--------------------------------------------------------------------------
-    */
-
-    public function favorites()
-    {
-        return $this->hasMany(MarketplaceFavorite::class);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Check if current user has favorited this item
-    |--------------------------------------------------------------------------
-    */
-
-    public function isFavorited()
-    {
-        if (!auth()->check()) {
-            return false;
-        }
-
-        return $this->favorites()
-            ->where('user_id', auth()->id())
-            ->exists();
+        return $this->hasMany(MarketplaceImage::class, 'marketplace_item_id');
     }
 }

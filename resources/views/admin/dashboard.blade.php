@@ -416,7 +416,7 @@
         ⚡ Admin Control Center
     </h2>
 
-   <div class="grid grid-cols-2 gap-4">
+   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 
    <a href="{{ route('admin.users') }}"
        class="bg-blue-600 text-white rounded-xl p-5 text-center hover:scale-105 transition">
@@ -438,11 +438,20 @@
 
 </a>
 
-<div class="bg-orange-500 text-white rounded-xl p-5 text-center hover:scale-105 transition cursor-pointer">
-    📚
-    <div class="mt-2 font-semibold">Notes</div>
-    <div class="text-xs opacity-80 mt-1">Coming Soon</div>
-</div>
+<a href="{{ route('admin.marketplace') }}"
+   class="bg-orange-500 text-white rounded-xl p-5 text-center hover:scale-105 transition">
+
+    🛒
+
+    <div class="mt-2 font-semibold">
+        Marketplace
+    </div>
+
+    <div class="text-xs opacity-80 mt-1">
+        Manage Listings
+    </div>
+
+</a>
 
 <div class="bg-red-600 text-white rounded-xl p-5 text-center hover:scale-105 transition cursor-pointer">
     📢
