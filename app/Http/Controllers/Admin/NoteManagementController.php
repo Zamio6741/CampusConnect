@@ -64,8 +64,10 @@ class NoteManagementController extends Controller
             'faculties'=>Faculty::orderBy('name')->get(),
             'departments'=>Department::orderBy('name')->get(),
             'programmes'=>Programme::orderBy('name')->get(),
-            'semesters'=>Semester::orderBy('name')->get(),
-            'units'=>Unit::orderBy('name')->get(),
+            'semesters' => Semester::orderBy('year')
+    ->orderBy('semester')
+    ->get(),
+            'units' => Unit::orderBy('unit_name')->get(),
 
         ]);
     }

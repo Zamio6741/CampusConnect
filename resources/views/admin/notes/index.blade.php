@@ -370,15 +370,10 @@
                     </option>
 
                     @foreach($semesters as $semester)
-
-                        <option
-                            value="{{ $semester->id }}"
-                            @selected(request('semester') == $semester->id)>
-
-                            {{ $semester->name }}
-
-                        </option>
-
+                             <option value="{{ $semester->id }}"
+                                   @selected(request('semester') == $semester->id)>
+                                  Year {{ $semester->year }} - Semester {{ $semester->semester }}
+                             </option>
                     @endforeach
 
                 </select>
