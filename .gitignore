@@ -35,3 +35,5 @@ Homestead.json
 Homestead.yaml
 
 Thumbs.db
+.env.sqlite
+.env.supabase
