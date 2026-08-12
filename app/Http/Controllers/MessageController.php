@@ -16,11 +16,12 @@ class MessageController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
-        Message::create([
-            'business_id' => $business->id,
-            'student_id' => auth()->id(),
-            'message' => $request->message,
-        ]);
+       Message::create([
+    'business_id' => $business->id,
+    'student_id' => auth()->id(),
+    'sender_id' => auth()->id(),
+    'message' => $request->message,
+]);
 
         Notification::create([
     'user_id' => $business->user_id,
@@ -30,7 +31,9 @@ class MessageController extends Controller
     'link' => route('business.messages'),
 ]);
 
-        return back()->with('success', 'Message sent successfully.');
+        return redirect()
+    ->route('business.preview', $business)
+    ->with('success', 'Message sent successfully.');
     }
 
     // Business owner's inbox
@@ -58,6 +61,7 @@ class MessageController extends Controller
             'is_read' => true,
         ]);
 
-        return back()->with('success', 'Reply sent.');
+        return redirect('/businesses/' . $business->id)
+    ->with('success', 'Message sent successfully.');
     }
 }

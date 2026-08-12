@@ -1,37 +1,74 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+
+    <div class="auth-heading">
+        Join CampusConnect 🚀
+    </div>
+
+    <p class="auth-subheading">
+        Create your account and connect with your university community.
+    </p>
+
+    <form
+        method="POST"
+        action="{{ route('register') }}"
+        class="auth-form">
+
         @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Full Name')" />
+        <!-- FULL NAME -->
 
-            <x-text-input
+        <div class="form-group">
+
+            <label
+                for="name"
+                class="form-label">
+
+                Full Name
+
+            </label>
+
+            <input
                 id="name"
-                class="block mt-1 w-full"
+                class="auth-input"
                 type="text"
                 name="name"
-                :value="old('name')"
+                value="{{ old('name') }}"
+                placeholder="Enter your full name"
                 required
                 autofocus
-                autocomplete="name" />
+                autocomplete="name">
 
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            @if($errors->get('name'))
+
+                <div class="error-message">
+                    {{ $errors->first('name') }}
+                </div>
+
+            @endif
+
         </div>
 
-        <!-- Register As -->
+        <!-- ACCOUNT TYPE -->
 
-        <div class="mt-4">
+        <div class="form-group">
 
-            <x-input-label for="role_id" :value="__('Register As')" />
+            <label
+                for="role_id"
+                class="form-label">
+
+                Register As
+
+            </label>
 
             <select
                 id="role_id"
                 name="role_id"
-                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="auth-select"
                 required>
 
-                <option value="">Choose Account Type</option>
+                <option value="">
+                    Choose Account Type
+                </option>
 
                 @foreach($roles as $role)
 
@@ -51,23 +88,37 @@
 
             </select>
 
-            <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
+            @if($errors->get('role_id'))
+
+                <div class="error-message">
+                    {{ $errors->first('role_id') }}
+                </div>
+
+            @endif
 
         </div>
 
-        <!-- University -->
+        <!-- UNIVERSITY -->
 
-        <div class="mt-4">
+        <div class="form-group">
 
-            <x-input-label for="university_id" :value="__('University')" />
+            <label
+                for="university_id"
+                class="form-label">
+
+                University
+
+            </label>
 
             <select
                 id="university_id"
                 name="university_id"
-                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="auth-select"
                 required>
 
-                <option value="">Select your University</option>
+                <option value="">
+                    Select your University
+                </option>
 
                 @foreach($universities as $university)
 
@@ -83,80 +134,164 @@
 
             </select>
 
-            <x-input-error :messages="$errors->get('university_id')" class="mt-2" />
+            @if($errors->get('university_id'))
+
+                <div class="error-message">
+                    {{ $errors->first('university_id') }}
+                </div>
+
+            @endif
 
         </div>
 
-        <!-- Email -->
+        <!-- EMAIL -->
 
-        <div class="mt-4">
+        <div class="form-group">
 
-            <x-input-label for="email" :value="__('Email Address')" />
+            <label
+                for="email"
+                class="form-label">
 
-            <x-text-input
+                Email Address
+
+            </label>
+
+            <input
                 id="email"
-                class="block mt-1 w-full"
+                class="auth-input"
                 type="email"
                 name="email"
-                :value="old('email')"
+                value="{{ old('email') }}"
+                placeholder="Enter your email address"
                 required
-                autocomplete="username" />
+                autocomplete="username">
 
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            @if($errors->get('email'))
 
-        </div>
+                <div class="error-message">
+                    {{ $errors->first('email') }}
+                </div>
 
-        <!-- Password -->
-
-        <div class="mt-4">
-
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input
-                id="password"
-                class="block mt-1 w-full"
-                type="password"
-                name="password"
-                required
-                autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            @endif
 
         </div>
 
-        <!-- Confirm Password -->
+        <!-- PASSWORD -->
 
-        <div class="mt-4">
+        <div class="form-group">
 
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <label
+                for="password"
+                class="form-label">
 
-            <x-text-input
-                id="password_confirmation"
-                class="block mt-1 w-full"
-                type="password"
-                name="password_confirmation"
-                required
-                autocomplete="new-password" />
+                Password
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    id="password"
+                    class="auth-input"
+                    type="password"
+                    name="password"
+                    placeholder="Create a strong password"
+                    required
+                    autocomplete="new-password">
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword(this, 'password')">
+
+                    Show
+
+                </button>
+
+            </div>
+
+            @if($errors->get('password'))
+
+                <div class="error-message">
+                    {{ $errors->first('password') }}
+                </div>
+
+            @endif
 
         </div>
 
-        <div class="flex items-center justify-between mt-6">
+        <!-- CONFIRM PASSWORD -->
 
-            <a
-                class="underline text-sm text-gray-600 hover:text-gray-900"
-                href="{{ route('login') }}">
+        <div class="form-group">
 
-                Already registered?
+            <label
+                for="password_confirmation"
+                class="form-label">
 
-            </a>
+                Confirm Password
 
-            <x-primary-button>
-                Register
-            </x-primary-button>
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    id="password_confirmation"
+                    class="auth-input"
+                    type="password"
+                    name="password_confirmation"
+                    placeholder="Confirm your password"
+                    required
+                    autocomplete="new-password">
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword(this, 'password_confirmation')">
+
+                    Show
+
+                </button>
+
+            </div>
+
+            @if($errors->get('password_confirmation'))
+
+                <div class="error-message">
+                    {{ $errors->first('password_confirmation') }}
+                </div>
+
+            @endif
 
         </div>
+
+        <!-- REGISTER -->
+
+        <button
+            type="submit"
+            class="auth-button">
+
+            Create My Account →
+
+        </button>
 
     </form>
+
+    <!-- FOOTER -->
+
+    <div class="auth-footer">
+
+        Already have an account?
+
+        <a href="{{ route('login') }}">
+            Sign in
+        </a>
+
+    </div>
+
+    <div class="security-note">
+        🔒 Your information is securely protected.
+    </div>
+
+</div>
+
 </x-guest-layout>

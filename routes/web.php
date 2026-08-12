@@ -415,30 +415,22 @@ Route::delete('/gallery/{image}', [BusinessGalleryController::class, 'destroy'])
 Route::patch('/gallery/{image}/cover', [BusinessGalleryController::class, 'cover'])
     ->name('business.gallery.cover');   
     
-// Student sends message
+// ============================================================
+// BUSINESS MESSAGING
+// ============================================================
+
+// Student sends a message to a business
 Route::post('/businesses/{business}/message', [MessageController::class, 'store'])
     ->name('messages.store');
 
-// Business owner views inbox
-Route::get('/business/messages', [MessageController::class, 'index'])
-    ->name('messages.index');
-
-// Business owner replies
-Route::post('/messages/{message}/reply', [MessageController::class, 'reply'])
-    ->name('messages.reply');    
-     
-Route::get('/business/messages', [BusinessMessageController::class, 'index'])
-    ->name('business.messages');   
-
+// Business owner inbox
 Route::get('/business/messages', [BusinessMessageController::class, 'index'])
     ->name('business.messages');
 
+// Business owner opens a conversation
 Route::get('/business/messages/{message}', [BusinessMessageController::class, 'show'])
     ->name('business.messages.show');
 
-Route::post('/business/messages/{message}/reply', [BusinessMessageController::class, 'reply'])
-    ->name('business.messages.reply');     
-    
     
 /*
 |--------------------------------------------------------------------------
