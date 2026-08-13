@@ -170,22 +170,25 @@ class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300
 
             </a>
 
-            <a href="#"
-               class="flex items-center gap-4 px-5 py-3 rounded-xl hover:bg-slate-800 transition">
+         <a href="{{ route('admin.announcements') }}"
+   class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300
+   {{ request()->routeIs('admin.announcements*')
+       ? 'bg-red-600 text-white shadow-lg'
+       : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2' }}">
 
-                <span class="text-xl">📢</span>
+    <span class="text-xl">📢</span>
 
-                <span
-                    x-show="sidebar"
-                    x-transition>
+    <span
+        x-show="sidebar"
+        x-transition>
 
-                    Announcements
+        Announcements
 
-                </span>
+    </span>
 
-            </a>
+</a>
 
-            <a href="#"
+            <a href="{{ route('admin.reports') }}"
                class="flex items-center gap-4 px-5 py-3 rounded-xl hover:bg-slate-800 transition">
 
                 <span class="text-xl">📊</span>

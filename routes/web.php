@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\BusinessManagementController;
 use App\Http\Controllers\Admin\AccommodationManagementController;
 use App\Http\Controllers\Admin\NoteManagementController;
+use App\Http\Controllers\Admin\AnnouncementManagementController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -704,6 +705,44 @@ Route::get('/notes/export/pdf', [NoteManagementController::class, 'exportPdf'])
     Route::delete('/marketplace/{marketplace}',
         [App\Http\Controllers\Admin\MarketplaceManagementController::class, 'destroy'])
         ->name('admin.marketplace.destroy');
+
+    /*
+|--------------------------------------------------------------------------
+| Announcement Management
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/announcements',
+    [AnnouncementManagementController::class, 'index'])
+    ->name('admin.announcements');
+
+Route::get('/announcements/create',
+    [AnnouncementManagementController::class, 'create'])
+    ->name('admin.announcements.create');
+
+Route::post('/announcements',
+    [AnnouncementManagementController::class, 'store'])
+    ->name('admin.announcements.store');
+
+Route::get('/announcements/{announcement}',
+    [AnnouncementManagementController::class, 'show'])
+    ->name('admin.announcements.show');
+
+Route::get('/announcements/{announcement}/edit',
+    [AnnouncementManagementController::class, 'edit'])
+    ->name('admin.announcements.edit');
+
+Route::put('/announcements/{announcement}',
+    [AnnouncementManagementController::class, 'update'])
+    ->name('admin.announcements.update');
+
+Route::delete('/announcements/{announcement}',
+    [AnnouncementManagementController::class, 'destroy'])
+    ->name('admin.announcements.destroy');
+
+    Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])
+    ->name('admin.reports');
+
 });
 
 require __DIR__.'/auth.php';

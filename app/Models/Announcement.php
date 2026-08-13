@@ -6,23 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Announcement extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'university_id',
-        'title',
-        'content',
-    ];
+   protected $fillable = [
+    'university_id',
+    'title',
+    'content',
+];
 
     /*
     |--------------------------------------------------------------------------
     | Relationships
     |--------------------------------------------------------------------------
     */
-
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class);
+}
 
     public function university()
     {
