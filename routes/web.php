@@ -743,6 +743,12 @@ Route::delete('/announcements/{announcement}',
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])
     ->name('admin.reports');
 
+    Route::get('/settings', [\App\Http\Controllers\Admin\AdminSettingsController::class, 'index'])
+    ->name('admin.settings');
+
+Route::put('/settings', [\App\Http\Controllers\Admin\AdminSettingsController::class, 'update'])
+    ->name('admin.settings.update');
+
 });
 
 require __DIR__.'/auth.php';

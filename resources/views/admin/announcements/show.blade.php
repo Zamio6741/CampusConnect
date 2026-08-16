@@ -14,8 +14,11 @@
 
         <div class="flex items-center gap-4">
 
-            <div class="w-14 h-14 rounded-2xl bg-red-100
-                        flex items-center justify-center text-2xl">
+            <div class="w-14 h-14 rounded-2xl
+                        bg-red-100
+                        border border-red-200
+                        flex items-center justify-center
+                        text-2xl shadow-sm">
                 📢
             </div>
 
@@ -36,30 +39,39 @@
 
         <div class="flex flex-col sm:flex-row gap-3">
 
+            {{-- Back --}}
+
             <a
                 href="{{ route('admin.announcements') }}"
                 class="inline-flex items-center justify-center gap-2
                        px-5 py-3 rounded-xl
-                       border border-slate-300
+                       border-2 border-slate-300
                        bg-white
                        text-slate-700
                        font-semibold
                        hover:bg-slate-50
-                       transition">
+                       hover:border-slate-400
+                       transition duration-200">
 
                 ← Back
 
             </a>
 
+
+            {{-- Edit --}}
+
             <a
                 href="{{ route('admin.announcements.edit', $announcement) }}"
                 class="inline-flex items-center justify-center gap-2
                        px-5 py-3 rounded-xl
-                       bg-amber-500 hover:bg-amber-600
+                       bg-amber-500
+                       hover:bg-amber-600
+                       border-2 border-amber-500
                        text-white
                        font-semibold
                        shadow-md
-                       transition">
+                       hover:shadow-lg
+                       transition duration-200">
 
                 ✏️ Edit Announcement
 
@@ -76,13 +88,20 @@
 
     @if(session('success'))
 
-        <div class="bg-green-50 border border-green-200
-                    rounded-2xl p-5">
+        <div class="bg-green-50
+                    border-2 border-green-200
+                    rounded-2xl
+                    p-5
+                    shadow-sm">
 
             <div class="flex items-center gap-3">
 
-                <div class="w-10 h-10 rounded-full bg-green-100
-                            flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full
+                            bg-green-100
+                            border border-green-200
+                            flex items-center justify-center
+                            text-green-700
+                            font-bold">
 
                     ✓
 
@@ -107,19 +126,26 @@
          ANNOUNCEMENT CARD
     ========================================================== --}}
 
-    <div class="bg-white rounded-2xl shadow-md
-                border border-slate-100 overflow-hidden">
+    <div class="bg-white
+                rounded-2xl
+                shadow-md
+                border-2 border-slate-200
+                overflow-hidden">
 
 
-        {{-- Announcement Header --}}
+        {{-- =====================================================
+             ANNOUNCEMENT HEADER
+        ====================================================== --}}
 
         <div class="bg-gradient-to-r from-red-500 to-red-600
-                    px-6 py-8 sm:px-8">
+                    px-6 py-8 sm:px-8
+                    border-b-2 border-red-700">
 
             <div class="flex items-start gap-5">
 
                 <div class="w-16 h-16 rounded-2xl
                             bg-white/20
+                            border border-white/30
                             flex items-center justify-center
                             text-3xl
                             flex-shrink-0">
@@ -134,6 +160,7 @@
                     <div class="inline-flex items-center
                                 px-3 py-1 rounded-full
                                 bg-white/20
+                                border border-white/30
                                 text-white
                                 text-xs font-semibold
                                 mb-3">
@@ -143,7 +170,8 @@
                     </div>
 
                     <h2 class="text-2xl sm:text-3xl
-                               font-bold text-white">
+                               font-bold text-white
+                               break-words">
 
                         {{ $announcement->title }}
 
@@ -152,7 +180,7 @@
                     <p class="text-red-100 mt-3 text-sm">
 
                         Published
-                        {{ $announcement->created_at->diffForHumans() }}
+                        {{ $announcement->created_at?->diffForHumans() }}
 
                     </p>
 
@@ -170,15 +198,18 @@
         <div class="grid grid-cols-1 md:grid-cols-3
                     divide-y md:divide-y-0
                     md:divide-x
-                    border-b border-slate-100">
+                    border-b-2 border-slate-200">
 
 
-            {{-- University --}}
+            {{-- =================================================
+                 UNIVERSITY
+            ================================================== --}}
 
             <div class="p-6">
 
                 <p class="text-xs uppercase tracking-wider
-                          text-slate-400 font-semibold">
+                          text-slate-400
+                          font-semibold">
 
                     Target University
 
@@ -188,15 +219,16 @@
 
                     <div class="w-10 h-10 rounded-xl
                                 bg-sky-100
+                                border border-sky-200
                                 flex items-center justify-center">
 
                         🎓
 
                     </div>
 
-                    <div>
+                    <div class="min-w-0">
 
-                        <p class="font-bold text-slate-800">
+                        <p class="font-bold text-slate-800 break-words">
 
                             {{ $announcement->university->name ?? 'Unknown University' }}
 
@@ -213,12 +245,15 @@
             </div>
 
 
-            {{-- Posted By --}}
+            {{-- =================================================
+                 POSTED BY
+            ================================================== --}}
 
             <div class="p-6">
 
                 <p class="text-xs uppercase tracking-wider
-                          text-slate-400 font-semibold">
+                          text-slate-400
+                          font-semibold">
 
                     Published By
 
@@ -228,17 +263,19 @@
 
                     <div class="w-10 h-10 rounded-full
                                 bg-purple-100
+                                border border-purple-200
                                 flex items-center justify-center
                                 text-purple-700
-                                font-bold">
+                                font-bold
+                                flex-shrink-0">
 
                         {{ strtoupper(substr($announcement->user->name ?? 'S', 0, 1)) }}
 
                     </div>
 
-                    <div>
+                    <div class="min-w-0">
 
-                        <p class="font-bold text-slate-800">
+                        <p class="font-bold text-slate-800 break-words">
 
                             {{ $announcement->user->name ?? 'System' }}
 
@@ -246,7 +283,7 @@
 
                         @if($announcement->user)
 
-                            <p class="text-xs text-slate-400">
+                            <p class="text-xs text-slate-400 break-all">
 
                                 {{ $announcement->user->email }}
 
@@ -267,12 +304,15 @@
             </div>
 
 
-            {{-- Date --}}
+            {{-- =================================================
+                 DATE
+            ================================================== --}}
 
             <div class="p-6">
 
                 <p class="text-xs uppercase tracking-wider
-                          text-slate-400 font-semibold">
+                          text-slate-400
+                          font-semibold">
 
                     Publication Date
 
@@ -282,6 +322,7 @@
 
                     <div class="w-10 h-10 rounded-xl
                                 bg-green-100
+                                border border-green-200
                                 flex items-center justify-center">
 
                         📅
@@ -292,13 +333,13 @@
 
                         <p class="font-bold text-slate-800">
 
-                            {{ $announcement->created_at->format('d M Y') }}
+                            {{ $announcement->created_at?->format('d M Y') }}
 
                         </p>
 
                         <p class="text-xs text-slate-400">
 
-                            {{ $announcement->created_at->format('h:i A') }}
+                            {{ $announcement->created_at?->format('h:i A') }}
 
                         </p>
 
@@ -321,6 +362,7 @@
 
                 <div class="w-10 h-10 rounded-xl
                             bg-red-100
+                            border border-red-200
                             flex items-center justify-center">
 
                     📝
@@ -342,10 +384,13 @@
             </div>
 
 
+            {{-- Message Box --}}
+
             <div class="bg-slate-50
-                        border border-slate-200
+                        border-2 border-slate-200
                         rounded-2xl
-                        p-6 sm:p-8">
+                        p-6 sm:p-8
+                        shadow-sm">
 
                 <div class="text-slate-700
                             leading-8
@@ -367,13 +412,17 @@
          NOTIFICATION INFORMATION
     ========================================================== --}}
 
-    <div class="bg-sky-50 border border-sky-100
-                rounded-2xl p-6">
+    <div class="bg-sky-50
+                border-2 border-sky-200
+                rounded-2xl
+                p-6
+                shadow-sm">
 
         <div class="flex items-start gap-4">
 
             <div class="w-12 h-12 rounded-xl
                         bg-white
+                        border border-sky-200
                         flex items-center justify-center
                         shadow-sm
                         text-xl
@@ -392,9 +441,11 @@
                 <p class="text-sm text-sky-700 mt-1 leading-6">
 
                     This announcement was targeted to
+
                     <strong>
                         {{ $announcement->university->name ?? 'the selected university' }}
                     </strong>.
+
                     Students belonging to that university are notified when
                     the announcement is published.
 
@@ -411,12 +462,16 @@
          MANAGEMENT ACTIONS
     ========================================================== --}}
 
-    <div class="bg-white rounded-2xl shadow-md
-                border border-slate-100 p-6">
+    <div class="bg-white
+                rounded-2xl
+                shadow-md
+                border-2 border-slate-200
+                p-6">
 
         <div class="flex flex-col lg:flex-row
                     lg:items-center
-                    lg:justify-between gap-5">
+                    lg:justify-between
+                    gap-5">
 
             <div>
 
@@ -433,23 +488,31 @@
 
             <div class="flex flex-col sm:flex-row gap-3">
 
-                {{-- Edit --}}
+                {{-- =================================================
+                     EDIT
+                ================================================== --}}
 
                 <a
                     href="{{ route('admin.announcements.edit', $announcement) }}"
                     class="inline-flex items-center justify-center gap-2
                            px-6 py-3 rounded-xl
-                           bg-amber-500 hover:bg-amber-600
+                           bg-amber-500
+                           hover:bg-amber-600
+                           border-2 border-amber-500
                            text-white
                            font-semibold
-                           transition">
+                           shadow-sm
+                           hover:shadow-md
+                           transition duration-200">
 
                     ✏️ Edit
 
                 </a>
 
 
-                {{-- Delete --}}
+                {{-- =================================================
+                     DELETE
+                ================================================== --}}
 
                 <form
                     method="POST"
@@ -464,10 +527,14 @@
                         type="submit"
                         class="w-full inline-flex items-center justify-center gap-2
                                px-6 py-3 rounded-xl
-                               bg-red-600 hover:bg-red-700
+                               bg-red-600
+                               hover:bg-red-700
+                               border-2 border-red-600
                                text-white
                                font-semibold
-                               transition">
+                               shadow-sm
+                               hover:shadow-md
+                               transition duration-200">
 
                         🗑 Delete
 

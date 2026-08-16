@@ -39,7 +39,9 @@
                    bg-white
                    text-slate-700
                    font-semibold
+                   shadow-sm
                    hover:bg-slate-50
+                   hover:border-slate-400
                    transition">
 
             ← Back to Announcements
@@ -151,11 +153,21 @@
                     id="university_id"
                     name="university_id"
                     required
-                    class="w-full rounded-xl border-slate-300
+                    class="w-full rounded-xl
+                           border border-slate-300
+                           bg-white
+                           px-4 py-3
+                           text-slate-800
+                           shadow-sm
+                           outline-none
+                           transition
                            focus:border-sky-500
-                           focus:ring-sky-500
+                           focus:ring-2
+                           focus:ring-sky-100
                            @error('university_id')
-                               border-red-400
+                               !border-red-400
+                               !focus:border-red-500
+                               !focus:ring-red-100
                            @enderror">
 
                     <option value="">
@@ -232,7 +244,9 @@
             <div class="p-6 space-y-6">
 
 
-                {{-- TITLE --}}
+                {{-- =================================================
+                     TITLE
+                ================================================== --}}
 
                 <div>
 
@@ -254,15 +268,26 @@
                         maxlength="255"
                         required
                         placeholder="e.g. Semester Examination Timetable Released"
-                        class="w-full rounded-xl border-slate-300
+                        class="w-full rounded-xl
+                               border border-slate-300
+                               bg-white
+                               px-4 py-3
+                               text-slate-800
+                               placeholder-slate-400
+                               shadow-sm
+                               outline-none
+                               transition
                                focus:border-sky-500
-                               focus:ring-sky-500
+                               focus:ring-2
+                               focus:ring-sky-100
                                @error('title')
-                                   border-red-400
+                                   !border-red-400
+                                   !focus:border-red-500
+                                   !focus:ring-red-100
                                @enderror">
 
 
-                    <div class="flex justify-between mt-2">
+                    <div class="flex justify-between mt-2 gap-4">
 
                         @error('title')
 
@@ -280,7 +305,7 @@
 
                         <span
                             id="titleCounter"
-                            class="text-xs text-slate-400">
+                            class="text-xs text-slate-400 whitespace-nowrap">
 
                             0 / 255
 
@@ -291,7 +316,9 @@
                 </div>
 
 
-                {{-- CONTENT --}}
+                {{-- =================================================
+                     CONTENT
+                ================================================== --}}
 
                 <div>
 
@@ -311,16 +338,27 @@
                         rows="10"
                         required
                         placeholder="Write your announcement here..."
-                        class="w-full rounded-xl border-slate-300
+                        class="w-full rounded-xl
+                               border border-slate-300
+                               bg-white
+                               px-4 py-3
+                               text-slate-800
+                               placeholder-slate-400
+                               shadow-sm
+                               outline-none
+                               transition
                                focus:border-sky-500
-                               focus:ring-sky-500
+                               focus:ring-2
+                               focus:ring-sky-100
                                resize-y
                                @error('content')
-                                   border-red-400
+                                   !border-red-400
+                                   !focus:border-red-500
+                                   !focus:ring-red-100
                                @enderror">{{ old('content') }}</textarea>
 
 
-                    <div class="flex justify-between mt-2">
+                    <div class="flex justify-between mt-2 gap-4">
 
                         @error('content')
 
@@ -338,7 +376,7 @@
 
                         <span
                             id="contentCounter"
-                            class="text-xs text-slate-400">
+                            class="text-xs text-slate-400 whitespace-nowrap">
 
                             0 characters
 
@@ -418,9 +456,12 @@
                         class="inline-flex items-center justify-center
                                px-6 py-3 rounded-xl
                                border border-slate-300
+                               bg-white
                                text-slate-700
                                font-semibold
+                               shadow-sm
                                hover:bg-slate-50
+                               hover:border-slate-400
                                transition">
 
                         Cancel
@@ -472,23 +513,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateTitleCounter() {
 
-        titleCounter.textContent =
-            title.value.length + ' / 255';
+        if (title && titleCounter) {
+
+            titleCounter.textContent =
+                title.value.length + ' / 255';
+
+        }
 
     }
 
 
     function updateContentCounter() {
 
-        contentCounter.textContent =
-            content.value.length + ' characters';
+        if (content && contentCounter) {
+
+            contentCounter.textContent =
+                content.value.length + ' characters';
+
+        }
 
     }
 
 
-    title.addEventListener('input', updateTitleCounter);
+    if (title) {
+        title.addEventListener('input', updateTitleCounter);
+    }
 
-    content.addEventListener('input', updateContentCounter);
+    if (content) {
+        content.addEventListener('input', updateContentCounter);
+    }
 
 
     updateTitleCounter();
