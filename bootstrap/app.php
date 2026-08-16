@@ -33,10 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         |--------------------------------------------------------------------------
         */
 
-        $middleware->alias([
-            'student' => \App\Http\Middleware\StudentMiddleware::class,
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
-        ]);
+      $middleware->alias([
+    'student' => \App\Http\Middleware\StudentMiddleware::class,
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+    'account.active' => \App\Http\Middleware\EnsureAccountIsActive::class,
+]);
 
         /*
         |--------------------------------------------------------------------------
@@ -47,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
        $middleware->web(append: [
     \App\Http\Middleware\UpdateLastSeen::class,
     \App\Http\Middleware\MaintenanceMiddleware::class,
+    \App\Http\Middleware\EnsureAccountIsActive::class,
 ]);
 
     })

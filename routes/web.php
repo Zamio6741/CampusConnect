@@ -143,6 +143,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/account-suspended', function () {
+    return view('account-suspended');
+})->middleware(['auth', 'account.active'])->name('account.suspended');
+
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
     Route::get('/landlord/bookings', [App\Http\Controllers\Landlord\BookingManagementController::class, 'index'])
@@ -439,7 +443,7 @@ Route::get('/business/messages/{message}', [BusinessMessageController::class, 's
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'account.active'])->group(function () {
 
     Route::get('/student/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:Student')
@@ -449,9 +453,9 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:Landlord')
         ->name('landlord.dashboard');
 
-   Route::get('/business/dashboard', [BusinessController::class, 'dashboard'])
-    ->middleware('role:Business Owner')
-    ->name('business.dashboard');
+    Route::get('/business/dashboard', [BusinessController::class, 'dashboard'])
+        ->middleware('role:Business Owner')
+        ->name('business.dashboard');
 
     Route::post(
     '/rentals/{accommodation}/request',
