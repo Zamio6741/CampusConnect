@@ -28,19 +28,40 @@
 
             <div class="flex items-center min-w-0">
 
-                <!-- LOGO -->
+                <!-- =================================================
+                     CAMPUSCONNECT BRAND
+                ================================================== -->
 
                 <div class="shrink-0 flex items-center">
 
                     <a
                         href="{{ $dashboardRoute }}"
-                        class="flex items-center"
+                        class="flex items-center gap-2"
                         aria-label="CampusConnect Dashboard"
                     >
 
-                        <x-application-logo
-                            class="block h-8 sm:h-9 w-auto fill-current text-sky-600"
-                        />
+                        <!-- CampusConnect Icon -->
+
+                        <div
+                            class="w-9 h-9 rounded-xl
+                                   bg-gradient-to-r from-blue-600 to-indigo-600
+                                   flex items-center justify-center
+                                   text-white text-lg
+                                   shadow-md"
+                        >
+                            🎓
+                        </div>
+
+                        <!-- Brand Name -->
+
+                        <span
+                            class="hidden sm:block
+                                   text-xl font-extrabold
+                                   bg-gradient-to-r from-blue-600 to-indigo-600
+                                   bg-clip-text text-transparent"
+                        >
+                            CampusConnect
+                        </span>
 
                     </a>
 
@@ -51,7 +72,11 @@
                      DESKTOP NAVIGATION
                 ================================================== -->
 
-                <div class="hidden sm:flex sm:items-center sm:space-x-4 lg:space-x-6 sm:ms-6 lg:ms-10">
+                <div
+                    class="hidden sm:flex sm:items-center
+                           sm:space-x-4 lg:space-x-6
+                           sm:ms-6 lg:ms-10"
+                >
 
                     <!-- Dashboard -->
 
@@ -377,7 +402,7 @@
                                            font-bold bg-red-600
                                            text-white rounded-full"
                                 >
-                                    {{ $notificationCount }}
+                                    {{ $notificationCount > 99 ? '99+' : $notificationCount }}
                                 </span>
 
                             @endif
@@ -517,7 +542,7 @@
 
     <!-- =============================================================
          MOBILE NAVIGATION
-    ============================================================= -->
+    ============================================================== -->
 
     <div
         x-show="open"
@@ -550,14 +575,13 @@
 
                     <div
                         class="w-11 h-11 rounded-full
-                               bg-sky-600
+                               bg-gradient-to-r from-blue-600 to-indigo-600
                                text-white
                                flex items-center justify-center
                                font-bold shrink-0"
                     >
                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                     </div>
-
 
                     <div class="min-w-0">
 
@@ -588,9 +612,7 @@
 
             <div class="px-3 py-3 space-y-1">
 
-                <x-responsive-nav-link
-                    :href="$dashboardRoute"
-                >
+                <x-responsive-nav-link :href="$dashboardRoute">
                     🏠 Dashboard
                 </x-responsive-nav-link>
 
@@ -635,51 +657,35 @@
 
                 @if($role == 'Student')
 
-                    <x-responsive-nav-link
-                        :href="route('notes.index')"
-                    >
+                    <x-responsive-nav-link :href="route('notes.index')">
                         📚 Notes
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('pastpapers.index')"
-                    >
+                    <x-responsive-nav-link :href="route('pastpapers.index')">
                         📄 Past Papers
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('marketplace.index')"
-                    >
+                    <x-responsive-nav-link :href="route('marketplace.index')">
                         🛒 Marketplace
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('campus.index')"
-                    >
+                    <x-responsive-nav-link :href="route('campus.index')">
                         🏫 Campus Hostels
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('rentals.index')"
-                    >
+                    <x-responsive-nav-link :href="route('rentals.index')">
                         🏠 Rentals
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('businesses.index')"
-                    >
+                    <x-responsive-nav-link :href="route('businesses.index')">
                         🏪 Businesses
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('lostfound.index')"
-                    >
+                    <x-responsive-nav-link :href="route('lostfound.index')">
                         🔍 Lost & Found
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('student-services.index')"
-                    >
+                    <x-responsive-nav-link :href="route('student-services.index')">
                         🎓 Student Services
                     </x-responsive-nav-link>
 
@@ -692,21 +698,15 @@
 
                 @if($role == 'Landlord')
 
-                    <x-responsive-nav-link
-                        :href="route('rentals.create')"
-                    >
+                    <x-responsive-nav-link :href="route('rentals.create')">
                         ➕ Add Rental
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('campus.create')"
-                    >
+                    <x-responsive-nav-link :href="route('campus.create')">
                         🏫 Add Hostel
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('rentals.index')"
-                    >
+                    <x-responsive-nav-link :href="route('rentals.index')">
                         🏠 My Listings
                     </x-responsive-nav-link>
 
@@ -719,21 +719,15 @@
 
                 @if($role == 'Business Owner')
 
-                    <x-responsive-nav-link
-                        :href="route('businesses.create')"
-                    >
+                    <x-responsive-nav-link :href="route('businesses.create')">
                         🏪 My Business
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('businesses.index')"
-                    >
+                    <x-responsive-nav-link :href="route('businesses.index')">
                         📋 My Businesses
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('marketplace.create')"
-                    >
+                    <x-responsive-nav-link :href="route('marketplace.create')">
                         🛒 Sell Item
                     </x-responsive-nav-link>
 
@@ -746,27 +740,19 @@
 
                 @if($role == 'Admin')
 
-                    <x-responsive-nav-link
-                        :href="route('admin.dashboard')"
-                    >
+                    <x-responsive-nav-link :href="route('admin.dashboard')">
                         🛠 Admin
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('announcements.index')"
-                    >
+                    <x-responsive-nav-link :href="route('announcements.index')">
                         📢 Announcements
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('notes.index')"
-                    >
+                    <x-responsive-nav-link :href="route('notes.index')">
                         📚 Notes
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('businesses.index')"
-                    >
+                    <x-responsive-nav-link :href="route('businesses.index')">
                         🏪 Businesses
                     </x-responsive-nav-link>
 
@@ -795,16 +781,12 @@
                 </p>
 
 
-                <x-responsive-nav-link
-                    :href="route('profile.edit')"
-                >
+                <x-responsive-nav-link :href="route('profile.edit')">
                     👤 Profile
                 </x-responsive-nav-link>
 
 
-                <x-responsive-nav-link
-                    :href="$dashboardRoute"
-                >
+                <x-responsive-nav-link :href="$dashboardRoute">
                     🏠 Dashboard
                 </x-responsive-nav-link>
 

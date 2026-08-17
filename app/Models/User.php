@@ -5,45 +5,67 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-   protected $fillable = [
-    'name',
-    'email',
-    'password',
+    /*
+    |--------------------------------------------------------------------------
+    | Mass Assignable Attributes
+    |--------------------------------------------------------------------------
+    */
 
-    'role_id',
-    'university_id',
-    'faculty_id',
-    'department_id',
-    'programme_id',
-    'semester_id',
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
 
-    'is_admin',
+        // Role
+        'role_id',
+        'is_admin',
 
-    'profile_photo',
+        // Academic information
+        'university_id',
+        'faculty_id',
+        'department_id',
+        'programme_id',
+        'semester_id',
 
-    'bio',
+        // Profile
+        'profile_photo',
+        'bio',
+        'last_seen',
+    ];
 
-    'last_seen',
-];
+    /*
+    |--------------------------------------------------------------------------
+    | Hidden Attributes
+    |--------------------------------------------------------------------------
+    */
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-   protected function casts(): array
-{
-    return [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'last_seen' => 'datetime',
-    ];
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Attribute Casting
+    |--------------------------------------------------------------------------
+    */
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'last_seen' => 'datetime',
+            'is_admin' => 'boolean',
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -52,9 +74,9 @@ class User extends Authenticatable
     */
 
     public function role()
-{
-    return $this->belongsTo(Role::class);
-}
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -62,25 +84,26 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function isAdmin()
-{
-    return optional($this->role)->name === 'Admin';
-}
+    public function isAdmin(): bool
+    {
+        return $this->is_admin === true ||
+               optional($this->role)->name === 'Admin';
+    }
 
-public function isStudent()
-{
-    return optional($this->role)->name === 'Student';
-}
+    public function isStudent(): bool
+    {
+        return optional($this->role)->name === 'Student';
+    }
 
-public function isLandlord()
-{
-    return optional($this->role)->name === 'Landlord';
-}
+    public function isLandlord(): bool
+    {
+        return optional($this->role)->name === 'Landlord';
+    }
 
-public function isBusinessOwner()
-{
-    return optional($this->role)->name === 'Business Owner';
-}
+    public function isBusinessOwner(): bool
+    {
+        return optional($this->role)->name === 'Business Owner';
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -115,6 +138,23 @@ public function isBusinessOwner()
 
     /*
     |--------------------------------------------------------------------------
+    | Student Semesters
+    |--------------------------------------------------------------------------
+    */
+
+    public function semesters(): HasMany
+    {
+        return $this->hasMany(StudentSemester::class);
+    }
+
+    public function currentSemester(): HasOne
+    {
+        return $this->hasOne(StudentSemester::class)
+            ->latestOfMany();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Notes
     |--------------------------------------------------------------------------
     */
@@ -135,7 +175,7 @@ public function isBusinessOwner()
         return $this->hasMany(AccommodationPass::class);
     }
 
-    public function hasActiveAccommodationPass()
+    public function hasActiveAccommodationPass(): bool
     {
         return $this->accommodationPasses()
             ->where('status', 'paid')
@@ -211,45 +251,89 @@ public function isBusinessOwner()
 
     /*
     |--------------------------------------------------------------------------
+    | Business Reviews
+    |--------------------------------------------------------------------------
+    */
+
+    public function businessReviews()
+    {
+        return $this->hasMany(BusinessReview::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bookings
+    |--------------------------------------------------------------------------
+    */
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'student_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Notifications
     |--------------------------------------------------------------------------
     */
 
-    
-/*
-|--------------------------------------------------------------------------
-| Bookings
-|--------------------------------------------------------------------------
-*/
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class)
+            ->latest();
+    }
 
-public function bookings()
-{
-    return $this->hasMany(Booking::class, 'student_id');
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Messages
+    |--------------------------------------------------------------------------
+    */
 
-public function notifications()
-{
-    return $this->hasMany(\App\Models\Notification::class)
-                ->latest();
-}
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'student_id');
+    }
 
-public function messages()
-{
-    return $this->hasMany(Message::class, 'student_id');
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Online Status
+    |--------------------------------------------------------------------------
+    */
 
-public function businessReviews()
-{
-    return $this->hasMany(BusinessReview::class);
-}
+    /**
+     * Determine if the user is currently online.
+     */
+    public function isOnline(): bool
+    {
+        return $this->last_seen &&
+               $this->last_seen->gt(now()->subMinutes(5));
+    }
 
-/**
- * Determine if the user is currently online.
- */
-public function isOnline(): bool
-{
-    return $this->last_seen &&
-           $this->last_seen->gt(now()->subMinutes(5));
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Helpers
+    |--------------------------------------------------------------------------
+    */
 
+    /**
+     * Return the user's profile photo URL.
+     */
+    public function profilePhotoUrl(): string
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' .
+            urlencode($this->name) .
+            '&background=2563eb&color=ffffff&bold=true';
+    }
+
+    /**
+     * Return the user's display name.
+     */
+    public function displayName(): string
+    {
+        return $this->name ?: 'CampusConnect Student';
+    }
 }

@@ -44,6 +44,8 @@ use App\Http\Controllers\Admin\BusinessManagementController;
 use App\Http\Controllers\Admin\AccommodationManagementController;
 use App\Http\Controllers\Admin\NoteManagementController;
 use App\Http\Controllers\Admin\AnnouncementManagementController;
+use App\Http\Controllers\StudentSemesterController;
+use App\Http\Controllers\Admin\AdminSearchController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -520,6 +522,19 @@ Route::middleware(['auth'])->group(function () {
     [StudentMessageController::class, 'send'])
     ->name('student.messages.send');    
 
+    Route::middleware(['auth'])->group(function () {
+
+    Route::get('/semester', [StudentSemesterController::class, 'edit'])
+        ->name('semester.edit');
+
+    Route::post('/semester', [StudentSemesterController::class, 'update'])
+        ->name('semester.update');
+    
+    Route::post('/dashboard/semester', [DashboardController::class, 'updateSemester'])
+    ->name('dashboard.semester.update');    
+
+});
+
 });
 
 });
@@ -636,8 +651,7 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('admin')->middleware(['auth','role:Admin'])->group(function () {
     
-    Route::get('/search', [AdminSearchController::class, 'index'])
-    ->name('admin.search');
+    
 
     Route::get('/accommodations', [AccommodationManagementController::class, 'index'])
         ->name('admin.accommodations');
