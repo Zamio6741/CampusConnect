@@ -20,7 +20,20 @@
 
 @php
 
+    /*
+    |--------------------------------------------------------------------------
+    | USER ROLE
+    |--------------------------------------------------------------------------
+    */
+
     $role = optional(auth()->user()->roleRelation)->name;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD ROUTE
+    |--------------------------------------------------------------------------
+    */
 
     $dashboardRoute = match ($role) {
 
@@ -47,6 +60,43 @@
         default => route('dashboard'),
 
     };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SAFE SEMESTER DEFAULTS
+    |--------------------------------------------------------------------------
+    */
+
+    $semesterProgress = isset($semesterProgress)
+        ? max(0, min(100, (int) $semesterProgress))
+        : 0;
+
+    $semesterStartDate = $semesterStartDate ?? null;
+
+    $semesterEndDate = $semesterEndDate ?? null;
+
+    $semesterDaysRemaining = $semesterDaysRemaining ?? null;
+
+    $semesterStarted = $semesterStarted ?? false;
+
+    $semesterCompleted = $semesterCompleted ?? false;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DAILY QUOTES
+    |--------------------------------------------------------------------------
+    */
+
+    $semesterMessages = $semesterMessages ?? [
+        '💪 Keep pushing! Small progress every day matters.',
+        '📚 Stay consistent with your studies.',
+        '🎯 Set your goals and keep moving forward.',
+        '🧠 Learn something new today.',
+        '🔥 Stay focused. Your future self will thank you.',
+        '🚀 Great things are built one step at a time.',
+    ];
 
 @endphp
 
@@ -293,6 +343,40 @@
 
                     </a>
 
+
+                    <!-- ================================================= -->
+                    <!-- SEMESTER SETTINGS -->
+                    <!-- ================================================= -->
+
+                    @if(Route::has('semester.edit'))
+
+                        <a
+                            href="{{ route('semester.edit') }}"
+                            class="sidebar-link
+                                   bg-blue-500/10
+                                   hover:bg-blue-500/20"
+
+                            :class="sidebar || mobileSidebar
+                                ? 'justify-start px-4 gap-4'
+                                : 'justify-center'"
+                        >
+
+                            <span class="text-lg shrink-0">
+                                📅
+                            </span>
+
+                            <span
+                                x-show="sidebar || mobileSidebar"
+                                x-transition
+                                class="whitespace-nowrap"
+                            >
+                                Semester Settings
+                            </span>
+
+                        </a>
+
+                    @endif
+
                 </div>
 
             </div>
@@ -446,6 +530,8 @@
                 <div class="space-y-2">
 
 
+                    <!-- STUDENT SERVICES -->
+
                     <a
                         href="{{ route('student-services.index') }}"
                         class="sidebar-link"
@@ -468,6 +554,8 @@
 
                     </a>
 
+
+                    <!-- BUSINESSES -->
 
                     <a
                         href="{{ route('businesses.index') }}"
@@ -549,7 +637,7 @@
 
 
             <!-- ================================================= -->
-            <!-- ACTIVITY -->
+            <!-- STUDENT ACTIVITY -->
             <!-- ================================================= -->
 
             @if($role === 'Student')
@@ -560,11 +648,17 @@
                     class="mt-8"
                 >
 
+
+                    <!-- ================================================= -->
+                    <!-- YOUR ACTIVITY -->
+                    <!-- ================================================= -->
+
                     <div
                         class="rounded-3xl
                                bg-slate-800
                                border border-slate-700
-                               p-5"
+                               p-5
+                               mb-5"
                     >
 
                         <h3 class="font-bold text-white mb-5">
@@ -574,6 +668,8 @@
 
                         <div class="space-y-4 text-sm">
 
+
+                            <!-- NOTES -->
 
                             <div class="flex justify-between">
 
@@ -588,6 +684,8 @@
                             </div>
 
 
+                            <!-- RENTALS -->
+
                             <div class="flex justify-between">
 
                                 <span class="text-slate-300">
@@ -600,6 +698,8 @@
 
                             </div>
 
+
+                            <!-- MARKETPLACE -->
 
                             <div class="flex justify-between">
 
@@ -614,6 +714,8 @@
                             </div>
 
 
+                            <!-- ANNOUNCEMENTS -->
+
                             <div class="flex justify-between">
 
                                 <span class="text-slate-300">
@@ -626,6 +728,8 @@
 
                             </div>
 
+
+                            <!-- MESSAGES -->
 
                             <div class="flex justify-between">
 
@@ -641,51 +745,293 @@
 
                         </div>
 
+                    </div>
 
-                        <!-- PROGRESS -->
 
-                        <div class="mt-7">
+                    <!-- ================================================= -->
+                    <!-- SEMESTER PROGRESS -->
+                    <!-- ================================================= -->
 
-                            <p class="text-sm text-slate-400 mb-2">
-                                Semester Progress
-                            </p>
+                    <div
+                        class="rounded-3xl
+                               bg-slate-800
+                               border border-slate-700
+                               p-5
+                               mb-5"
+                    >
 
-                            <div class="w-full bg-slate-700 rounded-full h-2">
+                        <div class="flex items-center justify-between mb-4">
 
-                                <div
-                                    class="bg-blue-500 h-2 rounded-full"
-                                    style="width:78%"
-                                ></div>
+                            <h3 class="font-bold text-white">
+                                📈 Semester Progress
+                            </h3>
 
-                            </div>
-
-                            <p class="text-right text-sm text-slate-400 mt-2">
-                                78%
-                            </p>
+                            <span class="text-sm font-bold text-blue-400">
+                                {{ $semesterProgress }}%
+                            </span>
 
                         </div>
 
 
-                        <!-- DAILY TIP -->
+                        <!-- PROGRESS BAR -->
 
                         <div
-                            class="mt-7
-                                   bg-blue-900/40
-                                   rounded-2xl
-                                   p-4"
+                            class="w-full
+                                   bg-slate-700
+                                   rounded-full
+                                   h-3
+                                   overflow-hidden"
                         >
 
-                            <h4 class="font-bold text-blue-400">
-                                💡 Daily Tip
+                            <div
+                                class="bg-gradient-to-r
+                                       from-blue-500
+                                       to-indigo-500
+                                       h-3
+                                       rounded-full
+                                       transition-all duration-700"
+                                style="width: {{ $semesterProgress }}%"
+                            ></div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="mt-4">
+
+                            @if($semesterCompleted)
+
+                                <p class="text-sm text-green-400 font-semibold">
+                                    🎉 Semester completed!
+                                </p>
+
+                            @elseif($semesterStarted)
+
+                                <p class="text-sm text-slate-300">
+
+                                    ⏳
+
+                                    @if($semesterDaysRemaining !== null)
+
+                                        {{ $semesterDaysRemaining }}
+                                        {{ $semesterDaysRemaining == 1 ? 'day' : 'days' }}
+                                        remaining
+
+                                    @else
+
+                                        Semester in progress
+
+                                    @endif
+
+                                </p>
+
+                            @elseif($semesterStartDate)
+
+                                <p class="text-sm text-slate-300">
+                                    🎓 Semester has not started yet.
+                                </p>
+
+                            @else
+
+                                <p class="text-sm text-slate-400">
+                                    📅 Set your semester dates below.
+                                </p>
+
+                            @endif
+
+                        </div>
+
+
+                        <!-- DATES -->
+
+                        @if($semesterStartDate || $semesterEndDate)
+
+                            <div
+                                class="mt-4
+                                       pt-4
+                                       border-t border-slate-700
+                                       space-y-2
+                                       text-xs"
+                            >
+
+                                @if($semesterStartDate)
+
+                                    <div class="flex justify-between">
+
+                                        <span class="text-slate-400">
+                                            Start
+                                        </span>
+
+                                        <span class="text-slate-200">
+                                            {{ \Carbon\Carbon::parse($semesterStartDate)->format('M d, Y') }}
+                                        </span>
+
+                                    </div>
+
+                                @endif
+
+
+                                @if($semesterEndDate)
+
+                                    <div class="flex justify-between">
+
+                                        <span class="text-slate-400">
+                                            End
+                                        </span>
+
+                                        <span class="text-slate-200">
+                                            {{ \Carbon\Carbon::parse($semesterEndDate)->format('M d, Y') }}
+                                        </span>
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        @endif
+
+
+                        <!-- ================================================= -->
+                        <!-- SEMESTER SETTINGS BUTTON -->
+                        <!-- ================================================= -->
+
+                        @if(Route::has('semester.edit'))
+
+                            <a
+                                href="{{ route('semester.edit') }}"
+                                class="mt-5
+                                       flex items-center justify-center gap-2
+                                       w-full
+                                       rounded-xl
+                                       bg-blue-600
+                                       hover:bg-blue-500
+                                       text-white
+                                       font-semibold
+                                       text-sm
+                                       py-3
+                                       transition
+                                       shadow-lg
+                                       hover:shadow-blue-500/20"
+                            >
+
+                                <span>
+                                    ⚙️
+                                </span>
+
+                                <span>
+                                    Semester Settings
+                                </span>
+
+                            </a>
+
+                        @endif
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- DAILY QUOTE -->
+                    <!-- ================================================= -->
+
+                    <div
+                        class="rounded-3xl
+                               bg-gradient-to-br
+                               from-blue-900/70
+                               to-indigo-900/70
+                               border border-blue-800/50
+                               p-5
+                               mb-5"
+                    >
+
+                        <div class="flex items-center gap-2 mb-3">
+
+                            <span class="text-xl">
+                                💡
+                            </span>
+
+                            <h4 class="font-bold text-blue-300">
+                                Daily Quote
                             </h4>
 
-                            <p class="text-sm text-slate-300 mt-2">
-                                Stay consistent. Small progress every day becomes huge success.
-                            </p>
+                        </div>
+
+
+                        <div
+                            x-data="{
+                                messages: @js($semesterMessages),
+                                current: 0,
+
+                                init() {
+
+                                    if (this.messages.length > 1) {
+
+                                        setInterval(() => {
+
+                                            this.current =
+                                                (this.current + 1)
+                                                % this.messages.length;
+
+                                        }, 7000);
+
+                                    }
+
+                                }
+                            }"
+                        >
+
+                            <p
+                                class="text-sm
+                                       text-slate-200
+                                       leading-relaxed
+                                       min-h-[48px]"
+                                x-text="messages[current]"
+                            ></p>
 
                         </div>
 
                     </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- QUICK SEMESTER SETTINGS -->
+                    <!-- ================================================= -->
+
+                    @if(Route::has('semester.edit'))
+
+                        <a
+                            href="{{ route('semester.edit') }}"
+                            class="flex items-center gap-3
+                                   rounded-2xl
+                                   border border-slate-700
+                                   bg-slate-800
+                                   hover:bg-slate-700
+                                   px-4 py-3
+                                   text-sm
+                                   text-slate-200
+                                   transition"
+                        >
+
+                            <span class="text-lg">
+                                📅
+                            </span>
+
+                            <div>
+
+                                <p class="font-semibold text-white">
+                                    Semester Settings
+                                </p>
+
+                                <p class="text-xs text-slate-400">
+                                    Update your semester dates
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    @endif
 
                 </div>
 
@@ -770,6 +1116,7 @@
                                flex items-center justify-center
                                text-xl
                                transition"
+                        aria-label="Open navigation menu"
                     >
                         ☰
                     </button>
@@ -914,47 +1261,46 @@
 
     </main>
 
-</div>
+
+    <!-- ============================================================= -->
+    <!-- SIDEBAR STYLES -->
+    <!-- ============================================================= -->
+
+    <style>
+
+        .sidebar-link {
+
+            display: flex;
+
+            align-items: center;
+
+            min-height: 48px;
+
+            border-radius: 14px;
+
+            color: #cbd5e1;
+
+            font-weight: 500;
+
+            transition: all .2s ease;
+
+            white-space: nowrap;
+
+        }
 
 
-<!-- ============================================================= -->
-<!-- SIDEBAR STYLES -->
-<!-- ============================================================= -->
+        .sidebar-link:hover {
 
-<style>
+            background: rgba(59, 130, 246, .15);
 
-    .sidebar-link {
+            color: #ffffff;
 
-        display: flex;
+            transform: translateX(2px);
 
-        align-items: center;
+        }
 
-        min-height: 48px;
+    </style>
 
-        border-radius: 14px;
-
-        color: #cbd5e1;
-
-        font-weight: 500;
-
-        transition: all .2s ease;
-
-        white-space: nowrap;
-
-    }
-
-
-    .sidebar-link:hover {
-
-        background: rgba(59, 130, 246, .15);
-
-        color: #ffffff;
-
-        transform: translateX(2px);
-
-    }
-
-</style>
 
 </body>
 

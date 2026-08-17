@@ -10,7 +10,6 @@ use App\Models\Note;
 use App\Models\Notification;
 use App\Models\PastPaper;
 use App\Models\StudentSemester;
-use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,84 +25,133 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | University Filter
+        | University
         |--------------------------------------------------------------------------
         */
 
         $universityId = $user->university_id;
 
+
         /*
         |--------------------------------------------------------------------------
-        | Dashboard Content
+        | Recent Announcements
         |--------------------------------------------------------------------------
+        |
+        | Only select the columns actually needed by the dashboard.
+        |
         */
 
         $announcements = Announcement::where('university_id', $universityId)
+            ->select([
+                'id',
+                'title',
+                'content',
+                'created_at',
+            ])
             ->latest()
-            ->take(3)
+            ->take(4)
             ->get();
 
-        $businesses = Business::where('university_id', $universityId)
-            ->latest()
-            ->take(3)
-            ->get();
 
-        $trendingNotes = Note::with(['user', 'unit'])
+        /*
+        |--------------------------------------------------------------------------
+        | Trending Notes
+        |--------------------------------------------------------------------------
+        |
+        | The dashboard only displays the note title and uploader name.
+        | There is no need to load the Unit relationship here.
+        |
+        */
+
+        $trendingNotes = Note::with([
+                'user:id,name',
+            ])
             ->where('university_id', $universityId)
+            ->select([
+                'id',
+                'user_id',
+                'title',
+                'created_at',
+            ])
             ->latest()
             ->take(3)
             ->get();
 
-        $pastPapers = PastPaper::with(['user', 'unit'])
-            ->where('university_id', $universityId)
-            ->latest()
-            ->take(3)
-            ->get();
 
         /*
         |--------------------------------------------------------------------------
         | Statistics
         |--------------------------------------------------------------------------
+        |
+        | These are the statistics currently used by the dashboard/sidebar.
+        |
         */
 
         $stats = [
 
-            'notes' => Note::where('university_id', $universityId)->count(),
+            'notes' => Note::where(
+                'university_id',
+                $universityId
+            )->count(),
 
-            'pastpapers' => PastPaper::where('university_id', $universityId)->count(),
+            'pastpapers' => PastPaper::where(
+                'university_id',
+                $universityId
+            )->count(),
 
-            'businesses' => Business::where('university_id', $universityId)->count(),
+            'businesses' => Business::where(
+                'university_id',
+                $universityId
+            )->count(),
 
-            'accommodations' => Accommodation::where('university_id', $universityId)->count(),
+            'accommodations' => Accommodation::where(
+                'university_id',
+                $universityId
+            )->count(),
 
-            'announcements' => Announcement::where('university_id', $universityId)->count(),
+            'announcements' => Announcement::where(
+                'university_id',
+                $universityId
+            )->count(),
 
-            'units' => Unit::count(),
+            /*
+            | Units are not displayed directly on the dashboard,
+            | so keep this lightweight.
+            */
 
-            'myNotes' => Note::where('user_id', $user->id)->count(),
+            'units' => 0,
+
+            'myNotes' => Note::where(
+                'user_id',
+                $user->id
+            )->count(),
 
             'messages' => Message::where(function ($query) use ($user) {
+
                 $query->where('student_id', $user->id)
                     ->orWhere('sender_id', $user->id);
+
             })->count(),
 
             'marketplace' => 0,
         ];
 
+
         /*
         |--------------------------------------------------------------------------
         | Notifications
         |--------------------------------------------------------------------------
+        |
+        | The dashboard itself does not render the notification collection.
+        | We only calculate the unread count.
+        |
         */
 
-        $notifications = Notification::where('user_id', $user->id)
+        $notificationCount = Notification::where('user_id', $user->id)
             ->where('created_at', '>=', now()->subDays(7))
-            ->latest()
-            ->get();
-
-        $notificationCount = $notifications
             ->where('is_read', false)
             ->count();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -116,18 +164,26 @@ class DashboardController extends Controller
             ->where('is_read', false)
             ->count();
 
+
         /*
         |--------------------------------------------------------------------------
         | REAL SEMESTER DATA
         |--------------------------------------------------------------------------
         |
-        | Semester information comes from the student_semesters table.
+        | Semester information comes directly from student_semesters.
         |
         */
 
         $semester = StudentSemester::where('user_id', $user->id)
-            ->latest()
+            ->select([
+                'id',
+                'user_id',
+                'start_date',
+                'end_date',
+            ])
+            ->latest('id')
             ->first();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -151,9 +207,10 @@ class DashboardController extends Controller
 
         $semesterEndDate = null;
 
+
         /*
         |--------------------------------------------------------------------------
-        | Calculate Semester Progress
+        | Calculate Real Semester Progress
         |--------------------------------------------------------------------------
         */
 
@@ -163,11 +220,16 @@ class DashboardController extends Controller
 
             $semesterEndDate = $semester->end_date;
 
-            $startDate = Carbon::parse($semesterStartDate)->startOfDay();
+            $startDate = Carbon::parse(
+                $semesterStartDate
+            )->startOfDay();
 
-            $endDate = Carbon::parse($semesterEndDate)->startOfDay();
+            $endDate = Carbon::parse(
+                $semesterEndDate
+            )->startOfDay();
 
             $today = Carbon::now()->startOfDay();
+
 
             /*
             |--------------------------------------------------------------------------
@@ -179,6 +241,7 @@ class DashboardController extends Controller
                 1,
                 $startDate->diffInDays($endDate)
             );
+
 
             /*
             |--------------------------------------------------------------------------
@@ -196,8 +259,11 @@ class DashboardController extends Controller
 
                 $semesterDaysPassed = 0;
 
-                $semesterDaysRemaining = $today->diffInDays($endDate);
+                $semesterDaysRemaining = $today->diffInDays(
+                    $startDate
+                );
             }
+
 
             /*
             |--------------------------------------------------------------------------
@@ -211,7 +277,9 @@ class DashboardController extends Controller
 
                 $semesterCompleted = false;
 
-                $semesterDaysPassed = $startDate->diffInDays($today);
+                $semesterDaysPassed = $startDate->diffInDays(
+                    $today
+                );
 
                 $semesterProgress = round(
                     ($semesterDaysPassed / $semesterTotalDays) * 100
@@ -225,8 +293,11 @@ class DashboardController extends Controller
                     )
                 );
 
-                $semesterDaysRemaining = $today->diffInDays($endDate);
+                $semesterDaysRemaining = $today->diffInDays(
+                    $endDate
+                );
             }
+
 
             /*
             |--------------------------------------------------------------------------
@@ -248,16 +319,25 @@ class DashboardController extends Controller
             }
         }
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | CONTEXT-AWARE ROTATING SEMESTER MESSAGES
+        |--------------------------------------------------------------------------
+        */
+
+        $semesterMessages = $this->getSemesterMessages(
+            $semesterStarted,
+            $semesterCompleted,
+            $semesterDaysRemaining,
+            $semesterProgress
+        );
+
+
         /*
         |--------------------------------------------------------------------------
         | CONTEXT-AWARE DAILY TIP
         |--------------------------------------------------------------------------
-        |
-        | The dashboard chooses the category of encouragement based on the
-        | student's actual semester situation.
-        |
-        | The message changes automatically each day.
-        |
         */
 
         $dailyTip = $this->getDailyTip(
@@ -267,66 +347,34 @@ class DashboardController extends Controller
             $semesterProgress
         );
 
+
         /*
         |--------------------------------------------------------------------------
-        | Dashboard
+        | Dashboard View
         |--------------------------------------------------------------------------
         */
 
         return view('student.dashboard', [
 
-            /*
-            |--------------------------------------------------------------------------
-            | User
-            |--------------------------------------------------------------------------
-            */
-
             'user' => $user,
-
-            /*
-            |--------------------------------------------------------------------------
-            | Dashboard Content
-            |--------------------------------------------------------------------------
-            */
 
             'announcements' => $announcements,
 
-            'businesses' => $businesses,
-
             'trendingNotes' => $trendingNotes,
-
-            'pastPapers' => $pastPapers,
-
-            /*
-            |--------------------------------------------------------------------------
-            | Statistics
-            |--------------------------------------------------------------------------
-            */
 
             'stats' => $stats,
 
             /*
-            |--------------------------------------------------------------------------
-            | Notifications
-            |--------------------------------------------------------------------------
+            | Notification count is kept available for the
+            | dashboard/layout if required.
             */
-
-            'notifications' => $notifications,
 
             'notificationCount' => $notificationCount,
-
-            /*
-            |--------------------------------------------------------------------------
-            | Messages
-            |--------------------------------------------------------------------------
-            */
 
             'unreadMessages' => $unreadMessages,
 
             /*
-            |--------------------------------------------------------------------------
-            | Semester Information
-            |--------------------------------------------------------------------------
+            | Semester information
             */
 
             'semesterProgress' => $semesterProgress,
@@ -346,9 +394,13 @@ class DashboardController extends Controller
             'semesterEndDate' => $semesterEndDate,
 
             /*
-            |--------------------------------------------------------------------------
+            | Rotating semester messages
+            */
+
+            'semesterMessages' => $semesterMessages,
+
+            /*
             | Daily Tip
-            |--------------------------------------------------------------------------
             */
 
             'dailyTip' => $dailyTip,
@@ -357,7 +409,167 @@ class DashboardController extends Controller
 
 
     /**
+     * Get context-aware rotating messages for the semester progress card.
+     */
+    private function getSemesterMessages(
+        bool $semesterStarted,
+        bool $semesterCompleted,
+        ?int $daysRemaining,
+        int $semesterProgress
+    ): array {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Semester Has Not Started
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$semesterStarted && !$semesterCompleted) {
+
+            return [
+
+                '🎓 Use this time to prepare. A strong semester starts before the first lecture.',
+
+                '📚 Get organized now and make your semester easier from day one.',
+
+                '🚀 Preparation today can make tomorrow much easier.',
+
+                '🎯 Set your academic goals before the semester begins.',
+
+                '📅 Build a study routine now instead of waiting for assignments.',
+
+                '🧠 Start the semester with a clear mind and a clear plan.',
+            ];
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Semester Completed
+        |--------------------------------------------------------------------------
+        */
+
+        if ($semesterCompleted) {
+
+            return [
+
+                '🎉 Semester complete! Take a moment to appreciate how far you have come.',
+
+                '🏆 You made it through. Be proud of the progress you made.',
+
+                '🌟 Another chapter completed. Get ready for what comes next.',
+
+                '💪 You finished strong. Keep that momentum going.',
+
+                '🎓 One semester down. Keep growing, learning and moving forward.',
+
+                '❤️ Give yourself credit for making it through another semester.',
+            ];
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 80%+ COMPLETE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($semesterProgress >= 80) {
+
+            return [
+
+                '🔥 You are almost there. Stay consistent and finish strong.',
+
+                '🏁 The finish line is close. Give these final days your best.',
+
+                '💪 Keep going! Your hard work is starting to pay off.',
+
+                '🚀 Almost done. Do not slow down now.',
+
+                '🎯 Stay focused. Every remaining day counts.',
+
+                '🏆 You have come a long way. Finish the semester with confidence.',
+            ];
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 60%–79% COMPLETE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($semesterProgress >= 60) {
+
+            return [
+
+                '📚 You are well into the semester. Keep your momentum going.',
+
+                '🔥 Consistency now will make the final stretch much easier.',
+
+                '🎯 Keep focusing on the topics that need the most attention.',
+
+                '💪 You have already made great progress. Keep moving forward.',
+
+                '🧠 Review what you have learned before moving on to new material.',
+
+                '🚀 Stay disciplined. Your progress is building every day.',
+            ];
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 30%–59% COMPLETE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($semesterProgress >= 30) {
+
+            return [
+
+                '📖 Keep building your understanding one topic at a time.',
+
+                '💡 This is a great time to identify your strongest and weakest subjects.',
+
+                '📝 Stay on top of your notes before the workload becomes heavier.',
+
+                '🎯 Focus on steady progress instead of trying to do everything at once.',
+
+                '🔥 Your semester is moving. Keep your study habits consistent.',
+
+                '🧠 Understanding a topic today is better than memorizing everything later.',
+            ];
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | EARLY SEMESTER
+        |--------------------------------------------------------------------------
+        */
+
+        return [
+
+            '🌱 You are just getting started. Build good habits now.',
+
+            '📚 Stay consistent from the beginning and future revision will be easier.',
+
+            '🎯 Set realistic goals for the week and work toward them.',
+
+            '🚀 Every great semester starts with small consistent steps.',
+
+            '🧠 Focus on understanding your lessons rather than simply memorizing them.',
+
+            '💪 Start strong and give yourself a good foundation for the semester.',
+        ];
+    }
+
+
+    /**
      * Generate a context-aware daily tip.
+     *
+     * The tip changes once per day.
      */
     private function getDailyTip(
         bool $semesterStarted,
@@ -370,19 +582,18 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         | Daily Rotation Number
         |--------------------------------------------------------------------------
-        |
-        | January 1, 2026 is used as the reference date.
-        |
-        | Every day gets a different number.
-        | Refreshing the dashboard on the same day keeps the same tip.
-        |
         */
 
-        $referenceDate = Carbon::create(2026, 1, 1)->startOfDay();
+        $referenceDate = Carbon::create(
+            2026,
+            1,
+            1
+        )->startOfDay();
 
         $today = Carbon::now()->startOfDay();
 
         $dayNumber = $referenceDate->diffInDays($today);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -414,6 +625,7 @@ class DashboardController extends Controller
             return $tips[$dayNumber % count($tips)];
         }
 
+
         /*
         |--------------------------------------------------------------------------
         | SEMESTER COMPLETED
@@ -443,6 +655,7 @@ class DashboardController extends Controller
 
             return $tips[$dayNumber % count($tips)];
         }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -474,6 +687,7 @@ class DashboardController extends Controller
             return $tips[$dayNumber % count($tips)];
         }
 
+
         /*
         |--------------------------------------------------------------------------
         | 7–14 DAYS REMAINING
@@ -504,6 +718,7 @@ class DashboardController extends Controller
             return $tips[$dayNumber % count($tips)];
         }
 
+
         /*
         |--------------------------------------------------------------------------
         | 14–30 DAYS REMAINING
@@ -533,6 +748,7 @@ class DashboardController extends Controller
 
             return $tips[$dayNumber % count($tips)];
         }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -581,7 +797,6 @@ class DashboardController extends Controller
             '💧 Stay hydrated and give yourself time to recharge.',
 
             '🎓 University is not just about passing exams. It is also about building yourself.',
-
         ];
 
         return $tips[$dayNumber % count($tips)];
@@ -590,16 +805,11 @@ class DashboardController extends Controller
 
     /**
      * Save/update semester dates.
-     *
-     * NOTE:
-     * Semester dates are normally handled by StudentSemesterController.
-     *
-     * This method remains here because the existing
-     * dashboard.semester.update route may still point to it.
      */
     public function updateSemester(Request $request)
     {
         $validated = $request->validate([
+
             'semester_start_date' => [
                 'required',
                 'date',
@@ -612,21 +822,25 @@ class DashboardController extends Controller
             ],
         ]);
 
+
         $user = Auth::user();
+
 
         /*
         |--------------------------------------------------------------------------
-        | Create a new StudentSemester record
+        | Create Student Semester
         |--------------------------------------------------------------------------
         */
 
         StudentSemester::create([
+
             'user_id' => $user->id,
 
             'start_date' => $validated['semester_start_date'],
 
             'end_date' => $validated['semester_end_date'],
         ]);
+
 
         return redirect()
             ->route('dashboard')
@@ -636,3 +850,4 @@ class DashboardController extends Controller
             );
     }
 }
+
