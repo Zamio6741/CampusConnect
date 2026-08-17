@@ -1295,11 +1295,22 @@
                     </div>
 
 
+                    {{-- UPDATED SAVE BUTTON --}}
                     <button
                         type="submit"
-                        class="w-full rounded-xl bg-sky-500 px-8 py-3 font-bold text-white shadow-lg transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-300 sm:w-auto"
+                        class="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-8 py-3.5 text-sm font-black text-white shadow-lg shadow-sky-500/30 ring-1 ring-sky-400 transition-all duration-200 hover:bg-sky-400 hover:shadow-xl hover:shadow-sky-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-sky-300/50 active:translate-y-0"
                     >
-                        Save Changes
+                        <span class="text-base">
+                            💾
+                        </span>
+
+                        <span>
+                            Save Changes
+                        </span>
+
+                        <span class="transition-transform duration-200 group-hover:translate-x-1">
+                            →
+                        </span>
                     </button>
 
                 </div>

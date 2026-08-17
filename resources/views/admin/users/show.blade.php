@@ -6,13 +6,6 @@
 
 @php
 
-
-/*
-|--------------------------------------------------------------------------
-| USER INFORMATION
-|--------------------------------------------------------------------------
-*/
-
 $roleName = $user->role->name ?? 'User';
 
 $roleColors = [
@@ -49,37 +42,38 @@ $roleStyle = $roleColors[$roleName] ?? [
 
 $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
-
 @endphp
 
-<div class="max-w-7xl mx-auto space-y-8">
+
+<div class="w-full max-w-7xl mx-auto space-y-5 sm:space-y-6 lg:space-y-8 px-0 sm:px-0">
 
 
 {{-- =========================================================
      PAGE HEADER
 ========================================================== --}}
 
-<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-5">
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 sm:gap-4 min-w-0">
 
-        <div class="w-14 h-14 rounded-2xl
+        <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl
                     bg-sky-100
                     border-2 border-sky-200
                     flex items-center justify-center
-                    text-2xl">
+                    text-xl sm:text-2xl
+                    flex-shrink-0">
 
             👤
 
         </div>
 
-        <div>
+        <div class="min-w-0">
 
-            <h1 class="text-3xl font-bold text-slate-800">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
                 User Details
             </h1>
 
-            <p class="text-slate-500 mt-1">
+            <p class="text-sm sm:text-base text-slate-500 mt-1 leading-5">
                 View and manage this CampusConnect user account.
             </p>
 
@@ -90,12 +84,12 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
     {{-- Header Actions --}}
 
-    <div class="flex flex-col sm:flex-row gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-3 w-full lg:w-auto">
 
         <a
             href="{{ route('admin.users') }}"
             class="inline-flex items-center justify-center gap-2
-                   px-5 py-3
+                   px-4 sm:px-5 py-3
                    rounded-xl
                    bg-white
                    border-2 border-slate-200
@@ -103,15 +97,18 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                    font-semibold
                    hover:bg-slate-50
                    hover:border-slate-300
-                   transition duration-200">
+                   transition duration-200
+                   text-sm sm:text-base">
 
             ← Back to Users
 
         </a>
 
+
         <form
             method="POST"
-            action="{{ route('admin.users.toggle', $user) }}">
+            action="{{ route('admin.users.toggle', $user) }}"
+            class="w-full">
 
             @csrf
             @method('PATCH')
@@ -119,7 +116,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
             <button
                 type="submit"
                 class="w-full inline-flex items-center justify-center gap-2
-                       px-5 py-3
+                       px-4 sm:px-5 py-3
                        rounded-xl
                        {{ $user->active
                             ? 'bg-yellow-500 hover:bg-yellow-600'
@@ -127,7 +124,8 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                        text-white
                        font-semibold
                        shadow-sm
-                       transition duration-200">
+                       transition duration-200
+                       text-sm sm:text-base">
 
                 {{ $user->active ? '⏸ Suspend Account' : '✓ Activate Account' }}
 
@@ -146,7 +144,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 ========================================================== --}}
 
 <div class="bg-white
-            rounded-3xl
+            rounded-2xl sm:rounded-3xl
             shadow-md
             border-2 border-slate-200
             overflow-hidden">
@@ -154,7 +152,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
     {{-- Top Banner --}}
 
-    <div class="h-32
+    <div class="h-24 sm:h-32
                 bg-gradient-to-r
                 from-sky-600
                 via-blue-600
@@ -164,13 +162,13 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         <div class="absolute inset-0 opacity-10">
 
             <div class="absolute -top-10 -right-10
-                        w-48 h-48
+                        w-32 h-32 sm:w-48 sm:h-48
                         rounded-full
                         bg-white">
             </div>
 
-            <div class="absolute -bottom-16 left-20
-                        w-56 h-56
+            <div class="absolute -bottom-16 left-10 sm:left-20
+                        w-40 h-40 sm:w-56 sm:h-56
                         rounded-full
                         bg-white">
             </div>
@@ -182,33 +180,34 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
     {{-- Profile Content --}}
 
-    <div class="px-6 sm:px-8 pb-8">
+    <div class="px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
 
         <div class="flex flex-col lg:flex-row
                     lg:items-end
                     lg:justify-between
-                    gap-6
-                    -mt-16">
+                    gap-5 sm:gap-6
+                    -mt-12 sm:-mt-16">
 
 
             {{-- Avatar + Identity --}}
 
             <div class="flex flex-col sm:flex-row
                         sm:items-end
-                        gap-5">
+                        gap-4 sm:gap-5
+                        min-w-0">
 
 
                 {{-- Avatar --}}
 
-                <div class="relative">
+                <div class="relative flex-shrink-0">
 
                     @if($user->profile_photo)
 
                         <img
                             src="{{ asset('storage/'.$user->profile_photo) }}"
                             alt="{{ $user->name }}"
-                            class="w-32 h-32
-                                   rounded-3xl
+                            class="w-24 h-24 sm:w-32 sm:h-32
+                                   rounded-2xl sm:rounded-3xl
                                    object-cover
                                    border-4
                                    border-white
@@ -216,15 +215,15 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     @else
 
-                        <div class="w-32 h-32
-                                    rounded-3xl
+                        <div class="w-24 h-24 sm:w-32 sm:h-32
+                                    rounded-2xl sm:rounded-3xl
                                     bg-sky-100
                                     border-4
                                     border-white
                                     shadow-xl
                                     flex items-center
                                     justify-center
-                                    text-5xl
+                                    text-4xl sm:text-5xl
                                     font-bold
                                     text-sky-700">
 
@@ -241,9 +240,9 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                         <span
                             class="absolute
-                                   bottom-2
-                                   right-2
-                                   w-6 h-6
+                                   bottom-1 sm:bottom-2
+                                   right-1 sm:right-2
+                                   w-5 h-5 sm:w-6 sm:h-6
                                    rounded-full
                                    bg-emerald-500
                                    border-4
@@ -258,21 +257,21 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 {{-- Identity --}}
 
-                <div class="pb-2">
+                <div class="pb-0 sm:pb-2 min-w-0">
 
-                    <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
 
-                        <h2 class="text-3xl font-bold text-slate-800">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 break-words">
                             {{ $user->name }}
                         </h2>
 
 
                         <span
                             class="inline-flex items-center
-                                   px-3 py-1.5
+                                   px-2.5 sm:px-3 py-1 sm:py-1.5
                                    rounded-full
                                    border
-                                   text-sm
+                                   text-xs sm:text-sm
                                    font-bold
                                    {{ $roleStyle['badge'] }}">
 
@@ -283,23 +282,23 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                     </div>
 
 
-                    <p class="text-slate-500 mt-2">
+                    <p class="text-sm sm:text-base text-slate-500 mt-2 break-all">
                         {{ $user->email }}
                     </p>
 
 
-                    <div class="flex flex-wrap items-center gap-3 mt-3">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-3">
 
                         @if($user->active)
 
                             <span
                                 class="inline-flex items-center gap-2
-                                       px-3 py-1.5
+                                       px-2.5 sm:px-3 py-1 sm:py-1.5
                                        rounded-full
                                        bg-green-50
                                        border border-green-200
                                        text-green-700
-                                       text-sm
+                                       text-xs sm:text-sm
                                        font-semibold">
 
                                 <span class="w-2 h-2 rounded-full bg-green-500"></span>
@@ -312,12 +311,12 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                             <span
                                 class="inline-flex items-center gap-2
-                                       px-3 py-1.5
+                                       px-2.5 sm:px-3 py-1 sm:py-1.5
                                        rounded-full
                                        bg-red-50
                                        border border-red-200
                                        text-red-700
-                                       text-sm
+                                       text-xs sm:text-sm
                                        font-semibold">
 
                                 <span class="w-2 h-2 rounded-full bg-red-500"></span>
@@ -333,12 +332,12 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                             <span
                                 class="inline-flex items-center gap-2
-                                       px-3 py-1.5
+                                       px-2.5 sm:px-3 py-1 sm:py-1.5
                                        rounded-full
                                        bg-emerald-50
                                        border border-emerald-200
                                        text-emerald-700
-                                       text-sm
+                                       text-xs sm:text-sm
                                        font-semibold">
 
                                 🟢 Online
@@ -349,12 +348,12 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                             <span
                                 class="inline-flex items-center gap-2
-                                       px-3 py-1.5
+                                       px-2.5 sm:px-3 py-1 sm:py-1.5
                                        rounded-full
                                        bg-slate-50
                                        border border-slate-200
                                        text-slate-600
-                                       text-sm
+                                       text-xs sm:text-sm
                                        font-semibold">
 
                                 ⚪ Offline
@@ -376,8 +375,9 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                 class="bg-slate-50
                        border-2 border-slate-200
                        rounded-2xl
-                       px-5 py-4
-                       min-w-[180px]">
+                       px-4 sm:px-5 py-3 sm:py-4
+                       w-full lg:w-auto
+                       lg:min-w-[180px]">
 
                 <p class="text-xs
                           uppercase
@@ -389,7 +389,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 </p>
 
-                <p class="text-2xl
+                <p class="text-xl sm:text-2xl
                           font-bold
                           text-slate-800
                           mt-1">
@@ -414,12 +414,13 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
 <div>
 
-    <div class="flex items-center gap-3 mb-5">
+    <div class="flex items-center gap-3 mb-4 sm:mb-5">
 
-        <div class="w-10 h-10 rounded-xl
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl
                     bg-sky-100
                     border-2 border-sky-200
-                    flex items-center justify-center">
+                    flex items-center justify-center
+                    flex-shrink-0">
 
             📊
 
@@ -427,11 +428,11 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
         <div>
 
-            <h2 class="text-xl font-bold text-slate-800">
+            <h2 class="text-lg sm:text-xl font-bold text-slate-800">
                 Account Overview
             </h2>
 
-            <p class="text-sm text-slate-500">
+            <p class="text-xs sm:text-sm text-slate-500">
                 Current account status and activity.
             </p>
 
@@ -440,27 +441,27 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
     </div>
 
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
 
 
         {{-- Account Status --}}
 
         <div class="bg-white
-                    rounded-2xl
+                    rounded-xl sm:rounded-2xl
                     border-2 border-slate-200
                     shadow-sm
-                    p-6">
+                    p-4 sm:p-6">
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
 
-                <div>
+                <div class="min-w-0">
 
                     <p class="text-sm font-medium text-slate-500">
                         Account Status
                     </p>
 
                     <h3
-                        class="text-xl font-bold mt-2
+                        class="text-lg sm:text-xl font-bold mt-2
                         {{ $user->active
                             ? 'text-green-600'
                             : 'text-red-600' }}">
@@ -472,12 +473,13 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                 </div>
 
                 <div
-                    class="w-12 h-12 rounded-xl
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl
                            {{ $user->active
                                 ? 'bg-green-100 text-green-600'
                                 : 'bg-red-100 text-red-600' }}
                            flex items-center justify-center
-                           text-xl">
+                           text-lg sm:text-xl
+                           flex-shrink-0">
 
                     {{ $user->active ? '✓' : '⛔' }}
 
@@ -491,30 +493,31 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         {{-- Role --}}
 
         <div class="bg-white
-                    rounded-2xl
+                    rounded-xl sm:rounded-2xl
                     border-2 border-slate-200
                     shadow-sm
-                    p-6">
+                    p-4 sm:p-6">
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
 
-                <div>
+                <div class="min-w-0">
 
                     <p class="text-sm font-medium text-slate-500">
                         User Role
                     </p>
 
-                    <h3 class="text-xl font-bold mt-2 {{ $roleStyle['accent'] }}">
+                    <h3 class="text-lg sm:text-xl font-bold mt-2 break-words {{ $roleStyle['accent'] }}">
                         {{ $roleName }}
                     </h3>
 
                 </div>
 
                 <div
-                    class="w-12 h-12 rounded-xl
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl
                            {{ $roleStyle['icon'] }}
                            flex items-center justify-center
-                           text-xl">
+                           text-lg sm:text-xl
+                           flex-shrink-0">
 
                     👤
 
@@ -528,12 +531,12 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         {{-- Activity --}}
 
         <div class="bg-white
-                    rounded-2xl
+                    rounded-xl sm:rounded-2xl
                     border-2 border-slate-200
                     shadow-sm
-                    p-6">
+                    p-4 sm:p-6">
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
 
                 <div>
 
@@ -541,7 +544,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                         Activity
                     </p>
 
-                    <h3 class="text-xl font-bold mt-2
+                    <h3 class="text-lg sm:text-xl font-bold mt-2
                                {{ $user->isOnline()
                                     ? 'text-emerald-600'
                                     : 'text-slate-600' }}">
@@ -553,12 +556,13 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                 </div>
 
                 <div
-                    class="w-12 h-12 rounded-xl
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl
                            {{ $user->isOnline()
                                 ? 'bg-emerald-100'
                                 : 'bg-slate-100' }}
                            flex items-center justify-center
-                           text-xl">
+                           text-lg sm:text-xl
+                           flex-shrink-0">
 
                     {{ $user->isOnline() ? '🟢' : '⚪' }}
 
@@ -572,33 +576,32 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         {{-- Joined --}}
 
         <div class="bg-white
-                    rounded-2xl
+                    rounded-xl sm:rounded-2xl
                     border-2 border-slate-200
                     shadow-sm
-                    p-6">
+                    p-4 sm:p-6">
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
 
-                <div>
+                <div class="min-w-0">
 
                     <p class="text-sm font-medium text-slate-500">
                         Member Since
                     </p>
 
-                    <h3 class="text-xl font-bold text-slate-800 mt-2">
-
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-800 mt-2">
                         {{ $user->created_at->format('d M Y') }}
-
                     </h3>
 
                 </div>
 
                 <div
-                    class="w-12 h-12 rounded-xl
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl
                            bg-purple-100
                            text-purple-600
                            flex items-center justify-center
-                           text-xl">
+                           text-lg sm:text-xl
+                           flex-shrink-0">
 
                     📅
 
@@ -618,7 +621,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
      USER INFORMATION
 ========================================================== --}}
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
 
 
     {{-- Personal Information --}}
@@ -626,23 +629,24 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
     <div
         class="lg:col-span-2
                bg-white
-               rounded-2xl
+               rounded-xl sm:rounded-2xl
                shadow-sm
                border-2 border-slate-200
                overflow-hidden">
 
         <div
-            class="px-6 py-5
+            class="px-4 sm:px-6 py-4 sm:py-5
                    border-b-2 border-slate-200
                    bg-slate-50">
 
             <div class="flex items-center gap-3">
 
                 <div
-                    class="w-10 h-10 rounded-xl
+                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl
                            bg-sky-100
                            border-2 border-sky-200
-                           flex items-center justify-center">
+                           flex items-center justify-center
+                           flex-shrink-0">
 
                     📝
 
@@ -650,11 +654,11 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 <div>
 
-                    <h2 class="text-lg font-bold text-slate-800">
+                    <h2 class="text-base sm:text-lg font-bold text-slate-800">
                         Personal Information
                     </h2>
 
-                    <p class="text-sm text-slate-500">
+                    <p class="text-xs sm:text-sm text-slate-500">
                         Basic information associated with this account.
                     </p>
 
@@ -665,9 +669,9 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         </div>
 
 
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
 
 
                 {{-- Name --}}
@@ -676,7 +680,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                     class="rounded-xl
                            border-2 border-slate-200
                            bg-white
-                           p-5
+                           p-4 sm:p-5
                            hover:border-sky-200
                            transition">
 
@@ -689,9 +693,10 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     </p>
 
-                    <p class="text-lg font-bold
+                    <p class="text-base sm:text-lg font-bold
                               text-slate-800
-                              mt-2">
+                              mt-2
+                              break-words">
 
                         {{ $user->name }}
 
@@ -706,7 +711,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                     class="rounded-xl
                            border-2 border-slate-200
                            bg-white
-                           p-5
+                           p-4 sm:p-5
                            hover:border-sky-200
                            transition">
 
@@ -719,7 +724,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     </p>
 
-                    <p class="text-lg font-bold
+                    <p class="text-base sm:text-lg font-bold
                               text-slate-800
                               mt-2
                               break-all">
@@ -737,7 +742,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                     class="rounded-xl
                            border-2 border-slate-200
                            bg-white
-                           p-5
+                           p-4 sm:p-5
                            hover:border-sky-200
                            transition">
 
@@ -757,7 +762,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                                    px-3 py-1.5
                                    rounded-full
                                    border
-                                   text-sm font-bold
+                                   text-xs sm:text-sm font-bold
                                    {{ $roleStyle['badge'] }}">
 
                             {{ $roleName }}
@@ -775,7 +780,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                     class="rounded-xl
                            border-2 border-slate-200
                            bg-white
-                           p-5
+                           p-4 sm:p-5
                            hover:border-sky-200
                            transition">
 
@@ -788,7 +793,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     </p>
 
-                    <p class="text-lg font-bold
+                    <p class="text-base sm:text-lg font-bold
                               text-slate-800
                               mt-2">
 
@@ -810,23 +815,24 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
     <div
         class="bg-white
-               rounded-2xl
+               rounded-xl sm:rounded-2xl
                shadow-sm
                border-2 border-slate-200
                overflow-hidden">
 
         <div
-            class="px-6 py-5
+            class="px-4 sm:px-6 py-4 sm:py-5
                    border-b-2 border-slate-200
                    bg-slate-50">
 
             <div class="flex items-center gap-3">
 
                 <div
-                    class="w-10 h-10 rounded-xl
+                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl
                            bg-emerald-100
                            border-2 border-emerald-200
-                           flex items-center justify-center">
+                           flex items-center justify-center
+                           flex-shrink-0">
 
                     🟢
 
@@ -834,11 +840,11 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 <div>
 
-                    <h2 class="text-lg font-bold text-slate-800">
+                    <h2 class="text-base sm:text-lg font-bold text-slate-800">
                         Activity
                     </h2>
 
-                    <p class="text-sm text-slate-500">
+                    <p class="text-xs sm:text-sm text-slate-500">
                         Login activity.
                     </p>
 
@@ -849,12 +855,15 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
         </div>
 
 
-        <div class="p-6 space-y-5">
+        <div class="p-4 sm:p-6 space-y-5">
 
 
             {{-- Current Status --}}
 
-            <div class="flex items-center justify-between
+            <div class="flex flex-col sm:flex-row
+                        sm:items-center
+                        sm:justify-between
+                        gap-3
                         pb-5
                         border-b-2 border-slate-100">
 
@@ -875,6 +884,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     <span
                         class="inline-flex items-center gap-2
+                               w-fit
                                px-3 py-1.5
                                rounded-full
                                bg-emerald-100
@@ -892,6 +902,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                     <span
                         class="inline-flex items-center gap-2
+                               w-fit
                                px-3 py-1.5
                                rounded-full
                                bg-slate-100
@@ -921,7 +932,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 </p>
 
-                <p class="font-bold text-slate-800 mt-2">
+                <p class="font-bold text-slate-800 mt-2 break-words">
 
                     {{ $user->last_seen
                         ? $user->last_seen->format('d M Y, h:i A')
@@ -932,9 +943,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                 @if($user->last_seen)
 
                     <p class="text-xs text-slate-400 mt-1">
-
                         {{ $user->last_seen->diffForHumans() }}
-
                     </p>
 
                 @endif
@@ -955,7 +964,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 </p>
 
-                <p class="font-bold text-slate-800 mt-2">
+                <p class="font-bold text-slate-800 mt-2 break-words">
 
                     {{ $user->created_at->format('d M Y, h:i A') }}
 
@@ -977,7 +986,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
                 </p>
 
-                <p class="font-bold text-slate-800 mt-2">
+                <p class="font-bold text-slate-800 mt-2 break-words">
 
                     {{ $user->updated_at->format('d M Y, h:i A') }}
 
@@ -999,23 +1008,24 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
 <div
     class="bg-white
-           rounded-2xl
+           rounded-xl sm:rounded-2xl
            shadow-sm
            border-2 border-slate-200
            overflow-hidden">
 
     <div
-        class="px-6 py-5
+        class="px-4 sm:px-6 py-4 sm:py-5
                border-b-2 border-slate-200
                bg-slate-50">
 
         <div class="flex items-center gap-3">
 
             <div
-                class="w-10 h-10 rounded-xl
+                class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl
                        bg-indigo-100
                        border-2 border-indigo-200
-                       flex items-center justify-center">
+                       flex items-center justify-center
+                       flex-shrink-0">
 
                 🛡️
 
@@ -1023,11 +1033,11 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
             <div>
 
-                <h2 class="text-lg font-bold text-slate-800">
+                <h2 class="text-base sm:text-lg font-bold text-slate-800">
                     Account & Security
                 </h2>
 
-                <p class="text-sm text-slate-500">
+                <p class="text-xs sm:text-sm text-slate-500">
                     Manage the user's access to CampusConnect.
                 </p>
 
@@ -1038,9 +1048,9 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
     </div>
 
 
-    <div class="p-6">
+    <div class="p-4 sm:p-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
 
 
             {{-- Account Access --}}
@@ -1048,28 +1058,30 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
             <div
                 class="rounded-xl
                        border-2 border-slate-200
-                       p-5">
+                       p-4 sm:p-5">
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-start gap-3">
 
                     <div
                         class="w-10 h-10 rounded-xl
                                {{ $user->active
                                     ? 'bg-green-100 text-green-600'
                                     : 'bg-red-100 text-red-600' }}
-                               flex items-center justify-center">
+                               flex items-center justify-center
+                               flex-shrink-0">
 
                         {{ $user->active ? '✓' : '⛔' }}
 
                     </div>
 
-                    <div>
+                    <div class="min-w-0">
 
                         <p class="font-bold text-slate-800">
                             Account Access
                         </p>
 
                         <p class="text-sm
+                                  mt-1
                                   {{ $user->active
                                         ? 'text-green-600'
                                         : 'text-red-600' }}">
@@ -1092,14 +1104,15 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
             <div
                 class="rounded-xl
                        border-2 border-slate-200
-                       p-5">
+                       p-4 sm:p-5">
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-start gap-3">
 
                     <div
                         class="w-10 h-10 rounded-xl
                                {{ $roleStyle['icon'] }}
-                               flex items-center justify-center">
+                               flex items-center justify-center
+                               flex-shrink-0">
 
                         🔐
 
@@ -1111,7 +1124,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                             Permission Level
                         </p>
 
-                        <p class="text-sm text-slate-500">
+                        <p class="text-sm text-slate-500 mt-1">
                             {{ $roleName }}
                         </p>
 
@@ -1127,16 +1140,17 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
             <div
                 class="rounded-xl
                        border-2 border-slate-200
-                       p-5">
+                       p-4 sm:p-5">
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-start gap-3">
 
                     <div
                         class="w-10 h-10 rounded-xl
                                {{ $user->isOnline()
                                     ? 'bg-emerald-100'
                                     : 'bg-slate-100' }}
-                               flex items-center justify-center">
+                               flex items-center justify-center
+                               flex-shrink-0">
 
                         {{ $user->isOnline() ? '🟢' : '⚪' }}
 
@@ -1148,7 +1162,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                             Presence
                         </p>
 
-                        <p class="text-sm text-slate-500">
+                        <p class="text-sm text-slate-500 mt-1">
 
                             {{ $user->isOnline()
                                 ? 'Currently online'
@@ -1176,23 +1190,24 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
 <div
     class="bg-white
-           rounded-2xl
+           rounded-xl sm:rounded-2xl
            shadow-md
            border-2 border-slate-200
            overflow-hidden">
 
     <div
-        class="px-6 py-5
+        class="px-4 sm:px-6 py-4 sm:py-5
                border-b-2 border-slate-200
                bg-slate-50">
 
         <div class="flex items-center gap-3">
 
             <div
-                class="w-10 h-10 rounded-xl
+                class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl
                        bg-orange-100
                        border-2 border-orange-200
-                       flex items-center justify-center">
+                       flex items-center justify-center
+                       flex-shrink-0">
 
                 ⚙️
 
@@ -1200,11 +1215,11 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
             <div>
 
-                <h2 class="text-lg font-bold text-slate-800">
+                <h2 class="text-base sm:text-lg font-bold text-slate-800">
                     Administrator Actions
                 </h2>
 
-                <p class="text-sm text-slate-500">
+                <p class="text-xs sm:text-sm text-slate-500">
                     Manage this user's account.
                 </p>
 
@@ -1216,7 +1231,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
 
     <div
-        class="p-6
+        class="p-4 sm:p-6
                flex flex-col
                lg:flex-row
                lg:items-center
@@ -1224,46 +1239,48 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                gap-5">
 
 
-        <div>
+        <div class="min-w-0">
 
             <p class="font-semibold text-slate-800">
                 Account Management
             </p>
 
-            <p class="text-sm text-slate-500 mt-1">
+            <p class="text-sm text-slate-500 mt-1 leading-6">
                 Suspending prevents access while deleting permanently removes the account.
             </p>
 
         </div>
 
 
-        <div class="flex flex-col sm:flex-row gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-auto">
 
 
             {{-- Toggle Account --}}
 
             <form
                 method="POST"
-                action="{{ route('admin.users.toggle', $user) }}">
+                action="{{ route('admin.users.toggle', $user) }}"
+                class="w-full">
 
                 @csrf
                 @method('PATCH')
 
                 <button
                     type="submit"
-                    class="w-full sm:w-auto
+                    class="w-full
                            inline-flex
                            items-center
                            justify-center
                            gap-2
-                           px-6 py-3
+                           px-5 sm:px-6 py-3
                            rounded-xl
                            {{ $user->active
                                 ? 'bg-yellow-500 hover:bg-yellow-600'
                                 : 'bg-green-600 hover:bg-green-700' }}
                            text-white
                            font-semibold
-                           transition">
+                           transition
+                           text-sm sm:text-base">
 
                     {{ $user->active
                         ? '⏸ Suspend User'
@@ -1281,25 +1298,27 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
                 <form
                     method="POST"
                     action="{{ route('admin.users.destroy', $user) }}"
-                    onsubmit="return confirm('Delete this user permanently? This action cannot be undone.');">
+                    onsubmit="return confirm('Delete this user permanently? This action cannot be undone.');"
+                    class="w-full">
 
                     @csrf
                     @method('DELETE')
 
                     <button
                         type="submit"
-                        class="w-full sm:w-auto
+                        class="w-full
                                inline-flex
                                items-center
                                justify-center
                                gap-2
-                               px-6 py-3
+                               px-5 sm:px-6 py-3
                                rounded-xl
                                bg-red-600
                                hover:bg-red-700
                                text-white
                                font-semibold
-                               transition">
+                               transition
+                               text-sm sm:text-base">
 
                         🗑 Delete User
 
@@ -1310,16 +1329,18 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
             @else
 
                 <div
-                    class="inline-flex
+                    class="w-full
+                           inline-flex
                            items-center
                            justify-center
                            gap-2
-                           px-6 py-3
+                           px-5 sm:px-6 py-3
                            rounded-xl
                            bg-slate-100
                            border-2 border-slate-200
                            text-slate-500
-                           font-semibold">
+                           font-semibold
+                           text-sm sm:text-base">
 
                     🛡️ Protected Admin
 
@@ -1340,15 +1361,15 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 ========================================================== --}}
 
 <div
-    class="rounded-2xl
+    class="rounded-xl sm:rounded-2xl
            bg-sky-50
            border-2 border-sky-200
-           p-5">
+           p-4 sm:p-5">
 
-    <div class="flex items-start gap-4">
+    <div class="flex items-start gap-3 sm:gap-4">
 
         <div
-            class="w-11 h-11 rounded-xl
+            class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl
                    bg-white
                    border-2 border-sky-200
                    flex items-center justify-center
@@ -1358,7 +1379,7 @@ $initial = strtoupper(substr($user->name ?? 'U', 0, 1));
 
         </div>
 
-        <div>
+        <div class="min-w-0">
 
             <h3 class="font-bold text-sky-900">
                 User Account Information

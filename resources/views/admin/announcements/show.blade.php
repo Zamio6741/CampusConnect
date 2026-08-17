@@ -123,6 +123,59 @@
 
 
     {{-- =========================================================
+         VALIDATION / ERROR MESSAGE
+    ========================================================== --}}
+
+    @if($errors->any())
+
+        <div class="bg-red-50
+                    border-2 border-red-200
+                    rounded-2xl
+                    p-5
+                    shadow-sm">
+
+            <div class="flex items-start gap-3">
+
+                <div class="w-10 h-10 rounded-full
+                            bg-red-100
+                            border border-red-200
+                            flex items-center justify-center
+                            text-red-700
+                            font-bold
+                            flex-shrink-0">
+
+                    !
+
+                </div>
+
+                <div>
+
+                    <p class="font-semibold text-red-800">
+                        Something went wrong.
+                    </p>
+
+                    <ul class="mt-2 text-sm text-red-700 space-y-1">
+
+                        @foreach($errors->all() as $error)
+
+                            <li>
+                                • {{ $error }}
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    @endif
+
+
+    {{-- =========================================================
          ANNOUNCEMENT CARD
     ========================================================== --}}
 
@@ -155,7 +208,7 @@
                 </div>
 
 
-                <div class="min-w-0">
+                <div class="min-w-0 flex-1">
 
                     <div class="inline-flex items-center
                                 px-3 py-1 rounded-full
@@ -180,7 +233,7 @@
                     <p class="text-red-100 mt-3 text-sm">
 
                         Published
-                        {{ $announcement->created_at?->diffForHumans() }}
+                        {{ $announcement->created_at?->diffForHumans() ?? 'Recently' }}
 
                     </p>
 
@@ -333,13 +386,13 @@
 
                         <p class="font-bold text-slate-800">
 
-                            {{ $announcement->created_at?->format('d M Y') }}
+                            {{ $announcement->created_at?->format('d M Y') ?? 'N/A' }}
 
                         </p>
 
                         <p class="text-xs text-slate-400">
 
-                            {{ $announcement->created_at?->format('h:i A') }}
+                            {{ $announcement->created_at?->format('h:i A') ?? 'N/A' }}
 
                         </p>
 
@@ -398,6 +451,101 @@
                             break-words">
 
                     {{ $announcement->content }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- =========================================================
+         PUBLICATION SUMMARY
+    ========================================================== --}}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+        {{-- Announcement ID --}}
+
+        <div class="bg-white
+                    rounded-2xl
+                    shadow-md
+                    border-2 border-slate-200
+                    p-6">
+
+            <div class="flex items-center gap-4">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-slate-100
+                            border border-slate-200
+                            flex items-center justify-center
+                            text-xl">
+
+                    🆔
+
+                </div>
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider
+                              text-slate-400
+                              font-semibold">
+
+                        Announcement ID
+
+                    </p>
+
+                    <p class="text-lg font-bold text-slate-800 mt-1">
+
+                        #{{ $announcement->id }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {{-- Last Updated --}}
+
+        <div class="bg-white
+                    rounded-2xl
+                    shadow-md
+                    border-2 border-slate-200
+                    p-6">
+
+            <div class="flex items-center gap-4">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-amber-100
+                            border border-amber-200
+                            flex items-center justify-center
+                            text-xl">
+
+                    🔄
+
+                </div>
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider
+                              text-slate-400
+                              font-semibold">
+
+                        Last Updated
+
+                    </p>
+
+                    <p class="text-lg font-bold text-slate-800 mt-1">
+
+                        {{ $announcement->updated_at?->diffForHumans() ?? 'Not available' }}
+
+                    </p>
 
                 </div>
 
@@ -487,6 +635,27 @@
 
 
             <div class="flex flex-col sm:flex-row gap-3">
+
+                {{-- =================================================
+                     BACK
+                ================================================== --}}
+
+                <a
+                    href="{{ route('admin.announcements') }}"
+                    class="inline-flex items-center justify-center gap-2
+                           px-6 py-3 rounded-xl
+                           border-2 border-slate-300
+                           bg-white
+                           text-slate-700
+                           font-semibold
+                           hover:bg-slate-50
+                           hover:border-slate-400
+                           transition duration-200">
+
+                    ← Back
+
+                </a>
+
 
                 {{-- =================================================
                      EDIT

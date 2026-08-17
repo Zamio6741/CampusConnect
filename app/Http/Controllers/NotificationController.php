@@ -7,16 +7,32 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    /**
+     * Display recent notifications.
+     */
     public function index()
     {
         $notifications = Auth::user()
             ->notifications()
+            ->where('created_at', '>=', now()->subDays(7))
             ->latest()
             ->get();
 
-        return view('landlord.notifications', compact('notifications'));
+        $notificationCount = Auth::user()
+            ->notifications()
+            ->where('created_at', '>=', now()->subDays(7))
+            ->where('is_read', false)
+            ->count();
+
+        return view(
+            'notifications.index',
+            compact('notifications', 'notificationCount')
+        );
     }
 
+    /**
+     * Mark one notification as read.
+     */
     public function markAsRead(Notification $notification)
     {
         abort_if($notification->user_id != Auth::id(), 403);
@@ -25,13 +41,21 @@ class NotificationController extends Controller
             'is_read' => true,
         ]);
 
+        if ($notification->link) {
+            return redirect($notification->link);
+        }
+
         return back();
     }
 
+    /**
+     * Mark all recent notifications as read.
+     */
     public function markAllAsRead()
     {
         Auth::user()
             ->notifications()
+            ->where('created_at', '>=', now()->subDays(7))
             ->where('is_read', false)
             ->update([
                 'is_read' => true,
@@ -40,6 +64,9 @@ class NotificationController extends Controller
         return back();
     }
 
+    /**
+     * Delete one notification.
+     */
     public function destroy(Notification $notification)
     {
         abort_if($notification->user_id != Auth::id(), 403);

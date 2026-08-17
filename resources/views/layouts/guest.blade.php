@@ -21,15 +21,19 @@
         body {
             margin: 0;
             min-height: 100%;
+            width: 100%;
         }
 
         body {
             font-family: 'Figtree', sans-serif;
             background: #f8fafc;
+            overflow-x: hidden;
         }
 
         .auth-page {
             min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
             position: relative;
             overflow: hidden;
             background:
@@ -47,6 +51,8 @@
                 linear-gradient(90deg, rgba(37, 99, 235, .06) 1px, transparent 1px);
             background-size: 50px 50px;
             mask-image: linear-gradient(to bottom, black, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+            pointer-events: none;
         }
 
         .auth-orb {
@@ -84,24 +90,41 @@
         }
 
         @keyframes floatOne {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(40px, 25px); }
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(40px, 25px);
+            }
         }
 
         @keyframes floatTwo {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-35px, -30px); }
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-35px, -30px);
+            }
         }
 
         @keyframes floatThree {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(25px); }
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(25px);
+            }
         }
 
         .auth-wrapper {
             position: relative;
             z-index: 2;
             min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -257,11 +280,13 @@
             background: rgba(96, 165, 250, .15);
             color: #60a5fa;
             font-weight: 900;
+            flex-shrink: 0;
         }
 
         .auth-form-section {
             padding: 50px 55px;
             background: rgba(255, 255, 255, .95);
+            min-width: 0;
         }
 
         .mobile-brand {
@@ -305,6 +330,7 @@
         .auth-input,
         .auth-select {
             width: 100%;
+            max-width: 100%;
             height: 50px;
             padding: 0 15px;
             border: 1px solid #cbd5e1;
@@ -334,10 +360,11 @@
 
         .password-wrapper {
             position: relative;
+            width: 100%;
         }
 
         .password-wrapper .auth-input {
-            padding-right: 50px;
+            padding-right: 60px;
         }
 
         .password-toggle {
@@ -351,6 +378,7 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 700;
+            padding: 6px;
         }
 
         .password-toggle:hover {
@@ -448,6 +476,8 @@
 
         .form-content {
             animation: formEnter .7s ease .15s both;
+            width: 100%;
+            min-width: 0;
         }
 
         @keyframes formEnter {
@@ -462,7 +492,15 @@
             }
         }
 
+        /* =========================================================
+           TABLETS
+        ========================================================= */
+
         @media (max-width: 900px) {
+            .auth-wrapper {
+                padding: 30px 18px;
+            }
+
             .auth-container {
                 max-width: 600px;
                 grid-template-columns: 1fr;
@@ -488,6 +526,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                flex-shrink: 0;
+                box-shadow: 0 10px 25px rgba(37, 99, 235, .20);
             }
 
             .mobile-brand-name {
@@ -505,26 +545,251 @@
             }
         }
 
-        @media (max-width: 500px) {
+        /* =========================================================
+           PHONES
+        ========================================================= */
+
+        @media (max-width: 600px) {
+            .auth-page {
+                background:
+                    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, .10), transparent 35%),
+                    radial-gradient(circle at 100% 100%, rgba(14, 165, 233, .10), transparent 35%),
+                    #f8fafc;
+            }
+
+            .auth-grid {
+                background-size: 35px 35px;
+            }
+
             .auth-wrapper {
-                padding: 20px 12px;
+                min-height: 100dvh;
+                padding: 16px 10px;
+                align-items: flex-start;
             }
 
             .auth-container {
-                border-radius: 24px;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 22px;
+                margin-top: 8px;
             }
 
             .auth-form-section {
-                padding: 30px 22px;
+                width: 100%;
+                padding: 28px 18px 30px;
+            }
+
+            .mobile-brand {
+                margin-bottom: 24px;
+            }
+
+            .mobile-brand-logo {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+            }
+
+            .mobile-brand-name {
+                font-size: 22px;
             }
 
             .auth-heading {
-                font-size: 27px;
+                font-size: 26px;
+                line-height: 1.2;
+            }
+
+            .auth-subheading {
+                font-size: 14px;
+                line-height: 1.55;
+            }
+
+            .auth-form {
+                margin-top: 25px;
+            }
+
+            .form-group {
+                margin-top: 17px;
+            }
+
+            .form-label {
+                font-size: 12px;
+                margin-bottom: 7px;
+            }
+
+            .auth-input,
+            .auth-select {
+                height: 48px;
+                padding: 0 13px;
+                font-size: 14px;
+                border-radius: 12px;
+            }
+
+            .password-wrapper .auth-input {
+                padding-right: 58px;
+            }
+
+            .password-toggle {
+                right: 10px;
             }
 
             .auth-row {
                 align-items: flex-start;
                 flex-direction: column;
+                gap: 12px;
+                margin-top: 18px;
+            }
+
+            .remember-label,
+            .auth-link {
+                font-size: 12px;
+            }
+
+            .auth-button {
+                height: 50px;
+                margin-top: 22px;
+                border-radius: 13px;
+            }
+
+            .auth-footer {
+                margin-top: 22px;
+                padding-top: 18px;
+                font-size: 12px;
+                line-height: 1.6;
+            }
+
+            .security-note {
+                font-size: 10px;
+            }
+
+            .orb-one {
+                width: 250px;
+                height: 250px;
+                top: -120px;
+                left: -100px;
+            }
+
+            .orb-two {
+                width: 220px;
+                height: 220px;
+                right: -100px;
+                bottom: -90px;
+            }
+
+            .orb-three {
+                width: 120px;
+                height: 120px;
+                right: 5%;
+                top: 8%;
+            }
+        }
+
+        /* =========================================================
+           VERY SMALL PHONES
+        ========================================================= */
+
+        @media (max-width: 380px) {
+            .auth-wrapper {
+                padding: 10px 7px;
+            }
+
+            .auth-container {
+                border-radius: 18px;
+            }
+
+            .auth-form-section {
+                padding: 24px 14px 26px;
+            }
+
+            .mobile-brand {
+                gap: 9px;
+                margin-bottom: 20px;
+            }
+
+            .mobile-brand-logo {
+                width: 38px;
+                height: 38px;
+                border-radius: 11px;
+            }
+
+            .mobile-brand-logo svg {
+                width: 21px;
+                height: 21px;
+            }
+
+            .mobile-brand-name {
+                font-size: 20px;
+            }
+
+            .auth-heading {
+                font-size: 24px;
+            }
+
+            .auth-subheading {
+                font-size: 13px;
+            }
+
+            .auth-input,
+            .auth-select {
+                height: 46px;
+                font-size: 13px;
+            }
+
+            .auth-button {
+                height: 48px;
+                font-size: 13px;
+            }
+        }
+
+        /* =========================================================
+           LANDSCAPE PHONES
+        ========================================================= */
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .auth-wrapper {
+                align-items: flex-start;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+            .auth-container {
+                margin-top: 0;
+            }
+
+            .auth-form-section {
+                padding-top: 22px;
+                padding-bottom: 22px;
+            }
+
+            .mobile-brand {
+                margin-bottom: 15px;
+            }
+
+            .auth-form {
+                margin-top: 18px;
+            }
+
+            .form-group {
+                margin-top: 12px;
+            }
+
+            .auth-footer {
+                margin-top: 15px;
+                padding-top: 12px;
+            }
+        }
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
             }
         }
     </style>
@@ -544,18 +809,25 @@
 
         <div class="auth-container">
 
+            <!-- =====================================================
+                 DESKTOP BRAND SECTION
+            ====================================================== -->
+
             <div class="auth-brand">
 
                 <div class="brand-content">
 
                     <div class="brand-logo">
-                        <svg width="34" height="34"
-                             viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="white"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
+                        <svg
+                            width="34"
+                            height="34"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
                             <path d="M22 10 12 5 2 10l10 5 10-5Z"/>
                             <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                             <path d="M22 10v6"/>
@@ -608,22 +880,32 @@
 
             </div>
 
+            <!-- =====================================================
+                 FORM SECTION
+            ====================================================== -->
+
             <div class="auth-form-section">
 
                 <div class="form-content">
 
+                    <!-- Mobile Brand -->
+
                     <div class="mobile-brand">
 
                         <div class="mobile-brand-logo">
-                            <svg width="25" height="25"
-                                 viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="white"
-                                 stroke-width="2"
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round">
+                            <svg
+                                width="25"
+                                height="25"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="white"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M22 10 12 5 2 10l10 5 10-5Z"/>
                                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                                <path d="M22 10v6"/>
                             </svg>
                         </div>
 
@@ -649,7 +931,9 @@
     function togglePassword(button, inputId) {
         const input = document.getElementById(inputId);
 
-        if (!input) return;
+        if (!input) {
+            return;
+        }
 
         if (input.type === 'password') {
             input.type = 'text';

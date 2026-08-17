@@ -82,9 +82,13 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         | Notifications
         |--------------------------------------------------------------------------
+        |
+        | Only notifications from the last 7 days are displayed/countable.
+        |
         */
 
         $notifications = Notification::where('user_id', $user->id)
+            ->where('created_at', '>=', now()->subDays(7))
             ->latest()
             ->get();
 
@@ -102,6 +106,12 @@ class DashboardController extends Controller
             ->where('sender_id', '!=', $user->id)
             ->where('is_read', false)
             ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Dashboard
+        |--------------------------------------------------------------------------
+        */
 
         return view('student.dashboard', [
 

@@ -116,14 +116,7 @@ Route::delete('/landlord/rental/photo/{photo}', [RentalController::class, 'delet
 Route::post('/landlord/rental/{accommodation}/photos', [RentalController::class, 'uploadPhotos'])
     ->name('rentals.photos.upload');    
     
-Route::get('/landlord/notifications', [NotificationController::class, 'index'])
-    ->middleware(['auth','role:Landlord'])
-    ->name('landlord.notifications');
-
-
-Route::get('/landlord/notifications', [NotificationController::class, 'index'])
-    ->name('landlord.notifications');
-
+    
 Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
     ->name('notifications.read');
 
@@ -624,6 +617,9 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     [AccommodationManagementController::class, 'reject'])
     ->name('admin.accommodations.reject');
 
+    Route::get('/search', [\App\Http\Controllers\Admin\AdminSearchController::class, 'index'])
+    ->name('admin.search');
+
 });
 
 Route::prefix('admin')->group(function () {
@@ -639,6 +635,9 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth','role:Admin'])->group(function () {
+    
+    Route::get('/search', [AdminSearchController::class, 'index'])
+    ->name('admin.search');
 
     Route::get('/accommodations', [AccommodationManagementController::class, 'index'])
         ->name('admin.accommodations');
@@ -752,6 +751,25 @@ Route::delete('/announcements/{announcement}',
 
 Route::put('/settings', [\App\Http\Controllers\Admin\AdminSettingsController::class, 'update'])
     ->name('admin.settings.update');
+
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::patch('/notifications/{notification}/read',
+        [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
+    Route::patch('/notifications/read-all',
+        [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.readAll');
+
+    Route::delete('/notifications/{notification}',
+        [NotificationController::class, 'destroy'])
+        ->name('notifications.destroy');
 
 });
 

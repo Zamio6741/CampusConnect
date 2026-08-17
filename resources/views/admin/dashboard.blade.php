@@ -8,890 +8,885 @@
 WELCOME HEADER
 ========================================================= --}}
 
-<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+<div class="w-full min-w-0">
 
-<div>
-    <h1 class="text-4xl font-bold text-slate-800">
-        Welcome back, Admin! 👋
-    </h1>
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
 
-    <p class="text-slate-500 mt-2">
-        Here's what's happening on CampusConnect today.
-    </p>
-</div>
+        <div class="min-w-0">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800 break-words">
+                Welcome back, Admin! 👋
+            </h1>
 
-{{-- LIVE CLOCK --}}
-
-<div class="bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-2xl rounded-2xl px-6 py-4 text-center min-w-[280px]">
-
-    <div class="flex items-center justify-center gap-2 mb-1">
-
-        <span class="text-2xl">
-            🕒
-        </span>
-
-        <span class="text-sm uppercase tracking-widest opacity-80">
-            Current Time
-        </span>
-
-    </div>
-
-    <div
-        id="liveDate"
-        class="text-lg font-semibold">
-    </div>
-
-    <div
-        id="liveTime"
-        class="text-3xl font-bold tracking-wide mt-1">
-    </div>
-
-</div>
-
-
-</div>
-
-{{-- =========================================================
-STATISTICS
-========================================================= --}}
-
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-
-{{-- Total Users --}}
-
-<a
-    href="{{ route('admin.users') }}"
-    class="block bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition duration-300">
-
-    <p class="text-gray-500">
-        Total Users
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($users) }}
-    </h2>
-
-</a>
-
-
-{{-- Students --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Students
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($students) }}
-    </h2>
-
-</div>
-
-
-{{-- Businesses --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Businesses
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($businesses) }}
-    </h2>
-
-</div>
-
-
-{{-- Accommodations --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Accommodations
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($accommodations) }}
-    </h2>
-
-</div>
-
-
-{{-- Notes --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Notes
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($notes) }}
-    </h2>
-
-</div>
-
-
-{{-- Past Papers --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Past Papers
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($pastpapers) }}
-    </h2>
-
-</div>
-
-
-{{-- Announcements --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Announcements
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($announcements) }}
-    </h2>
-
-</div>
-
-
-{{-- Universities --}}
-
-<div class="bg-white rounded-2xl shadow-lg p-6">
-
-    <p class="text-gray-500">
-        Universities
-    </p>
-
-    <h2 class="text-4xl font-bold mt-2">
-        {{ number_format($universities) }}
-    </h2>
-
-</div>
-
-
-</div>
-
-{{-- =========================================================
-SYSTEM OVERVIEW
-========================================================= --}}
-
-<div class="mt-10">
-
-
-<h2 class="text-2xl font-bold text-slate-800 mb-6">
-    🚀 System Overview
-</h2>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-    {{-- Users --}}
-
-    <div class="bg-gradient-to-r from-blue-500 to-blue-700 rounded-2xl p-6 text-white shadow-xl">
-
-        <div class="text-5xl">
-            👥
+            <p class="text-slate-500 mt-2 break-words">
+                Here's what's happening on CampusConnect today.
+            </p>
         </div>
 
-        <h3 class="text-xl font-bold mt-4">
-            {{ number_format($users) }}
-        </h3>
+        {{-- LIVE CLOCK --}}
 
-        <p class="opacity-80">
-            Registered Users
-        </p>
+        <div class="w-full lg:w-auto lg:min-w-[280px] bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-2xl rounded-2xl px-6 py-4 text-center">
 
-    </div>
+            <div class="flex items-center justify-center gap-2 mb-1">
 
+                <span class="text-2xl">
+                    🕒
+                </span>
 
-    {{-- Businesses --}}
+                <span class="text-sm uppercase tracking-widest opacity-80">
+                    Current Time
+                </span>
 
-    <div class="bg-gradient-to-r from-green-500 to-green-700 rounded-2xl p-6 text-white shadow-xl">
+            </div>
 
-        <div class="text-5xl">
-            🏪
+            <div
+                id="liveDate"
+                class="text-base sm:text-lg font-semibold break-words">
+            </div>
+
+            <div
+                id="liveTime"
+                class="text-2xl sm:text-3xl font-bold tracking-wide mt-1">
+            </div>
+
         </div>
 
-        <h3 class="text-xl font-bold mt-4">
-            {{ number_format($businesses) }}
-        </h3>
-
-        <p class="opacity-80">
-            Active Businesses
-        </p>
-
     </div>
 
 
-    {{-- Rentals --}}
+    {{-- =========================================================
+    STATISTICS
+    ========================================================= --}}
 
-    <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl p-6 text-white shadow-xl">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-        <div class="text-5xl">
-            🏠
+        {{-- Total Users --}}
+
+        <a
+            href="{{ route('admin.users') }}"
+            class="block min-w-0 bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+
+            <p class="text-gray-500 break-words">
+                Total Users
+            </p>
+
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($users) }}
+            </h2>
+
+        </a>
+
+
+        {{-- Students --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
+
+            <p class="text-gray-500">
+                Students
+            </p>
+
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($students) }}
+            </h2>
+
         </div>
 
-        <h3 class="text-xl font-bold mt-4">
-            {{ number_format($accommodations) }}
-        </h3>
 
-        <p class="opacity-80">
-            Rental Listings
-        </p>
+        {{-- Businesses --}}
 
-    </div>
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
 
-</div>
+            <p class="text-gray-500">
+                Businesses
+            </p>
 
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($businesses) }}
+            </h2>
 
-</div>
-
-{{-- =========================================================
-SYSTEM STATUS
-========================================================= --}}
-
-<div class="mt-8 grid md:grid-cols-4 gap-6">
+        </div>
 
 
-{{-- Server --}}
+        {{-- Accommodations --}}
 
-<div class="bg-white rounded-2xl shadow p-6">
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
 
-    <div class="flex justify-between items-center">
+            <p class="text-gray-500 break-words">
+                Accommodations
+            </p>
 
-        <span>
-            Server
-        </span>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($accommodations) }}
+            </h2>
 
-        <span class="text-green-600 font-bold">
-            ● Online
-        </span>
-
-    </div>
-
-</div>
+        </div>
 
 
-{{-- Database --}}
+        {{-- Notes --}}
 
-<div class="bg-white rounded-2xl shadow p-6">
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
 
-    <div class="flex justify-between items-center">
+            <p class="text-gray-500">
+                Notes
+            </p>
 
-        <span>
-            Database
-        </span>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($notes) }}
+            </h2>
 
-        <span class="text-green-600 font-bold">
-            ● Connected
-        </span>
-
-    </div>
-
-</div>
+        </div>
 
 
-{{-- Storage --}}
+        {{-- Past Papers --}}
 
-<div class="bg-white rounded-2xl shadow p-6">
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
 
-    <div class="flex justify-between items-center">
+            <p class="text-gray-500">
+                Past Papers
+            </p>
 
-        <span>
-            Storage
-        </span>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($pastpapers) }}
+            </h2>
 
-        <span class="text-blue-600 font-bold">
-            Healthy
-        </span>
-
-    </div>
-
-</div>
+        </div>
 
 
-{{-- Security --}}
+        {{-- Announcements --}}
 
-<div class="bg-white rounded-2xl shadow p-6">
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
 
-    <div class="flex justify-between items-center">
+            <p class="text-gray-500 break-words">
+                Announcements
+            </p>
 
-        <span>
-            Security
-        </span>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($announcements) }}
+            </h2>
 
-        <span class="text-green-600 font-bold">
-            Protected
-        </span>
+        </div>
+
+
+        {{-- Universities --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow-lg p-6">
+
+            <p class="text-gray-500">
+                Universities
+            </p>
+
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2">
+                {{ number_format($universities) }}
+            </h2>
+
+        </div>
 
     </div>
 
-</div>
 
+    {{-- =========================================================
+    SYSTEM OVERVIEW
+    ========================================================= --}}
 
-</div>
+    <div class="mt-10">
 
-{{-- =========================================================
-MAIN DASHBOARD GRID
-========================================================= --}}
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 break-words">
+            🚀 System Overview
+        </h2>
 
-<div class="grid xl:grid-cols-3 gap-6 mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
+            {{-- Users --}}
 
-{{-- =====================================================
-    LEFT SIDE
-====================================================== --}}
+            <div class="min-w-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-2xl p-6 text-white shadow-xl">
 
-<div class="xl:col-span-2 space-y-6">
+                <div class="text-5xl">
+                    👥
+                </div>
 
+                <h3 class="text-xl font-bold mt-4">
+                    {{ number_format($users) }}
+                </h3>
 
-    {{-- =================================================
-        USER GROWTH
-    ================================================== --}}
-
-    <div class="bg-white rounded-2xl shadow p-6">
-
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
-
-            <div>
-
-                <h2 class="text-xl font-bold">
-                    User Growth
-                </h2>
-
-                <p class="text-sm text-slate-500 mt-1">
-                    Total registered users by month
+                <p class="opacity-80 break-words">
+                    Registered Users
                 </p>
 
             </div>
 
-            <div class="text-sm text-slate-400">
-                {{ now()->year }}
+
+            {{-- Businesses --}}
+
+            <div class="min-w-0 bg-gradient-to-r from-green-500 to-green-700 rounded-2xl p-6 text-white shadow-xl">
+
+                <div class="text-5xl">
+                    🏪
+                </div>
+
+                <h3 class="text-xl font-bold mt-4">
+                    {{ number_format($businesses) }}
+                </h3>
+
+                <p class="opacity-80 break-words">
+                    Active Businesses
+                </p>
+
+            </div>
+
+
+            {{-- Rentals --}}
+
+            <div class="min-w-0 bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl p-6 text-white shadow-xl">
+
+                <div class="text-5xl">
+                    🏠
+                </div>
+
+                <h3 class="text-xl font-bold mt-4">
+                    {{ number_format($accommodations) }}
+                </h3>
+
+                <p class="opacity-80 break-words">
+                    Rental Listings
+                </p>
+
             </div>
 
         </div>
 
-        <div style="height:320px;">
+    </div>
 
-            <canvas id="usersChart"></canvas>
+
+    {{-- =========================================================
+    SYSTEM STATUS
+    ========================================================= --}}
+
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        {{-- Server --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow p-6">
+
+            <div class="flex flex-wrap justify-between items-center gap-2">
+
+                <span>
+                    Server
+                </span>
+
+                <span class="text-green-600 font-bold whitespace-nowrap">
+                    ● Online
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {{-- Database --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow p-6">
+
+            <div class="flex flex-wrap justify-between items-center gap-2">
+
+                <span>
+                    Database
+                </span>
+
+                <span class="text-green-600 font-bold whitespace-nowrap">
+                    ● Connected
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {{-- Storage --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow p-6">
+
+            <div class="flex flex-wrap justify-between items-center gap-2">
+
+                <span>
+                    Storage
+                </span>
+
+                <span class="text-blue-600 font-bold whitespace-nowrap">
+                    Healthy
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {{-- Security --}}
+
+        <div class="min-w-0 bg-white rounded-2xl shadow p-6">
+
+            <div class="flex flex-wrap justify-between items-center gap-2">
+
+                <span>
+                    Security
+                </span>
+
+                <span class="text-green-600 font-bold whitespace-nowrap">
+                    Protected
+                </span>
+
+            </div>
 
         </div>
 
     </div>
 
 
-    {{-- =================================================
-        RECENT ACTIVITY
-    ================================================== --}}
+    {{-- =========================================================
+    MAIN DASHBOARD GRID
+    ========================================================= --}}
 
-    <div class="bg-white rounded-2xl shadow p-6">
-
-        <h2 class="text-xl font-bold mb-6">
-            📈 Recent Activity
-        </h2>
-
-        <div class="space-y-5">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-8 min-w-0">
 
 
-            {{-- RECENT USERS --}}
+        {{-- =====================================================
+        LEFT SIDE
+        ====================================================== --}}
 
-            @foreach($recentUsers as $user)
+        <div class="xl:col-span-2 min-w-0 space-y-6">
 
-                <div class="flex items-start gap-4">
 
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl shrink-0">
-                        👤
+            {{-- USER GROWTH --}}
+
+            <div class="min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6">
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+
+                    <div class="min-w-0">
+
+                        <h2 class="text-xl font-bold break-words">
+                            User Growth
+                        </h2>
+
+                        <p class="text-sm text-slate-500 mt-1 break-words">
+                            Total registered users by month
+                        </p>
+
                     </div>
 
-                    <div>
-
-                        <div class="font-semibold">
-                            {{ $user->name }}
-                        </div>
-
-                        <div class="text-gray-500 text-sm">
-                            Registered a new account
-                        </div>
-
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{ $user->created_at->diffForHumans() }}
-                        </div>
-
+                    <div class="text-sm text-slate-400 shrink-0">
+                        {{ now()->year }}
                     </div>
 
                 </div>
 
-            @endforeach
+                <div class="relative w-full" style="height:320px;">
 
-
-            {{-- RECENT BUSINESSES --}}
-
-            @foreach($recentBusinesses as $business)
-
-                <div class="flex items-start gap-4">
-
-                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-xl shrink-0">
-                        🏪
-                    </div>
-
-                    <div>
-
-                        <div class="font-semibold">
-                            {{ $business->business_name }}
-                        </div>
-
-                        <div class="text-gray-500 text-sm">
-                            Registered a business
-                        </div>
-
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{ $business->created_at->diffForHumans() }}
-                        </div>
-
-                    </div>
+                    <canvas id="usersChart"></canvas>
 
                 </div>
 
-            @endforeach
+            </div>
 
 
-            {{-- RECENT NOTES --}}
+            {{-- RECENT ACTIVITY --}}
 
-            @foreach($recentNotes as $note)
+            <div class="min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6">
 
-                <div class="flex items-start gap-4">
+                <h2 class="text-xl font-bold mb-6 break-words">
+                    📈 Recent Activity
+                </h2>
 
-                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-xl shrink-0">
-                        📚
-                    </div>
+                <div class="space-y-5">
 
-                    <div>
 
-                        <div class="font-semibold">
-                            {{ $note->title }}
+                    {{-- RECENT USERS --}}
+
+                    @foreach($recentUsers as $user)
+
+                        <div class="flex items-start gap-4 min-w-0">
+
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl shrink-0">
+                                👤
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <div class="font-semibold break-words">
+                                    {{ $user->name }}
+                                </div>
+
+                                <div class="text-gray-500 text-sm break-words">
+                                    Registered a new account
+                                </div>
+
+                                <div class="text-xs text-gray-400 mt-1">
+                                    {{ $user->created_at->diffForHumans() }}
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="text-gray-500 text-sm">
-                            Uploaded new notes
+                    @endforeach
+
+
+                    {{-- RECENT BUSINESSES --}}
+
+                    @foreach($recentBusinesses as $business)
+
+                        <div class="flex items-start gap-4 min-w-0">
+
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-xl shrink-0">
+                                🏪
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <div class="font-semibold break-words">
+                                    {{ $business->business_name }}
+                                </div>
+
+                                <div class="text-gray-500 text-sm break-words">
+                                    Registered a business
+                                </div>
+
+                                <div class="text-xs text-gray-400 mt-1">
+                                    {{ $business->created_at->diffForHumans() }}
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{ $note->created_at->diffForHumans() }}
+                    @endforeach
+
+
+                    {{-- RECENT NOTES --}}
+
+                    @foreach($recentNotes as $note)
+
+                        <div class="flex items-start gap-4 min-w-0">
+
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-xl shrink-0">
+                                📚
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <div class="font-semibold break-words">
+                                    {{ $note->title }}
+                                </div>
+
+                                <div class="text-gray-500 text-sm break-words">
+                                    Uploaded new notes
+                                </div>
+
+                                <div class="text-xs text-gray-400 mt-1">
+                                    {{ $note->created_at->diffForHumans() }}
+                                </div>
+
+                            </div>
+
                         </div>
 
-                    </div>
+                    @endforeach
+
+
+                    {{-- EMPTY STATE --}}
+
+                    @if(
+                        $recentUsers->isEmpty() &&
+                        $recentBusinesses->isEmpty() &&
+                        $recentNotes->isEmpty()
+                    )
+
+                        <div class="text-center py-10 text-gray-500">
+                            No recent activity available.
+                        </div>
+
+                    @endif
 
                 </div>
 
-            @endforeach
+            </div>
+
+        </div>
 
 
-            {{-- EMPTY STATE --}}
+        {{-- =====================================================
+        RIGHT SIDE
+        ====================================================== --}}
 
-            @if(
-                $recentUsers->isEmpty() &&
-                $recentBusinesses->isEmpty() &&
-                $recentNotes->isEmpty()
-            )
+        <div class="min-w-0 space-y-6">
 
-                <div class="text-center py-10 text-gray-500">
-                    No recent activity available.
+
+            {{-- USERS BY ROLE --}}
+
+            <div class="min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6">
+
+                <h2 class="text-xl font-bold mb-6 break-words">
+                    Users by Role
+                </h2>
+
+                <div class="relative w-full" style="height:300px;">
+
+                    <canvas id="rolesChart"></canvas>
+
                 </div>
 
-            @endif
+            </div>
+
+
+            {{-- TOP UNIVERSITIES --}}
+
+            <div class="min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6">
+
+                <h2 class="text-xl font-bold mb-6 break-words">
+                    🏆 Top Universities
+                </h2>
+
+                <div class="space-y-5">
+
+                    @forelse($topUniversities as $university)
+
+                        @php
+
+                            $percentage = $users > 0
+                                ? min(($university->users_count / $users) * 100, 100)
+                                : 0;
+
+                        @endphp
+
+                        <div class="min-w-0">
+
+                            <div class="flex flex-col sm:flex-row sm:justify-between mb-2 gap-1">
+
+                                <span class="font-semibold break-words min-w-0">
+                                    {{ $university->name }}
+                                </span>
+
+                                <span class="text-slate-500 whitespace-nowrap shrink-0">
+                                    {{ number_format($university->users_count) }} users
+                                </span>
+
+                            </div>
+
+                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+
+                                <div
+                                    class="bg-blue-600 h-3 rounded-full transition-all duration-500"
+                                    style="width: {{ $percentage }}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @empty
+
+                        <div class="text-center py-8 text-gray-500">
+                            No university data available.
+                        </div>
+
+                    @endforelse
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
+
+    {{-- =========================================================
+    FULL-WIDTH ADMIN CONTROL CENTER
+    ========================================================= --}}
+
+    <div class="mt-10 min-w-0 bg-white rounded-3xl shadow-xl border border-slate-100 p-4 sm:p-6 lg:p-8">
 
 
-{{-- =====================================================
-    RIGHT SIDE
-====================================================== --}}
+        {{-- HEADER --}}
 
-<div class="space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 
+            <div class="flex items-start gap-4 min-w-0">
 
-    {{-- =================================================
-        USERS BY ROLE
-    ================================================== --}}
+                <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl shrink-0">
+                    ⚡
+                </div>
 
-    <div class="bg-white rounded-2xl shadow p-6">
+                <div class="min-w-0">
 
-        <h2 class="text-xl font-bold mb-6">
-            Users by Role
-        </h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800 break-words">
+                        Admin Control Center
+                    </h2>
 
-        <div style="height:300px;">
-
-            <canvas id="rolesChart"></canvas>
-
-        </div>
-
-    </div>
-
-
-    {{-- =================================================
-        TOP UNIVERSITIES
-    ================================================== --}}
-
-    <div class="bg-white rounded-2xl shadow p-6">
-
-        <h2 class="text-xl font-bold mb-6">
-            🏆 Top Universities
-        </h2>
-
-        <div class="space-y-5">
-
-            @forelse($topUniversities as $university)
-
-                @php
-
-                    $percentage = $users > 0
-                        ? min(($university->users_count / $users) * 100, 100)
-                        : 0;
-
-                @endphp
-
-                <div>
-
-                    <div class="flex justify-between mb-2 gap-3">
-
-                        <span class="font-semibold">
-                            {{ $university->name }}
-                        </span>
-
-                        <span class="text-slate-500 whitespace-nowrap">
-                            {{ number_format($university->users_count) }} users
-                        </span>
-
-                    </div>
-
-                    <div class="w-full bg-slate-200 rounded-full h-3">
-
-                        <div
-                            class="bg-blue-600 h-3 rounded-full transition-all duration-500"
-                            style="width: {{ $percentage }}%">
-                        </div>
-
-                    </div>
+                    <p class="text-sm text-slate-500 mt-1 break-words">
+                        Manage and monitor the major areas of CampusConnect.
+                    </p>
 
                 </div>
 
-            @empty
+            </div>
 
-                <div class="text-center py-8 text-gray-500">
-                    No university data available.
+            <div class="text-sm text-slate-400 shrink-0">
+                Administrative Tools
+            </div>
+
+        </div>
+
+
+        {{-- CONTROL BUTTONS --}}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+
+            {{-- USERS --}}
+
+            <a
+                href="{{ route('admin.users') }}"
+                class="group min-w-0 bg-blue-600 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
+
+                <div class="text-3xl">
+                    👥
                 </div>
 
-            @endforelse
-
-        </div>
-
-    </div>
-
-</div>
-
-
-</div>
-
-{{-- =========================================================
-FULL-WIDTH ADMIN CONTROL CENTER
-========================================================= --}}
-
-<div class="mt-10 bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
-
-
-{{-- HEADER --}}
-
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-
-    <div class="flex items-center gap-4">
-
-        <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl">
-            ⚡
-        </div>
-
-        <div>
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                Admin Control Center
-            </h2>
-
-            <p class="text-sm text-slate-500 mt-1">
-                Manage and monitor the major areas of CampusConnect.
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="text-sm text-slate-400">
-        Administrative Tools
-    </div>
-
-</div>
-
-
-{{-- CONTROL BUTTONS --}}
-
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
-
-    {{-- USERS --}}
-
-    <a
-        href="{{ route('admin.users') }}"
-        class="group bg-blue-600 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            👥
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Users
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            Manage Users
-        </div>
-
-    </a>
-
-
-    {{-- BUSINESSES --}}
-
-    <a
-        href="{{ route('admin.businesses') }}"
-        class="group bg-green-600 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            🏪
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Businesses
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            Manage Businesses
-        </div>
-
-    </a>
-
-
-    {{-- RENTALS --}}
-
-    <a
-        href="{{ route('admin.accommodations') }}"
-        class="group bg-purple-600 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            🏠
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Rentals
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            Manage Rentals
-        </div>
-
-    </a>
-
-
-    {{-- MARKETPLACE --}}
-
-    <a
-        href="{{ route('admin.marketplace') }}"
-        class="group bg-orange-500 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            🛒
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Marketplace
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            Manage Listings
-        </div>
-
-    </a>
-
-
-    {{-- ANNOUNCEMENTS --}}
-
-    <a
-        href="{{ route('admin.announcements') }}"
-        class="group bg-red-600 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            📢
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Announcements
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            Manage Announcements
-        </div>
-
-    </a>
-
-
-    {{-- REPORTS --}}
-
-    <a
-        href="{{ route('admin.reports') }}"
-        class="group bg-slate-700 text-white rounded-2xl p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-        <div class="text-3xl">
-            📊
-        </div>
-
-        <div class="mt-3 text-lg font-bold">
-            Reports
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-            System Reports
-        </div>
-
-    </a>
-
-</div>
-
-
-{{-- =====================================================
-    PENDING ITEMS
-====================================================== --}}
-
-<div class="mt-8">
-
-    <h3 class="text-lg font-bold text-slate-800 mb-5">
-        Pending & Attention Required
-    </h3>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-
-
-        {{-- PENDING BUSINESSES --}}
-
-        <div class="bg-yellow-100 rounded-2xl p-6 border-l-8 border-yellow-500">
-
-            <div class="flex items-start justify-between gap-4">
-
-                <div>
-
-                    <h3 class="text-lg font-bold text-slate-800">
-                        Businesses Pending
-                    </h3>
-
-                    <div class="text-5xl font-bold mt-3 text-slate-900">
-                        {{ number_format($pendingBusinesses) }}
-                    </div>
-
+                <div class="mt-3 text-lg font-bold">
+                    Users
                 </div>
+
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    Manage Users
+                </div>
+
+            </a>
+
+
+            {{-- BUSINESSES --}}
+
+            <a
+                href="{{ route('admin.businesses') }}"
+                class="group min-w-0 bg-green-600 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
 
                 <div class="text-3xl">
                     🏪
                 </div>
 
-            </div>
-
-        </div>
-
-
-        {{-- PENDING NOTES --}}
-
-        <div class="bg-blue-100 rounded-2xl p-6 border-l-8 border-blue-500">
-
-            <div class="flex items-start justify-between gap-4">
-
-                <div>
-
-                    <h3 class="text-lg font-bold text-slate-800">
-                        Notes Pending
-                    </h3>
-
-                    <div class="text-5xl font-bold mt-3 text-slate-900">
-                        {{ number_format($pendingNotes) }}
-                    </div>
-
+                <div class="mt-3 text-lg font-bold">
+                    Businesses
                 </div>
 
-                <div class="text-3xl">
-                    📚
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    Manage Businesses
                 </div>
 
-            </div>
-
-        </div>
+            </a>
 
 
-        {{-- PENDING RENTALS --}}
+            {{-- RENTALS --}}
 
-        <div class="bg-green-100 rounded-2xl p-6 border-l-8 border-green-500">
-
-            <div class="flex items-start justify-between gap-4">
-
-                <div>
-
-                    <h3 class="text-lg font-bold text-slate-800">
-                        Rentals Pending
-                    </h3>
-
-                    <div class="text-5xl font-bold mt-3 text-slate-900">
-                        {{ number_format($pendingAccommodations) }}
-                    </div>
-
-                </div>
+            <a
+                href="{{ route('admin.accommodations') }}"
+                class="group min-w-0 bg-purple-600 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
 
                 <div class="text-3xl">
                     🏠
                 </div>
 
-            </div>
+                <div class="mt-3 text-lg font-bold">
+                    Rentals
+                </div>
+
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    Manage Rentals
+                </div>
+
+            </a>
+
+
+            {{-- MARKETPLACE --}}
+
+            <a
+                href="{{ route('admin.marketplace') }}"
+                class="group min-w-0 bg-orange-500 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
+
+                <div class="text-3xl">
+                    🛒
+                </div>
+
+                <div class="mt-3 text-lg font-bold">
+                    Marketplace
+                </div>
+
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    Manage Listings
+                </div>
+
+            </a>
+
+
+            {{-- ANNOUNCEMENTS --}}
+
+            <a
+                href="{{ route('admin.announcements') }}"
+                class="group min-w-0 bg-red-600 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
+
+                <div class="text-3xl">
+                    📢
+                </div>
+
+                <div class="mt-3 text-lg font-bold">
+                    Announcements
+                </div>
+
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    Manage Announcements
+                </div>
+
+            </a>
+
+
+            {{-- REPORTS --}}
+
+            <a
+                href="{{ route('admin.reports') }}"
+                class="group min-w-0 bg-slate-700 text-white rounded-2xl p-6 sm:p-7 text-center hover:-translate-y-1 hover:shadow-xl transition duration-300">
+
+                <div class="text-3xl">
+                    📊
+                </div>
+
+                <div class="mt-3 text-lg font-bold">
+                    Reports
+                </div>
+
+                <div class="text-sm opacity-80 mt-1 break-words">
+                    System Reports
+                </div>
+
+            </a>
 
         </div>
 
 
-        {{-- REPORTS --}}
+        {{-- =====================================================
+        PENDING ITEMS
+        ====================================================== --}}
 
-        <div class="bg-red-100 rounded-2xl p-6 border-l-8 border-red-500">
+        <div class="mt-8">
 
-            <div class="flex items-start justify-between gap-4">
+            <h3 class="text-lg font-bold text-slate-800 mb-5 break-words">
+                Pending & Attention Required
+            </h3>
 
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
 
-                    <h3 class="text-lg font-bold text-slate-800">
-                        Reports
-                    </h3>
 
-                    <div class="text-5xl font-bold mt-3 text-slate-900">
-                        {{ number_format($pendingReports) }}
+                {{-- PENDING BUSINESSES --}}
+
+                <div class="min-w-0 bg-yellow-100 rounded-2xl p-5 sm:p-6 border-l-8 border-yellow-500">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <h3 class="text-lg font-bold text-slate-800 break-words">
+                                Businesses Pending
+                            </h3>
+
+                            <div class="text-4xl sm:text-5xl font-bold mt-3 text-slate-900">
+                                {{ number_format($pendingBusinesses) }}
+                            </div>
+
+                        </div>
+
+                        <div class="text-3xl shrink-0">
+                            🏪
+                        </div>
+
                     </div>
 
                 </div>
 
-                <div class="text-3xl">
-                    🚨
+
+                {{-- PENDING NOTES --}}
+
+                <div class="min-w-0 bg-blue-100 rounded-2xl p-5 sm:p-6 border-l-8 border-blue-500">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <h3 class="text-lg font-bold text-slate-800 break-words">
+                                Notes Pending
+                            </h3>
+
+                            <div class="text-4xl sm:text-5xl font-bold mt-3 text-slate-900">
+                                {{ number_format($pendingNotes) }}
+                            </div>
+
+                        </div>
+
+                        <div class="text-3xl shrink-0">
+                            📚
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {{-- PENDING RENTALS --}}
+
+                <div class="min-w-0 bg-green-100 rounded-2xl p-5 sm:p-6 border-l-8 border-green-500">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <h3 class="text-lg font-bold text-slate-800 break-words">
+                                Rentals Pending
+                            </h3>
+
+                            <div class="text-4xl sm:text-5xl font-bold mt-3 text-slate-900">
+                                {{ number_format($pendingAccommodations) }}
+                            </div>
+
+                        </div>
+
+                        <div class="text-3xl shrink-0">
+                            🏠
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {{-- REPORTS --}}
+
+                <div class="min-w-0 bg-red-100 rounded-2xl p-5 sm:p-6 border-l-8 border-red-500">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <h3 class="text-lg font-bold text-slate-800 break-words">
+                                Reports
+                            </h3>
+
+                            <div class="text-4xl sm:text-5xl font-bold mt-3 text-slate-900">
+                                {{ number_format($pendingReports) }}
+                            </div>
+
+                        </div>
+
+                        <div class="text-3xl shrink-0">
+                            🚨
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -902,10 +897,8 @@ FULL-WIDTH ADMIN CONTROL CENTER
 
 </div>
 
-
-</div>
-
 @endsection
+
 
 {{-- =========================================================
 SCRIPTS
@@ -917,16 +910,14 @@ SCRIPTS
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
     /* ========================================================
        USER GROWTH CHART
-       Data comes entirely from AdminDashboardController
     ========================================================= */
 
     const usersChartElement =
         document.getElementById('usersChart');
 
-    if (usersChartElement) {
+    if (usersChartElement && typeof Chart !== 'undefined') {
 
         const userGrowthLabels =
             @json($userGrowthLabels);
@@ -1064,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const rolesChartElement =
         document.getElementById('rolesChart');
 
-    if (rolesChartElement) {
+    if (rolesChartElement && typeof Chart !== 'undefined') {
 
         new Chart(
             rolesChartElement,
