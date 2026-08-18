@@ -140,20 +140,42 @@ Route::get('/', function () {
 
 Route::get('/sitemap.xml', function () {
 
-    $urls = [
-        url('/'),
-        url('/campus-hostels'),
-        url('/marketplace'),
-        url('/notes'),
-        url('/past-papers'),
-        url('/student-services'),
-        url('/lost-found'),
-    ];
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
 
-    return response()
-        ->view('sitemap', compact('urls'))
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/campus-hostels') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/marketplace') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/notes') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/past-papers') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/student-services') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/lost-found') . '</loc>';
+    $xml .= '</url>';
+
+    $xml .= '</urlset>';
+
+    return response($xml, 200)
         ->header('Content-Type', 'application/xml');
-
 });
 
 Route::get('/account-suspended', function () {
