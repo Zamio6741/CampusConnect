@@ -28,9 +28,7 @@
 
             <div class="flex items-center min-w-0">
 
-                <!-- =================================================
-                     CAMPUSCONNECT BRAND
-                ================================================== -->
+                <!-- CAMPUSCONNECT BRAND -->
 
                 <div class="shrink-0 flex items-center">
 
@@ -39,8 +37,6 @@
                         class="flex items-center gap-2"
                         aria-label="CampusConnect Dashboard"
                     >
-
-                        <!-- CampusConnect Icon -->
 
                         <div
                             class="w-9 h-9 rounded-xl
@@ -51,8 +47,6 @@
                         >
                             🎓
                         </div>
-
-                        <!-- Brand Name -->
 
                         <span
                             class="hidden sm:block
@@ -70,6 +64,7 @@
 
                 <!-- =================================================
                      DESKTOP NAVIGATION
+                     Only main navigation remains here.
                 ================================================== -->
 
                 <div
@@ -86,71 +81,6 @@
                     >
                         🏠 Dashboard
                     </x-nav-link>
-
-
-                    {{-- =================================================
-                         STUDENT
-                    ================================================== --}}
-
-                    @if($role == 'Student')
-
-                        <x-nav-link
-                            :href="route('notes.index')"
-                            :active="request()->routeIs('notes.*')"
-                        >
-                            📚 Notes
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('pastpapers.index')"
-                            :active="request()->routeIs('pastpapers.*')"
-                        >
-                            📄 Past Papers
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('marketplace.index')"
-                            :active="request()->routeIs('marketplace.*')"
-                        >
-                            🛒 Marketplace
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('campus.index')"
-                            :active="request()->routeIs('campus.*')"
-                        >
-                            🏫 Campus Hostels
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('rentals.index')"
-                            :active="request()->routeIs('rentals.*')"
-                        >
-                            🏠 Rentals
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('businesses.index')"
-                            :active="request()->routeIs('businesses.*')"
-                        >
-                            🏪 Businesses
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('lostfound.index')"
-                            :active="request()->routeIs('lostfound.*')"
-                        >
-                            🔍 Lost & Found
-                        </x-nav-link>
-
-                        <x-nav-link
-                            :href="route('student-services.index')"
-                            :active="request()->routeIs('student-services.*')"
-                        >
-                            🎓 Student Services
-                        </x-nav-link>
-
-                    @endif
 
 
                     {{-- =================================================
@@ -264,62 +194,58 @@
                      NOTIFICATIONS
                 ================================================== -->
 
-                <div class="relative z-50">
+                <a
+                    href="{{ route('notifications.index') }}"
+                    class="relative flex items-center justify-center
+                           w-10 h-10 rounded-full
+                           text-gray-600 dark:text-gray-300
+                           hover:bg-sky-50 dark:hover:bg-gray-700
+                           hover:text-sky-600
+                           transition duration-200"
+                    title="Notifications"
+                    aria-label="Notifications"
+                >
 
-                    <a
-                        href="{{ route('notifications.index') }}"
-                        class="relative flex items-center justify-center
-                               w-10 h-10 rounded-full
-                               text-gray-600 dark:text-gray-300
-                               hover:bg-sky-50 dark:hover:bg-gray-700
-                               hover:text-sky-600
-                               transition duration-200"
-                        title="Notifications"
-                        aria-label="Notifications"
-                    >
+                    <span class="text-xl leading-none pointer-events-none">
+                        🔔
+                    </span>
 
-                        <span class="text-xl leading-none pointer-events-none">
-                            🔔
+                    @if(isset($notificationCount) && $notificationCount > 0)
+
+                        <span
+                            class="absolute -top-1 -right-1
+                                   min-w-[19px] h-5
+                                   px-1
+                                   flex items-center justify-center
+                                   bg-red-600
+                                   text-white
+                                   text-[10px]
+                                   font-bold
+                                   rounded-full
+                                   border-2 border-white
+                                   dark:border-gray-800
+                                   shadow-sm"
+                        >
+                            {{ $notificationCount > 99 ? '99+' : $notificationCount }}
                         </span>
 
-                        @if(isset($notificationCount) && $notificationCount > 0)
+                    @endif
 
-                            <span
-                                class="absolute -top-1 -right-1
-                                       min-w-[19px] h-5
-                                       px-1
-                                       flex items-center justify-center
-                                       bg-red-600
-                                       text-white
-                                       text-[10px]
-                                       font-bold
-                                       rounded-full
-                                       border-2 border-white
-                                       dark:border-gray-800
-                                       shadow-sm"
-                            >
-                                {{ $notificationCount > 99 ? '99+' : $notificationCount }}
-                            </span>
-
-                        @endif
-
-                    </a>
-
-                </div>
+                </a>
 
 
                 <!-- =================================================
                      USER DROPDOWN
                 ================================================== -->
 
-                <x-dropdown align="right" width="56">
+                <x-dropdown align="right" width="64">
 
                     <x-slot name="trigger">
 
                         <button
                             type="button"
                             class="inline-flex items-center
-                                   max-w-[220px]
+                                   max-w-[300px]
                                    px-3 py-2
                                    border border-transparent
                                    text-sm font-medium
@@ -329,21 +255,61 @@
                                    hover:bg-gray-50
                                    dark:hover:bg-gray-700
                                    hover:text-sky-600
-                                   transition"
+                                   transition
+                                   focus:outline-none
+                                   focus:ring-2
+                                   focus:ring-sky-500
+                                   focus:ring-offset-2"
                         >
 
-                            <div class="text-left min-w-0">
+                            <!-- =================================================
+                                 USER AVATAR
+                            ================================================== -->
 
-                                <div class="truncate max-w-[150px]">
+                            <div
+                                class="w-10 h-10 rounded-full
+                                       bg-gradient-to-r from-blue-600 to-indigo-600
+                                       text-white
+                                       flex items-center justify-center
+                                       font-extrabold
+                                       text-base
+                                       shadow-md
+                                       shrink-0"
+                            >
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+
+
+                            <!-- =================================================
+                                 USER NAME + ROLE
+                            ================================================== -->
+
+                            <div class="text-left min-w-0 ms-3">
+
+                                <div
+                                    class="truncate
+                                           max-w-[180px]
+                                           font-semibold
+                                           text-gray-700
+                                           dark:text-gray-200"
+                                >
                                     {{ Auth::user()->name }}
                                 </div>
 
-                                <div class="text-xs text-gray-400 truncate">
+                                <div
+                                    class="text-xs
+                                           text-gray-400
+                                           dark:text-gray-500
+                                           truncate
+                                           max-w-[180px]"
+                                >
                                     {{ $role }}
                                 </div>
 
                             </div>
 
+
+                            <!-- ARROW -->
 
                             <div class="ms-2 shrink-0">
 
@@ -366,49 +332,261 @@
                     </x-slot>
 
 
+                    <!-- =================================================
+                         DROPDOWN CONTENT
+                    ================================================== -->
+
                     <x-slot name="content">
 
-                        <div class="px-4 py-2 text-xs text-gray-500">
+                        <!-- =================================================
+                             USER HEADER
+                        ================================================== -->
 
-                            Logged in as
+                        <div
+                            class="px-4 py-4
+                                   bg-gradient-to-r
+                                   from-sky-50
+                                   to-blue-50
+                                   dark:from-gray-900
+                                   dark:to-gray-800
+                                   border-b
+                                   border-sky-100
+                                   dark:border-gray-700"
+                        >
 
-                            <strong>{{ $role }}</strong>
+                            <div class="flex items-center gap-3">
+
+                                <div
+                                    class="w-11 h-11 rounded-full
+                                           bg-gradient-to-r
+                                           from-blue-600
+                                           to-indigo-600
+                                           text-white
+                                           flex items-center justify-center
+                                           font-extrabold
+                                           text-lg
+                                           shadow-md
+                                           shrink-0"
+                                >
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <p
+                                        class="font-bold
+                                               text-gray-800
+                                               dark:text-gray-100
+                                               truncate"
+                                    >
+                                        {{ Auth::user()->name }}
+                                    </p>
+
+                                    <p
+                                        class="text-xs
+                                               text-gray-500
+                                               dark:text-gray-400
+                                               truncate"
+                                    >
+                                        User
+                                    </p>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
-                        <hr>
+
+                        <!-- =================================================
+                             ROLE
+                        ================================================== -->
+
+                        <div
+                            class="px-4 py-2
+                                   text-xs
+                                   text-gray-500
+                                   dark:text-gray-400"
+                        >
+
+                            Logged in as
+
+                            <strong class="text-sky-600">
+                                {{ $role }}
+                            </strong>
+
+                        </div>
 
 
-                        <x-dropdown-link :href="route('profile.edit')">
-                            👤 Profile
-                        </x-dropdown-link>
+                        <div
+                            class="border-t
+                                   border-gray-100
+                                   dark:border-gray-700"
+                        ></div>
 
 
-                        <x-dropdown-link :href="$dashboardRoute">
+                        <!-- =================================================
+                             DASHBOARD
+                        ================================================== -->
+
+                        <x-dropdown-link
+                            :href="$dashboardRoute"
+                        >
                             🏠 Dashboard
                         </x-dropdown-link>
 
 
-                        <x-dropdown-link :href="route('notifications.index')">
+                        {{-- =================================================
+                             STUDENT DROPDOWN BUTTONS
+                        ================================================== --}}
 
-                            🔔 Notifications
+                        @if($role == 'Student')
 
-                            @if(isset($notificationCount) && $notificationCount > 0)
+                            <div
+                                class="px-4 pt-3 pb-2
+                                       text-[11px]
+                                       font-bold
+                                       uppercase
+                                       tracking-wider
+                                       text-gray-400
+                                       dark:text-gray-500"
+                            >
+                                Student Menu
+                            </div>
 
-                                <span
-                                    class="ms-2 inline-flex items-center justify-center
-                                           min-w-[18px] h-[18px]
-                                           px-1 text-[10px]
-                                           font-bold bg-red-600
-                                           text-white rounded-full"
-                                >
-                                    {{ $notificationCount > 99 ? '99+' : $notificationCount }}
+
+                            <!-- Notes -->
+
+                            <x-dropdown-link
+                                :href="route('notes.index')"
+                            >
+                                📚 Notes
+                            </x-dropdown-link>
+
+
+                            <!-- Past Papers -->
+
+                            <x-dropdown-link
+                                :href="route('pastpapers.index')"
+                            >
+                                📄 Past Papers
+                            </x-dropdown-link>
+
+
+                            <!-- Marketplace -->
+
+                            <x-dropdown-link
+                                :href="route('marketplace.index')"
+                            >
+                                🛒 Marketplace
+                            </x-dropdown-link>
+
+
+                            <!-- Campus Hostels -->
+
+                            <x-dropdown-link
+                                :href="route('campus.index')"
+                            >
+                                🏫 Campus Hostels
+                            </x-dropdown-link>
+
+
+                            <!-- Rentals -->
+
+                            <x-dropdown-link
+                                :href="route('rentals.index')"
+                            >
+                                🏠 Rentals
+                            </x-dropdown-link>
+
+
+                            <!-- Businesses -->
+
+                            <x-dropdown-link
+                                :href="route('businesses.index')"
+                            >
+                                🏪 Businesses
+                            </x-dropdown-link>
+
+
+                            <!-- Lost & Found -->
+
+                            <x-dropdown-link
+                                :href="route('lostfound.index')"
+                            >
+                                🔍 Lost & Found
+                            </x-dropdown-link>
+
+
+                            <!-- Student Services -->
+
+                            <x-dropdown-link
+                                :href="route('student-services.index')"
+                            >
+                                🎓 Student Services
+                            </x-dropdown-link>
+
+
+                            <div
+                                class="my-2
+                                       border-t
+                                       border-gray-100
+                                       dark:border-gray-700"
+                            ></div>
+
+                        @endif
+
+
+                        <!-- =================================================
+                             PROFILE
+                        ================================================== -->
+
+                        <x-dropdown-link
+                            :href="route('profile.edit')"
+                        >
+                            👤 Profile
+                        </x-dropdown-link>
+
+
+                        <!-- =================================================
+                             NOTIFICATIONS
+                        ================================================== -->
+
+                        <x-dropdown-link
+                            :href="route('notifications.index')"
+                        >
+
+                            <div class="flex items-center justify-between w-full">
+
+                                <span>
+                                    🔔 Notifications
                                 </span>
 
-                            @endif
+                                @if(isset($notificationCount) && $notificationCount > 0)
+
+                                    <span
+                                        class="ms-2 inline-flex items-center justify-center
+                                               min-w-[18px] h-[18px]
+                                               px-1
+                                               text-[10px]
+                                               font-bold
+                                               bg-red-600
+                                               text-white
+                                               rounded-full"
+                                    >
+                                        {{ $notificationCount > 99 ? '99+' : $notificationCount }}
+                                    </span>
+
+                                @endif
+
+                            </div>
 
                         </x-dropdown-link>
 
+
+                        <!-- =================================================
+                             LOGOUT
+                        ================================================== -->
 
                         <form
                             method="POST"
@@ -596,7 +774,7 @@
                             class="text-xs text-gray-500
                                    dark:text-gray-400 truncate"
                         >
-                            {{ $role }}
+                            User
                         </p>
 
                     </div>
@@ -781,15 +959,24 @@
                 </p>
 
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <!-- Profile -->
+
+                <x-responsive-nav-link
+                    :href="route('profile.edit')"
+                    :active="request()->routeIs('profile.edit')"
+                >
                     👤 Profile
                 </x-responsive-nav-link>
 
+
+                <!-- Dashboard -->
 
                 <x-responsive-nav-link :href="$dashboardRoute">
                     🏠 Dashboard
                 </x-responsive-nav-link>
 
+
+                <!-- Logout -->
 
                 <form
                     method="POST"

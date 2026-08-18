@@ -1202,44 +1202,236 @@
                     @endif
 
 
-                    <!-- USER -->
+                    <!-- USER DROPDOWN -->
 
-                    <div
-                        class="flex items-center gap-3
-                               bg-gray-50
-                               rounded-2xl
-                               px-3 lg:px-4
-                               py-2
-                               shadow-sm"
+<div
+    class="relative"
+    x-data="{ userMenu: false }"
+    @click.outside="userMenu = false"
+>
+
+    <!-- USER BUTTON -->
+
+    <button
+        type="button"
+        @click="userMenu = !userMenu"
+        class="flex items-center gap-3
+               bg-gray-50
+               hover:bg-blue-50
+               border border-gray-200
+               hover:border-blue-200
+               rounded-2xl
+               px-3 lg:px-4
+               py-2
+               shadow-sm
+               hover:shadow-md
+               transition-all duration-200
+               focus:outline-none
+               focus:ring-2
+               focus:ring-blue-500/30"
+        aria-label="Open user menu"
+        :aria-expanded="userMenu"
+    >
+
+        <!-- AVATAR -->
+
+        <div
+            class="w-10 h-10
+                   rounded-full
+                   bg-gradient-to-r
+                   from-blue-600
+                   to-indigo-600
+                   text-white
+                   flex items-center justify-center
+                   font-bold
+                   shrink-0"
+        >
+            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        </div>
+
+
+        <!-- USER DETAILS -->
+
+        <div class="hidden md:block text-left">
+
+            <p class="font-semibold text-sm text-gray-800">
+                {{ Auth::user()->name }}
+            </p>
+
+            <small class="text-gray-500">
+                {{ $role ?? 'User' }}
+            </small>
+
+        </div>
+
+
+        <!-- CHEVRON -->
+
+        <svg
+            class="w-4 h-4 text-gray-500
+                   transition-transform duration-200"
+            :class="{ 'rotate-180': userMenu }"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+            />
+        </svg>
+
+    </button>
+
+
+    <!-- DROPDOWN -->
+
+    <div
+        x-show="userMenu"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+        x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+        class="absolute right-0 mt-3
+               w-64
+               bg-white
+               rounded-2xl
+               shadow-2xl
+               border border-gray-200
+               overflow-hidden
+               z-50"
+        style="display: none;"
+    >
+
+        <!-- DROPDOWN HEADER -->
+
+        <div
+            class="px-5 py-4
+                   bg-gradient-to-r
+                   from-blue-600
+                   to-indigo-600
+                   text-white"
+        >
+
+            <p class="font-bold text-sm">
+                {{ Auth::user()->name }}
+            </p>
+
+            <p class="text-xs text-blue-100 mt-1">
+                {{ Auth::user()->email }}
+            </p>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <div class="p-2">
+
+            <!-- PROFILE -->
+
+            @if(Route::has('profile.edit'))
+
+                <a
+                    href="{{ route('profile.edit') }}"
+                    @click="userMenu = false"
+                    class="flex items-center gap-3
+                           px-4 py-3
+                           rounded-xl
+                           text-gray-700
+                           hover:bg-blue-50
+                           hover:text-blue-700
+                           transition"
+                >
+
+                    <span
+                        class="w-9 h-9
+                               rounded-lg
+                               bg-blue-100
+                               text-blue-600
+                               flex items-center justify-center
+                               text-lg"
                     >
+                        👤
+                    </span>
 
-                        <div
-                            class="w-10 h-10
-                                   rounded-full
-                                   bg-gradient-to-r
-                                   from-blue-600
-                                   to-indigo-600
-                                   text-white
-                                   flex items-center justify-center
-                                   font-bold"
-                        >
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                        </div>
+                    <div>
 
+                        <p class="font-semibold text-sm">
+                            Profile
+                        </p>
 
-                        <div class="hidden md:block">
-
-                            <p class="font-semibold text-sm">
-                                {{ Auth::user()->name }}
-                            </p>
-
-                            <small class="text-gray-500">
-                                {{ $role ?? 'User' }}
-                            </small>
-
-                        </div>
+                        <p class="text-xs text-gray-400">
+                            Manage your account
+                        </p>
 
                     </div>
+
+                </a>
+
+            @endif
+
+
+            <!-- LOGOUT -->
+
+            <form
+                method="POST"
+                action="{{ route('logout') }}"
+            >
+
+                @csrf
+
+                <button
+                    type="submit"
+                    @click="userMenu = false"
+                    class="w-full
+                           flex items-center gap-3
+                           px-4 py-3
+                           rounded-xl
+                           text-gray-700
+                           hover:bg-red-50
+                           hover:text-red-600
+                           transition
+                           text-left"
+                >
+
+                    <span
+                        class="w-9 h-9
+                               rounded-lg
+                               bg-red-100
+                               text-red-600
+                               flex items-center justify-center
+                               text-lg"
+                    >
+                        🚪
+                    </span>
+
+                    <div>
+
+                        <p class="font-semibold text-sm">
+                            Log Out
+                        </p>
+
+                        <p class="text-xs text-gray-400">
+                            Sign out of your account
+                        </p>
+
+                    </div>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
                 </div>
 
