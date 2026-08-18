@@ -138,6 +138,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/sitemap.xml', function () {
+
+    $urls = [
+        url('/'),
+        url('/campus-hostels'),
+        url('/marketplace'),
+        url('/notes'),
+        url('/past-papers'),
+        url('/student-services'),
+        url('/lost-found'),
+    ];
+
+    return response()
+        ->view('sitemap', compact('urls'))
+        ->header('Content-Type', 'application/xml');
+
+});
+
 Route::get('/account-suspended', function () {
     return view('account-suspended');
 })->middleware(['auth', 'account.active'])->name('account.suspended');
