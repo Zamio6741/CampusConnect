@@ -15,6 +15,8 @@
         content="CampusConnect - Kenya's Smart Student Platform"
     >
 
+    <meta name="google-site-verification" content="CR78jsqxKZsGFK5D08AORr-taYRGmngBsnYBczwUMqk" />
+
     <title>CampusConnect</title>
 
     <script src="https://unpkg.com/lucide@latest"></script>
