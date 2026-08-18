@@ -2,45 +2,57 @@
 
 <div class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-100">
 
-    <!-- Hero -->
-<div class="bg-gradient-to-r from-sky-700 via-blue-700 to-indigo-800 text-white shadow-xl">
+    {{-- ========================================================= --}}
+    {{-- HERO --}}
+    {{-- ========================================================= --}}
 
-    <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="bg-gradient-to-r from-sky-700 via-blue-700 to-indigo-800 text-white shadow-xl">
 
-        <div class="flex flex-col lg:flex-row justify-between items-center gap-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
 
-            <div>
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-8">
 
-                <h1 class="text-5xl font-extrabold drop-shadow-md">
-                    📄 Past Papers Library
-                </h1>
+                <div class="w-full">
 
-                <p class="mt-4 text-sky-100 text-lg max-w-3xl">
-                    Browse CATs, Main Exams, Supplementary Exams,
-                    Assignments and Quizzes uploaded by students.
-                </p>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold drop-shadow-md">
+                        📄 Past Papers Library
+                    </h1>
+
+                    <p class="mt-3 sm:mt-4 text-sky-100 text-base sm:text-lg max-w-3xl leading-relaxed">
+                        Browse CATs, Main Exams, Supplementary Exams,
+                        Assignments and Quizzes uploaded by students.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ route('pastpapers.create') }}"
+                    class="w-full sm:w-auto text-center bg-white text-sky-700 font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl shadow-xl hover:scale-105 transition duration-300"
+                >
+                    + Upload Paper
+                </a>
 
             </div>
-
-            <a href="{{ route('pastpapers.create') }}"
-               class="bg-white text-sky-700 font-bold px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition">
-
-                + Upload Paper
-
-            </a>
 
         </div>
 
     </div>
 
-</div>
 
-    <div class="max-w-7xl mx-auto px-6 py-10">
+    {{-- ========================================================= --}}
+    {{-- MAIN CONTENT --}}
+    {{-- ========================================================= --}}
 
-        {{-- Success --}}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+
+
+        {{-- ===================================================== --}}
+        {{-- SUCCESS MESSAGE --}}
+        {{-- ===================================================== --}}
+
         @if(session('success'))
 
-            <div class="mb-8 bg-green-100 border border-green-300 rounded-2xl px-6 py-4 text-green-700 shadow">
+            <div class="mb-6 sm:mb-8 bg-green-100 border-2 border-green-300 rounded-2xl px-4 sm:px-6 py-4 text-green-700 shadow">
 
                 {{ session('success') }}
 
@@ -49,77 +61,83 @@
         @endif
 
 
-        {{-- Statistics --}}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        {{-- ===================================================== --}}
+        {{-- STATISTICS --}}
+        {{-- ===================================================== --}}
 
-            <div class="bg-white rounded-3xl shadow-xl p-7">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10">
 
-                <div class="text-5xl">📄</div>
+            {{-- TOTAL PAPERS --}}
 
-                <h2 class="text-4xl font-extrabold mt-4 text-green-700">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 sm:p-7">
 
+                <div class="text-4xl sm:text-5xl">
+                    📄
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 text-green-700">
                     {{ $papers->count() }}
-
                 </h2>
 
                 <p class="text-gray-500 mt-2">
-
                     Total Papers
-
                 </p>
 
             </div>
 
-            <div class="bg-white rounded-3xl shadow-xl p-7">
 
-                <div class="text-5xl">👨‍🎓</div>
+            {{-- CONTRIBUTORS --}}
 
-                <h2 class="text-4xl font-extrabold mt-4 text-blue-700">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 sm:p-7">
 
+                <div class="text-4xl sm:text-5xl">
+                    👨‍🎓
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 text-blue-700">
                     {{ $papers->unique('user_id')->count() }}
-
                 </h2>
 
                 <p class="text-gray-500 mt-2">
-
                     Contributors
-
                 </p>
 
             </div>
 
-            <div class="bg-white rounded-3xl shadow-xl p-7">
 
-                <div class="text-5xl">📚</div>
+            {{-- UNITS --}}
 
-                <h2 class="text-4xl font-extrabold mt-4 text-purple-700">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 sm:p-7">
 
+                <div class="text-4xl sm:text-5xl">
+                    📚
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 text-purple-700">
                     {{ $papers->pluck('unit_id')->unique()->count() }}
-
                 </h2>
 
                 <p class="text-gray-500 mt-2">
-
                     Units Covered
-
                 </p>
 
             </div>
 
-            <div class="bg-white rounded-3xl shadow-xl p-7">
 
-                <div class="text-5xl">📝</div>
+            {{-- MAIN EXAMS --}}
 
-                <h2 class="text-4xl font-extrabold mt-4 text-orange-600">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 sm:p-7">
 
+                <div class="text-4xl sm:text-5xl">
+                    📝
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 text-orange-600">
                     {{ $papers->where('type','Main Exam')->count() }}
-
                 </h2>
 
                 <p class="text-gray-500 mt-2">
-
                     Main Exams
-
                 </p>
 
             </div>
@@ -127,53 +145,138 @@
         </div>
 
 
-        {{-- Search & Filters --}}
-        <div class="bg-white rounded-3xl shadow-xl p-6 mb-10">
+        {{-- ===================================================== --}}
+        {{-- SEARCH & FILTERS --}}
+        {{-- ===================================================== --}}
+
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-4 sm:p-6 mb-8 sm:mb-10">
 
             <form
                 action="{{ route('pastpapers.index') }}"
-                method="GET">
+                method="GET"
+            >
 
-                <div class="grid lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ request('search') }}"
-                        placeholder="Search title or unit..."
-                        class="rounded-2xl border-gray-300 py-4 px-5">
+                    {{-- SEARCH --}}
 
-                    <input
-                        type="text"
-                        name="year"
-                        value="{{ request('year') }}"
-                        placeholder="Year"
-                        class="rounded-2xl border-gray-300 py-4 px-5">
+                    <div class="w-full">
 
-                    <select
-                        name="type"
-                        class="rounded-2xl border-gray-300 py-4 px-5">
+                        <label
+                            for="search"
+                            class="block text-sm font-semibold text-gray-700 mb-2"
+                        >
+                            Search
+                        </label>
 
-                        <option value="">All Types</option>
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search title or unit..."
+                            class="w-full rounded-2xl border-2 border-slate-300 bg-white py-3.5 px-4 sm:px-5 text-gray-700 placeholder-gray-400 shadow-sm outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                        >
 
-                        <option value="CAT">CAT</option>
+                    </div>
 
-                        <option value="Main Exam">Main Exam</option>
 
-                        <option value="Supplementary">Supplementary</option>
+                    {{-- YEAR --}}
 
-                        <option value="Assignment">Assignment</option>
+                    <div class="w-full">
 
-                        <option value="Quiz">Quiz</option>
+                        <label
+                            for="year"
+                            class="block text-sm font-semibold text-gray-700 mb-2"
+                        >
+                            Year
+                        </label>
 
-                    </select>
+                        <input
+                            type="text"
+                            id="year"
+                            name="year"
+                            value="{{ request('year') }}"
+                            placeholder="e.g. 2025"
+                            class="w-full rounded-2xl border-2 border-slate-300 bg-white py-3.5 px-4 sm:px-5 text-gray-700 placeholder-gray-400 shadow-sm outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                        >
 
-                    <button
-                        class="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-bold">
+                    </div>
 
-                        Search
 
-                    </button>
+                    {{-- TYPE --}}
+
+                    <div class="w-full">
+
+                        <label
+                            for="type"
+                            class="block text-sm font-semibold text-gray-700 mb-2"
+                        >
+                            Paper Type
+                        </label>
+
+                        <select
+                            id="type"
+                            name="type"
+                            class="w-full rounded-2xl border-2 border-slate-300 bg-white py-3.5 px-4 sm:px-5 text-gray-700 shadow-sm outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                        >
+
+                            <option value="">
+                                All Types
+                            </option>
+
+                            <option
+                                value="CAT"
+                                {{ request('type') == 'CAT' ? 'selected' : '' }}
+                            >
+                                CAT
+                            </option>
+
+                            <option
+                                value="Main Exam"
+                                {{ request('type') == 'Main Exam' ? 'selected' : '' }}
+                            >
+                                Main Exam
+                            </option>
+
+                            <option
+                                value="Supplementary"
+                                {{ request('type') == 'Supplementary' ? 'selected' : '' }}
+                            >
+                                Supplementary
+                            </option>
+
+                            <option
+                                value="Assignment"
+                                {{ request('type') == 'Assignment' ? 'selected' : '' }}
+                            >
+                                Assignment
+                            </option>
+
+                            <option
+                                value="Quiz"
+                                {{ request('type') == 'Quiz' ? 'selected' : '' }}
+                            >
+                                Quiz
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    {{-- SEARCH BUTTON --}}
+
+                    <div class="w-full flex items-end">
+
+                        <button
+                            type="submit"
+                            class="w-full min-h-[52px] bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-2xl font-bold shadow-md hover:shadow-lg transition duration-300"
+                        >
+                            🔍 Search
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -182,200 +285,202 @@
         </div>
 
 
-        {{-- Papers Grid --}}
-        <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+        {{-- ===================================================== --}}
+        {{-- PAPERS GRID --}}
+        {{-- ===================================================== --}}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
 
             @forelse($papers as $paper)
-                        <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-300">
 
-                <div class="bg-gradient-to-r from-green-600 to-emerald-700 h-3"></div>
+                {{-- ================================================= --}}
+                {{-- PAPER CARD --}}
+                {{-- ================================================= --}}
 
-                <div class="p-7">
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden hover:-translate-y-1 hover:shadow-2xl duration-300">
 
-                    {{-- Unit --}}
-                    <div class="flex justify-between items-start">
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-700 h-3"></div>
 
-                        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold">
+                    <div class="p-5 sm:p-7">
 
-                            {{ $paper->unit->unit_code }}
 
-                        </span>
+                        {{-- UNIT + ICON --}}
 
-                        <span class="text-2xl">
+                        <div class="flex justify-between items-start gap-4">
 
-                            📄
+                            <span class="bg-green-100 border border-green-200 text-green-700 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold break-all">
+                                {{ $paper->unit->unit_code }}
+                            </span>
 
-                        </span>
-
-                    </div>
-
-                    {{-- Icon --}}
-                    <div class="mt-6 flex justify-center">
-
-                        <div class="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
-
-                            <span class="text-5xl">
-
+                            <span class="text-2xl shrink-0">
                                 📄
-
                             </span>
 
                         </div>
 
-                    </div>
 
-                    {{-- Title --}}
-                    <h2 class="text-2xl font-bold text-center mt-6">
+                        {{-- ICON --}}
 
-                        {{ $paper->title }}
+                        <div class="mt-6 flex justify-center">
 
-                    </h2>
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-100 border-4 border-red-50 flex items-center justify-center">
 
-                    {{-- Unit --}}
-                    <p class="text-center text-gray-500 mt-2">
+                                <span class="text-4xl sm:text-5xl">
+                                    📄
+                                </span>
 
-                        {{ $paper->unit->unit_name }}
-
-                    </p>
-
-                    {{-- Description --}}
-                    <p class="text-gray-600 text-center mt-5 line-clamp-3">
-
-                        {{ $paper->description }}
-
-                    </p>
-
-                    {{-- Details --}}
-                    <div class="border-t mt-6 pt-5 space-y-3">
-
-                        <div class="flex justify-between">
-
-                            <span class="text-gray-500">
-
-                                📅 Year
-
-                            </span>
-
-                            <span>
-
-                                {{ $paper->year }}
-
-                            </span>
+                            </div>
 
                         </div>
 
-                        <div class="flex justify-between">
 
-                            <span class="text-gray-500">
+                        {{-- TITLE --}}
 
-                                📖 Semester
+                        <h2 class="text-xl sm:text-2xl font-bold text-center mt-6 break-words">
+                            {{ $paper->title }}
+                        </h2>
 
-                            </span>
 
-                            <span>
+                        {{-- UNIT NAME --}}
 
-                                {{ $paper->semester }}
+                        <p class="text-center text-gray-500 mt-2 break-words">
+                            {{ $paper->unit->unit_name }}
+                        </p>
 
-                            </span>
+
+                        {{-- DESCRIPTION --}}
+
+                        <p class="text-gray-600 text-center mt-5 line-clamp-3 leading-relaxed">
+                            {{ $paper->description }}
+                        </p>
+
+
+                        {{-- DETAILS --}}
+
+                        <div class="border-t-2 border-slate-200 mt-6 pt-5 space-y-3">
+
+                            {{-- YEAR --}}
+
+                            <div class="flex flex-col xs:flex-row sm:flex-row justify-between gap-1 sm:gap-3">
+
+                                <span class="text-gray-500">
+                                    📅 Year
+                                </span>
+
+                                <span class="font-medium text-gray-800 sm:text-right">
+                                    {{ $paper->year }}
+                                </span>
+
+                            </div>
+
+
+                            {{-- SEMESTER --}}
+
+                            <div class="flex flex-col sm:flex-row justify-between gap-1 sm:gap-3">
+
+                                <span class="text-gray-500">
+                                    📖 Semester
+                                </span>
+
+                                <span class="font-medium text-gray-800 sm:text-right">
+                                    {{ $paper->semester }}
+                                </span>
+
+                            </div>
+
+
+                            {{-- TYPE --}}
+
+                            <div class="flex flex-col sm:flex-row justify-between gap-1 sm:gap-3">
+
+                                <span class="text-gray-500">
+                                    📝 Type
+                                </span>
+
+                                <span class="font-semibold text-green-700 sm:text-right">
+                                    {{ $paper->type }}
+                                </span>
+
+                            </div>
+
+
+                            {{-- UPLOADER --}}
+
+                            <div class="flex flex-col sm:flex-row justify-between gap-1 sm:gap-3">
+
+                                <span class="text-gray-500">
+                                    👤 Uploaded By
+                                </span>
+
+                                <span class="font-medium text-gray-800 sm:text-right break-words">
+                                    {{ $paper->user->name }}
+                                </span>
+
+                            </div>
 
                         </div>
 
-                        <div class="flex justify-between">
 
-                            <span class="text-gray-500">
+                        {{-- BUTTONS --}}
 
-                                📝 Type
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
 
-                            </span>
+                            <a
+                                href="{{ route('pastpapers.preview', $paper) }}"
+                                target="_blank"
+                                class="w-full bg-green-100 border border-green-200 hover:bg-green-200 text-green-700 py-3 rounded-xl text-center font-semibold transition duration-300"
+                            >
+                                👁 Preview
+                            </a>
 
-                            <span class="font-semibold text-green-700">
-
-                                {{ $paper->type }}
-
-                            </span>
-
-                        </div>
-
-                        <div class="flex justify-between">
-
-                            <span class="text-gray-500">
-
-                                👤 Uploaded By
-
-                            </span>
-
-                            <span>
-
-                                {{ $paper->user->name }}
-
-                            </span>
+                            <a
+                                href="{{ asset('storage/'.$paper->file_path) }}"
+                                download
+                                class="w-full bg-gradient-to-r from-blue-600 to-sky-600 text-white py-3 rounded-xl text-center font-bold hover:scale-[1.02] transition duration-300"
+                            >
+                                📥 Download
+                            </a>
 
                         </div>
-
-                    </div>
-
-                    {{-- Buttons --}}
-                    <div class="grid grid-cols-2 gap-3 mt-8">
-
-                        <a
-                            href="{{ route('pastpapers.preview', $paper) }}"
-                            target="_blank"
-                            class="bg-green-100 hover:bg-green-200 text-green-700 py-3 rounded-xl text-center font-semibold transition">
-
-                            👁 Preview
-
-                        </a>
-
-                        <a
-                            href="{{ asset('storage/'.$paper->file_path) }}"
-                            download
-                            class="bg-gradient-to-r from-blue-600 to-sky-600 text-white py-3 rounded-xl text-center font-bold hover:scale-105 transition">
-
-                            📥 Download
-
-                        </a>
 
                     </div>
 
                 </div>
 
-            </div>
 
             @empty
 
-            <div class="col-span-3">
 
-                <div class="bg-white rounded-3xl shadow-xl p-20 text-center">
+                {{-- ================================================= --}}
+                {{-- EMPTY STATE --}}
+                {{-- ================================================= --}}
 
-                    <div class="text-8xl">
+                <div class="col-span-1 md:col-span-2 lg:col-span-3">
 
-                        📄
+                    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8 sm:p-12 lg:p-20 text-center">
+
+                        <div class="text-6xl sm:text-7xl lg:text-8xl">
+                            📄
+                        </div>
+
+                        <h2 class="text-3xl sm:text-4xl font-bold mt-6 sm:mt-8">
+                            No Past Papers Found
+                        </h2>
+
+                        <p class="text-gray-500 mt-3 sm:mt-4 text-base sm:text-lg">
+                            No past papers have been uploaded yet.
+                        </p>
+
+                        <a
+                            href="{{ route('pastpapers.create') }}"
+                            class="inline-block mt-6 sm:mt-8 bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl font-bold transition"
+                        >
+                            Upload First Paper
+                        </a>
 
                     </div>
 
-                    <h2 class="text-4xl font-bold mt-8">
-
-                        No Past Papers Found
-
-                    </h2>
-
-                    <p class="text-gray-500 mt-4 text-lg">
-
-                        No past papers have been uploaded yet.
-
-                    </p>
-
-                    <a
-                        href="{{ route('pastpapers.create') }}"
-                        class="inline-block mt-8 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold">
-
-                        Upload First Paper
-
-                    </a>
-
                 </div>
-
-            </div>
 
             @endforelse
 

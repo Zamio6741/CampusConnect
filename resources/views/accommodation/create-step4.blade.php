@@ -1,151 +1,296 @@
 <x-app-layout>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-12">
+<div class="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-6 sm:py-10 lg:py-12">
 
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center mb-10">
+        {{-- ========================================================= --}}
+        {{-- HEADER --}}
+        {{-- ========================================================= --}}
 
-            <h1 class="text-5xl font-extrabold text-orange-600">
+        <div class="text-center mb-7 sm:mb-10">
+
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-orange-600 leading-tight">
                 Create Rental Listing
             </h1>
 
-            <p class="text-gray-500 mt-3 text-lg">
+            <p class="text-gray-500 mt-2 sm:mt-3 text-sm sm:text-base lg:text-lg">
                 Step 4 of 5 • Rental Details
             </p>
 
         </div>
 
-        <div class="w-full bg-gray-200 rounded-full h-3 mb-10">
 
-            <div class="bg-orange-500 h-3 rounded-full" style="width:80%"></div>
+        {{-- ========================================================= --}}
+        {{-- PROGRESS --}}
+        {{-- ========================================================= --}}
+
+        <div class="w-full bg-gray-200 rounded-full h-2.5 sm:h-3 mb-7 sm:mb-10">
+
+            <div
+                class="bg-orange-500 h-2.5 sm:h-3 rounded-full"
+                style="width:80%">
+            </div>
 
         </div>
 
-        <div class="bg-white rounded-3xl shadow-xl p-10">
 
-            <form method="POST" action="{{ route('rental.step4.store') }}">
+        {{-- ========================================================= --}}
+        {{-- FORM CARD --}}
+        {{-- ========================================================= --}}
 
-                @csrf
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-orange-100 overflow-hidden">
 
-                <!-- Monthly Rent -->
+            <div class="p-5 sm:p-7 lg:p-10">
 
-                <div class="mb-6">
+                <form
+                    method="POST"
+                    action="{{ route('rental.step4.store') }}"
+                    class="space-y-6 sm:space-y-7">
 
-                    <label class="block font-bold mb-2">
+                    @csrf
 
-                        Monthly Rent (KES)
 
-                    </label>
+                    {{-- ================================================= --}}
+                    {{-- MONTHLY RENT --}}
+                    {{-- ================================================= --}}
 
-                   <input
-                    type="number"
-                    name="price"
-                    class="w-full rounded-xl border-gray-300"
-                    placeholder="6000"
-                    required>
-                </div>
+                    <div>
 
-                <!-- Phone -->
+                        <label
+                            for="price"
+                            class="block font-bold text-gray-700 mb-2">
 
-                <div class="mb-6">
+                            Monthly Rent (KES)
 
-                    <label class="block font-bold mb-2">
+                        </label>
 
-                        Phone Number
+                        <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            value="{{ old('price') }}"
+                            min="0"
+                            placeholder="6000"
+                            required
+                            class="w-full rounded-xl sm:rounded-2xl
+                                   border-2 border-gray-300
+                                   bg-white
+                                   px-4 py-3.5 sm:py-4
+                                   text-gray-700
+                                   placeholder-gray-400
+                                   shadow-sm
+                                   focus:border-orange-500
+                                   focus:ring-2 focus:ring-orange-200
+                                   focus:outline-none
+                                   transition">
 
-                    </label>
+                    </div>
 
-                    <input
-type="text"
-name="phone"
-class="w-full rounded-xl border-gray-300"
-placeholder="+254712345678">
 
-                </div>
+                    {{-- ================================================= --}}
+                    {{-- PHONE --}}
+                    {{-- ================================================= --}}
 
-                <!-- WhatsApp -->
+                    <div>
 
-                <div class="mb-6">
+                        <label
+                            for="phone"
+                            class="block font-bold text-gray-700 mb-2">
 
-                    <label class="block font-bold mb-2">
+                            Phone Number
 
-                        WhatsApp
+                        </label>
 
-                    </label>
+                        <input
+                            type="text"
+                            id="phone"
+                            name="phone"
+                            value="{{ old('phone') }}"
+                            placeholder="+254712345678"
+                            class="w-full rounded-xl sm:rounded-2xl
+                                   border-2 border-gray-300
+                                   bg-white
+                                   px-4 py-3.5 sm:py-4
+                                   text-gray-700
+                                   placeholder-gray-400
+                                   shadow-sm
+                                   focus:border-orange-500
+                                   focus:ring-2 focus:ring-orange-200
+                                   focus:outline-none
+                                   transition">
 
-                   <input
-type="text"
-name="whatsapp"
-class="w-full rounded-xl border-gray-300"
-placeholder="+254712345678">
-                </div>
+                    </div>
 
-                <div class="grid grid-cols-2 gap-4">
 
-<label>
-<input type="checkbox" name="facilities[]" value="WiFi">
-WiFi
-</label>
+                    {{-- ================================================= --}}
+                    {{-- WHATSAPP --}}
+                    {{-- ================================================= --}}
 
-<label>
-<input type="checkbox" name="facilities[]" value="Water">
-Water
-</label>
+                    <div>
 
-<label>
-<input type="checkbox" name="facilities[]" value="Electricity">
-Electricity
-</label>
+                        <label
+                            for="whatsapp"
+                            class="block font-bold text-gray-700 mb-2">
 
-<label>
-<input type="checkbox" name="facilities[]" value="CCTV">
-CCTV
-</label>
+                            WhatsApp
 
-<label>
-<input type="checkbox" name="facilities[]" value="Parking">
-Parking
-</label>
+                        </label>
 
-<label>
-<input type="checkbox" name="facilities[]" value="Security Guard">
-Security Guard
-</label>
+                        <input
+                            type="text"
+                            id="whatsapp"
+                            name="whatsapp"
+                            value="{{ old('whatsapp') }}"
+                            placeholder="+254712345678"
+                            class="w-full rounded-xl sm:rounded-2xl
+                                   border-2 border-gray-300
+                                   bg-white
+                                   px-4 py-3.5 sm:py-4
+                                   text-gray-700
+                                   placeholder-gray-400
+                                   shadow-sm
+                                   focus:border-orange-500
+                                   focus:ring-2 focus:ring-orange-200
+                                   focus:outline-none
+                                   transition">
 
-<label>
-<input type="checkbox" name="facilities[]" value="Laundry">
-Laundry
-</label>
+                    </div>
 
-<label>
-<input type="checkbox" name="facilities[]" value="Kitchen">
-Kitchen
-</label>
 
-</div>
+                    {{-- ================================================= --}}
+                    {{-- FACILITIES --}}
+                    {{-- ================================================= --}}
 
-                <div class="flex justify-between mt-12">
+                    <div>
 
-                    <a
-                        href="{{ route('rental.step3') }}"
-                        class="px-8 py-4 rounded-xl bg-gray-300 font-bold">
+                        <label class="block font-bold text-gray-700 mb-3">
 
-                        ← Back
+                            Facilities
 
-                    </a>
+                        </label>
 
-                   <button
-type="submit"
-class="px-8 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold">
+                        <div
+                            class="grid grid-cols-1
+                                   sm:grid-cols-2
+                                   gap-3 sm:gap-4
+                                   border-2 border-gray-200
+                                   rounded-2xl
+                                   p-4 sm:p-5
+                                   bg-gray-50">
 
-Next →
+                            @foreach([
+                                'WiFi',
+                                'Water',
+                                'Electricity',
+                                'CCTV',
+                                'Parking',
+                                'Security Guard',
+                                'Laundry',
+                                'Kitchen'
+                            ] as $facility)
 
-</button>
+                                <label
+                                    class="flex items-center gap-3
+                                           bg-white
+                                           border border-gray-200
+                                           rounded-xl
+                                           px-4 py-3
+                                           cursor-pointer
+                                           hover:border-orange-400
+                                           hover:bg-orange-50
+                                           transition">
 
-                </div>
+                                    <input
+                                        type="checkbox"
+                                        name="facilities[]"
+                                        value="{{ $facility }}"
+                                        {{ in_array($facility, old('facilities', [])) ? 'checked' : '' }}
+                                        class="h-4 w-4
+                                               rounded
+                                               border-2 border-gray-400
+                                               text-orange-600
+                                               focus:ring-orange-500">
 
-            </form>
+                                    <span class="text-gray-700 font-medium text-sm sm:text-base">
+                                        {{ $facility }}
+                                    </span>
+
+                                </label>
+
+                            @endforeach
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- ================================================= --}}
+                    {{-- BUTTONS --}}
+                    {{-- ================================================= --}}
+
+                    <div
+                        class="flex flex-col-reverse
+                               sm:flex-row
+                               sm:justify-between
+                               gap-3 sm:gap-4
+                               mt-8 sm:mt-12
+                               pt-6 sm:pt-8
+                               border-t border-gray-200">
+
+
+                        {{-- BACK --}}
+
+                        <a
+                            href="{{ route('rental.step3') }}"
+                            class="w-full sm:w-auto
+                                   inline-flex items-center justify-center
+                                   px-6 sm:px-8
+                                   py-3.5 sm:py-4
+                                   rounded-xl
+                                   bg-gray-200
+                                   hover:bg-gray-300
+                                   text-gray-800
+                                   font-bold
+                                   transition">
+
+                            ←
+                            <span class="ml-2">
+                                Back
+                            </span>
+
+                        </a>
+
+
+                        {{-- NEXT --}}
+
+                        <button
+                            type="submit"
+                            class="w-full sm:w-auto
+                                   inline-flex items-center justify-center
+                                   px-7 sm:px-8
+                                   py-3.5 sm:py-4
+                                   rounded-xl
+                                   bg-orange-600
+                                   hover:bg-orange-700
+                                   text-white
+                                   font-bold
+                                   shadow-lg
+                                   hover:shadow-xl
+                                   transition">
+
+                            Next
+                            <span class="ml-2">
+                                →
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 

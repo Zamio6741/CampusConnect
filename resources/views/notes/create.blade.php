@@ -1,163 +1,317 @@
 <x-app-layout>
 
-<div class="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-blue-100 py-10">
+    <div class="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-blue-100 py-6 sm:py-8 lg:py-10">
 
-    <div class="max-w-3xl mx-auto">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="bg-white rounded-3xl shadow-2xl p-10">
+            <div class="bg-white rounded-3xl shadow-2xl p-5 sm:p-8 lg:p-10">
 
-            <div class="text-center">
+                {{-- ===================================================== --}}
+                {{-- HEADER --}}
+                {{-- ===================================================== --}}
 
-                <div class="text-7xl mb-4">
-                    📚
-                </div>
+                <div class="text-center">
 
-                <h1 class="text-4xl font-bold text-sky-700">
-                    Upload Lecture Notes
-                </h1>
+                    <div class="text-5xl sm:text-6xl lg:text-7xl mb-4">
+                        📚
+                    </div>
 
-                <p class="text-gray-500 mt-3">
-                    Share your notes with fellow students.
-                </p>
+                    <h1 class="text-3xl sm:text-4xl font-bold text-sky-700">
+                        Upload Lecture Notes
+                    </h1>
 
-            </div>
-
-            @if ($errors->any())
-                <div class="mt-8 bg-red-100 border border-red-300 text-red-700 rounded-2xl p-5">
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form
-                action="{{ route('notes.store') }}"
-                method="POST"
-                enctype="multipart/form-data"
-                class="mt-10 space-y-7">
-
-                @csrf
-
-                {{-- Unit --}}
-                <div>
-
-                    <label class="block font-semibold mb-2">
-                        📘 Select Unit
-                    </label>
-
-                    <select
-                        name="unit_id"
-                        required
-                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-sky-500 focus:border-sky-500">
-
-                        <option value="">
-                            -- Select Unit --
-                        </option>
-
-                        @foreach($units as $unit)
-
-                            <option
-                                value="{{ $unit->id }}"
-                                {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
-
-                                {{ $unit->unit_code }}
-                                —
-                                {{ $unit->unit_name }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
+                    <p class="text-gray-500 mt-3 text-sm sm:text-base">
+                        Share your notes with fellow students.
+                    </p>
 
                 </div>
 
-                {{-- Title --}}
-                <div>
 
-                    <label class="block font-semibold mb-2">
-                        📝 Note Title
-                    </label>
+                {{-- ===================================================== --}}
+                {{-- ERRORS --}}
+                {{-- ===================================================== --}}
 
-                    <input
-                        type="text"
-                        name="title"
-                        value="{{ old('title') }}"
-                        placeholder="Introduction to Programming"
-                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                @if ($errors->any())
 
-                </div>
+                    <div class="mt-8 bg-red-50 border-2 border-red-300 text-red-700 rounded-2xl p-4 sm:p-5">
 
-                {{-- Description --}}
-                <div>
-
-                    <label class="block font-semibold mb-2">
-                        📖 Description
-                    </label>
-
-                    <textarea
-                        name="description"
-                        rows="5"
-                        placeholder="Briefly describe what these notes contain..."
-                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-sky-500 focus:border-sky-500">{{ old('description') }}</textarea>
-
-                </div>
-
-                {{-- PDF Upload --}}
-                <div>
-
-                    <label class="block font-semibold mb-3">
-
-                        📄 Upload PDF
-
-                    </label>
-
-                    <div class="rounded-3xl border-2 border-dashed border-sky-300 bg-sky-50 p-10 text-center hover:border-sky-500 hover:bg-sky-100 transition">
-
-                        <div class="text-6xl mb-4">
-                            📚
-                        </div>
-
-                        <h3 class="text-2xl font-bold text-gray-700">
-
-                            Upload Lecture Notes
-
-                        </h3>
-
-                        <p class="text-gray-500 mt-2">
-
-                            PDF only • Maximum size 25 MB
-
+                        <p class="font-bold mb-2">
+                            Please fix the following errors:
                         </p>
 
-                        <input
-                            type="file"
-                            name="pdf"
-                            accept=".pdf"
-                            required
-                            class="mt-6 block w-full rounded-xl border border-gray-300 bg-white p-3">
+                        <ul class="list-disc list-inside space-y-1 text-sm sm:text-base">
+
+                            @foreach ($errors->all() as $error)
+
+                                <li>
+                                    {{ $error }}
+                                </li>
+
+                            @endforeach
+
+                        </ul>
 
                     </div>
 
-                </div>
+                @endif
 
-                {{-- Upload Button --}}
-                <button
-                    type="submit"
-                    class="w-full rounded-2xl bg-gradient-to-r from-sky-600 to-blue-700 py-4 text-lg font-bold text-white shadow-lg transition duration-300 hover:scale-[1.02] hover:from-sky-700 hover:to-blue-800">
 
-                    🚀 Upload Notes
+                {{-- ===================================================== --}}
+                {{-- FORM --}}
+                {{-- ===================================================== --}}
 
-                </button>
+                <form
+                    action="{{ route('notes.store') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="mt-8 sm:mt-10 space-y-6 sm:space-y-7"
+                >
 
-            </form>
+                    @csrf
+
+
+                    {{-- ================================================= --}}
+                    {{-- UNIT --}}
+                    {{-- ================================================= --}}
+
+                    <div>
+
+                        <label
+                            for="unit_id"
+                            class="block font-semibold text-gray-700 mb-2"
+                        >
+                            📘 Select Unit
+                        </label>
+
+                        <select
+                            id="unit_id"
+                            name="unit_id"
+                            required
+                            class="w-full rounded-xl
+                                   border-2 border-slate-300
+                                   bg-white
+                                   text-gray-700
+                                   px-4 py-3.5
+                                   shadow-sm
+                                   outline-none
+                                   transition
+                                   duration-200
+                                   hover:border-slate-400
+                                   focus:border-sky-500
+                                   focus:ring-4
+                                   focus:ring-sky-100"
+                        >
+
+                            <option value="">
+                                -- Select Unit --
+                            </option>
+
+                            @foreach($units as $unit)
+
+                                <option
+                                    value="{{ $unit->id }}"
+                                    {{ old('unit_id') == $unit->id ? 'selected' : '' }}
+                                >
+
+                                    {{ $unit->unit_code }}
+                                    —
+                                    {{ $unit->unit_name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+
+                    {{-- ================================================= --}}
+                    {{-- TITLE --}}
+                    {{-- ================================================= --}}
+
+                    <div>
+
+                        <label
+                            for="title"
+                            class="block font-semibold text-gray-700 mb-2"
+                        >
+                            📝 Note Title
+                        </label>
+
+                        <input
+                            id="title"
+                            type="text"
+                            name="title"
+                            value="{{ old('title') }}"
+                            placeholder="Introduction to Programming"
+                            required
+                            class="w-full rounded-xl
+                                   border-2 border-slate-300
+                                   bg-white
+                                   text-gray-700
+                                   placeholder-gray-400
+                                   px-4 py-3.5
+                                   shadow-sm
+                                   outline-none
+                                   transition
+                                   duration-200
+                                   hover:border-slate-400
+                                   focus:border-sky-500
+                                   focus:ring-4
+                                   focus:ring-sky-100"
+                        >
+
+                    </div>
+
+
+                    {{-- ================================================= --}}
+                    {{-- DESCRIPTION --}}
+                    {{-- ================================================= --}}
+
+                    <div>
+
+                        <label
+                            for="description"
+                            class="block font-semibold text-gray-700 mb-2"
+                        >
+                            📖 Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="5"
+                            placeholder="Briefly describe what these notes contain..."
+                            class="w-full rounded-xl
+                                   border-2 border-slate-300
+                                   bg-white
+                                   text-gray-700
+                                   placeholder-gray-400
+                                   px-4 py-3.5
+                                   shadow-sm
+                                   outline-none
+                                   resize-y
+                                   transition
+                                   duration-200
+                                   hover:border-slate-400
+                                   focus:border-sky-500
+                                   focus:ring-4
+                                   focus:ring-sky-100"
+                        >{{ old('description') }}</textarea>
+
+                    </div>
+
+
+                    {{-- ================================================= --}}
+                    {{-- PDF UPLOAD --}}
+                    {{-- ================================================= --}}
+
+                    <div>
+
+                        <label
+                            for="pdf"
+                            class="block font-semibold text-gray-700 mb-3"
+                        >
+                            📄 Upload PDF
+                        </label>
+
+
+                        <div
+                            class="rounded-3xl
+                                   border-2 border-dashed border-sky-300
+                                   bg-sky-50
+                                   p-5 sm:p-8 lg:p-10
+                                   text-center
+                                   hover:border-sky-500
+                                   hover:bg-sky-100
+                                   transition"
+                        >
+
+                            <div class="text-5xl sm:text-6xl mb-4">
+                                📚
+                            </div>
+
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-700">
+                                Upload Lecture Notes
+                            </h3>
+
+                            <p class="text-gray-500 mt-2 text-sm sm:text-base">
+                                PDF only • Maximum size 25 MB
+                            </p>
+
+
+                            <input
+                                id="pdf"
+                                type="file"
+                                name="pdf"
+                                accept=".pdf,application/pdf"
+                                required
+                                class="mt-6 block w-full
+                                       rounded-xl
+                                       border-2 border-slate-300
+                                       bg-white
+                                       text-sm sm:text-base
+                                       text-gray-600
+                                       shadow-sm
+                                       cursor-pointer
+                                       file:mr-3
+                                       file:rounded-lg
+                                       file:border-0
+                                       file:bg-sky-600
+                                       file:px-4
+                                       file:py-2.5
+                                       file:text-sm
+                                       file:font-semibold
+                                       file:text-white
+                                       hover:file:bg-sky-700
+                                       focus:outline-none
+                                       focus:ring-4
+                                       focus:ring-sky-100"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- ================================================= --}}
+                    {{-- UPLOAD BUTTON --}}
+                    {{-- ================================================= --}}
+
+                    <button
+                        type="submit"
+                        class="w-full
+                               rounded-2xl
+                               bg-gradient-to-r
+                               from-sky-600
+                               to-blue-700
+                               py-3.5 sm:py-4
+                               px-6
+                               text-base sm:text-lg
+                               font-bold
+                               text-white
+                               shadow-lg
+                               transition
+                               duration-300
+                               hover:scale-[1.01]
+                               hover:from-sky-700
+                               hover:to-blue-800
+                               focus:outline-none
+                               focus:ring-4
+                               focus:ring-sky-200"
+                    >
+
+                        🚀 Upload Notes
+
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 </x-app-layout>

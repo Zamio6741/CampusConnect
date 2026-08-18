@@ -1,158 +1,286 @@
 <x-app-layout>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 py-10">
+<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 py-8">
 
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
 
-        <div class="flex justify-between items-center mb-10">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-            <div>
+            <!-- Header -->
+            <div class="bg-orange-600 text-white p-6 sm:p-8">
 
-                <h1 class="text-5xl font-bold text-orange-600">
-                    🏪 Local Businesses
-                </h1>
+                <div class="flex items-center gap-4">
 
-                <p class="text-gray-500 mt-2">
-                    Discover businesses around campus.
-                </p>
-
-            </div>
-
-            <a href="{{ route('businesses.create') }}"
-               class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-bold">
-
-                ➕ Post Business
-
-            </a>
-
-        </div>
-
-        @if(session('success'))
-
-            <div class="bg-green-100 border border-green-300 text-green-700 px-5 py-4 rounded-xl mb-8">
-
-                {{ session('success') }}
-
-            </div>
-
-        @endif
-        <form method="GET" action="{{ route('businesses.index') }}" class="mb-10">
-
-    <div class="grid md:grid-cols-3 gap-4">
-
-        <input
-            type="text"
-            name="search"
-            value="{{ request('search') }}"
-            placeholder="🔍 Search businesses..."
-            class="border rounded-xl p-3">
-
-        <select
-            name="category"
-            class="border rounded-xl p-3">
-
-            <option value="">All Categories</option>
-
-            <option value="Restaurant">Restaurant</option>
-            <option value="Hostel">Hostel</option>
-            <option value="Cyber">Cyber Café</option>
-            <option value="Salon">Salon</option>
-            <option value="Barbershop">Barbershop</option>
-            <option value="Laundry">Laundry</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Printing">Printing</option>
-            <option value="Other">Other</option>
-
-        </select>
-
-        <button
-            class="bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold">
-
-            Search
-
-        </button>
-
-    </div>
-
-</form>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            @forelse($businesses as $business)
-
-                <div class="bg-white rounded-3xl shadow-xl p-6 hover:shadow-2xl transition">
-
-                    <div class="text-5xl mb-4">
+                    <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-3xl">
                         🏪
                     </div>
 
-                    <h2 class="text-2xl font-bold">
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl font-bold">
+                            Post Your Business
+                        </h1>
 
-                        {{ $business->name }}
-
-                    </h2>
-
-                    <p class="text-orange-600 font-semibold mt-2">
-
-                        {{ $business->category }}
-
-                    </p>
-
-                    <p class="text-gray-600 mt-4">
-
-                        {{ \Illuminate\Support\Str::limit($business->description,120) }}
-
-                    </p>
-
-                    <div class="mt-5 space-y-2 text-sm text-gray-500">
-
-                        <p>📍 {{ $business->location }}</p>
-
-                        <p>📞 {{ $business->phone }}</p>
-
+                        <p class="mt-1 text-orange-100">
+                            Reach students around campus.
+                        </p>
                     </div>
-
-                    <a href="{{ route('businesses.show',$business) }}"
-                       class="inline-block mt-6 text-orange-600 font-bold hover:underline">
-
-                        View Details →
-
-                    </a>
 
                 </div>
 
-            @empty
+            </div>
 
-                <div class="col-span-3 bg-white rounded-3xl shadow-xl p-16 text-center">
+            <!-- Form -->
+            <div class="p-6 sm:p-8">
 
-                    <div class="text-7xl">
+                @if($errors->any())
 
-                        🏪
+                    <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+
+                        <p class="font-bold text-red-700 mb-2">
+                            Please fix the following:
+                        </p>
+
+                        <ul class="list-disc list-inside text-red-600 text-sm space-y-1">
+
+                            @foreach($errors->all() as $error)
+
+                                <li>{{ $error }}</li>
+
+                            @endforeach
+
+                        </ul>
 
                     </div>
 
-                    <h2 class="text-3xl font-bold mt-5">
+                @endif
 
-                        No businesses yet
+                <form
+                    action="{{ route('businesses.store') }}"
+                    method="POST"
+                    class="space-y-6">
 
-                    </h2>
+                    @csrf
 
-                    <p class="text-gray-500 mt-3">
+                    <!-- Business Name -->
+                    <div>
 
-                        Be the first student to advertise your business.
+                        <label
+                            for="name"
+                            class="block font-semibold text-gray-700 mb-2">
 
-                    </p>
+                            Business Name
 
-                </div>
+                        </label>
 
-            @endforelse
+                        <input
+                            id="name"
+                            type="text"
+                            name="name"
+                            value="{{ old('name') }}"
+                            placeholder="Example: Campus Tech Solutions"
+                            class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            required>
+
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+
+                        <label
+                            for="category"
+                            class="block font-semibold text-gray-700 mb-2">
+
+                            Category
+
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            required>
+
+                            <option value="">Select Category</option>
+
+                            @foreach([
+                                'Restaurant',
+                                'Hostel',
+                                'Barbershop',
+                                'Salon',
+                                'Laundry',
+                                'Electronics',
+                                'Bookshop',
+                                'Cyber Cafe',
+                                'Supermarket',
+                                'Printing',
+                                'Other'
+                            ] as $category)
+
+                                <option
+                                    value="{{ $category }}"
+                                    @selected(old('category') === $category)>
+
+                                    {{ $category }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+
+                        <label
+                            for="description"
+                            class="block font-semibold text-gray-700 mb-2">
+
+                            Business Description
+
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="5"
+                            placeholder="Describe your products or services..."
+                            class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            required>{{ old('description') }}</textarea>
+
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="grid sm:grid-cols-2 gap-5">
+
+                        <div>
+
+                            <label
+                                for="phone"
+                                class="block font-semibold text-gray-700 mb-2">
+
+                                Phone Number
+
+                            </label>
+
+                            <input
+                                id="phone"
+                                type="text"
+                                name="phone"
+                                value="{{ old('phone', auth()->user()->phone ?? '') }}"
+                                placeholder="+254 7XX XXX XXX"
+                                class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                                required>
+
+                        </div>
+
+                        <div>
+
+                            <label
+                                for="whatsapp"
+                                class="block font-semibold text-gray-700 mb-2">
+
+                                WhatsApp
+
+                            </label>
+
+                            <input
+                                id="whatsapp"
+                                type="text"
+                                name="whatsapp"
+                                value="{{ old('whatsapp') }}"
+                                placeholder="+254 7XX XXX XXX"
+                                class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+
+                        <label
+                            for="location"
+                            class="block font-semibold text-gray-700 mb-2">
+
+                            📍 Location
+
+                        </label>
+
+                        <input
+                            id="location"
+                            type="text"
+                            name="location"
+                            value="{{ old('location') }}"
+                            placeholder="Example: Near KU Main Gate"
+                            class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            required>
+
+                    </div>
+
+                    <!-- Opening Hours -->
+                    <div>
+
+                        <label
+                            for="opening_hours"
+                            class="block font-semibold text-gray-700 mb-2">
+
+                            🕒 Opening Hours
+
+                        </label>
+
+                        <input
+                            id="opening_hours"
+                            type="text"
+                            name="opening_hours"
+                            value="{{ old('opening_hours') }}"
+                            placeholder="Example: Mon-Fri 8:00 AM - 8:00 PM"
+                            class="w-full rounded-xl border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+
+                    </div>
+
+                    <!-- Notice -->
+                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+
+                        <div class="flex gap-3">
+
+                            <span class="text-xl">💡</span>
+
+                            <p class="text-sm text-orange-800">
+                                Use accurate contact and location details so students can easily find and reach your business.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+
+                        <button
+                            type="submit"
+                            class="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-xl font-bold transition">
+
+                            🚀 Post Business
+
+                        </button>
+
+                        <a
+                            href="{{ route('businesses.index') }}"
+                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-center py-4 rounded-xl font-bold transition">
+
+                            ← Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
-        <div class="mt-10">
-
-    {{ $businesses->links() }}
-
-</div>
 
     </div>
 

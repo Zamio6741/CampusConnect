@@ -2,127 +2,439 @@
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 py-10">
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto px-6">
 
-        <div class="bg-white rounded-3xl shadow-xl p-10">
+        <!-- Main Card -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-            <h1 class="text-4xl font-bold text-orange-600 mb-8">
-                🏪 Post Your Business
-            </h1>
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 text-white p-8 md:p-10">
 
-            <form action="{{ route('businesses.store') }}" method="POST">
-
-                @csrf
-
-                <div class="mb-5">
-                    <label class="font-semibold">Business Name</label>
-
-                    <input type="text"
-                           name="name"
-                           class="w-full mt-2 border rounded-xl p-3"
-                           required>
-                </div>
-
-                <div class="mb-5">
-                    <label class="font-semibold">Category</label>
-
-                    <select name="category"
-                            class="w-full mt-2 border rounded-xl p-3"
-                            required>
-
-                        <option>Restaurant</option>
-                        <option>Hostel</option>
-                        <option>Barbershop</option>
-                        <option>Salon</option>
-                        <option>Laundry</option>
-                        <option>Electronics</option>
-                        <option>Bookshop</option>
-                        <option>Cyber Cafe</option>
-                        <option>Supermarket</option>
-                        <option>Other</option>
-
-                    </select>
-                </div>
-
-                <div class="mb-5">
-
-                    <label class="font-semibold">Description</label>
-
-                    <textarea
-                        name="description"
-                        rows="5"
-                        class="w-full mt-2 border rounded-xl p-3"
-                        required></textarea>
-
-                </div>
-
-                <div class="grid grid-cols-2 gap-5">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
                     <div>
 
-                        <label class="font-semibold">
-                            Phone
-                        </label>
+                        <div class="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full text-sm font-bold mb-4">
+                            🏪 Campus Business Hub
+                        </div>
 
-                        <input
-                            type="text"
-                            name="phone"
-                            class="w-full mt-2 border rounded-xl p-3"
-                            required>
+                        <h1 class="text-4xl md:text-5xl font-extrabold">
+                            Post Your Business
+                        </h1>
+
+                        <p class="mt-3 text-orange-100 text-lg">
+                            Advertise your business and reach students around campus.
+                        </p>
 
                     </div>
 
-                    <div>
-
-                        <label class="font-semibold">
-                            WhatsApp
-                        </label>
-
-                        <input
-                            type="text"
-                            name="whatsapp"
-                            class="w-full mt-2 border rounded-xl p-3">
-
+                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center text-5xl">
+                        🏪
                     </div>
 
                 </div>
 
-                <div class="mt-5">
+            </div>
 
-                    <label class="font-semibold">
-                        Location
-                    </label>
+            <!-- Form Area -->
+            <div class="p-8 md:p-10">
 
-                    <input
-                        type="text"
-                        name="location"
-                        class="w-full mt-2 border rounded-xl p-3"
-                        required>
+                @if($errors->any())
+
+                    <div class="mb-8 bg-red-50 border border-red-300 rounded-2xl p-5">
+
+                        <div class="flex items-center gap-3 mb-3">
+
+                            <span class="text-2xl">
+                                ⚠️
+                            </span>
+
+                            <h2 class="font-bold text-red-700">
+                                Please fix the following errors:
+                            </h2>
+
+                        </div>
+
+                        <ul class="list-disc list-inside text-red-600 space-y-1">
+
+                            @foreach($errors->all() as $error)
+
+                                <li>
+                                    {{ $error }}
+                                </li>
+
+                            @endforeach
+
+                        </ul>
+
+                    </div>
+
+                @endif
+
+                @if(session('success'))
+
+                    <div class="mb-8 bg-green-50 border border-green-300 rounded-2xl p-5 text-green-700">
+
+                        <div class="flex items-center gap-3">
+
+                            <span class="text-xl">
+                                ✅
+                            </span>
+
+                            <span class="font-semibold">
+                                {{ session('success') }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                @endif
+
+                <form
+                    action="{{ route('businesses.store') }}"
+                    method="POST"
+                    class="space-y-8">
+
+                    @csrf
+
+                    <!-- Business Information -->
+                    <div>
+
+                        <div class="mb-5">
+
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                📋 Business Information
+                            </h2>
+
+                            <p class="text-gray-500 mt-1">
+                                Tell students what your business is called and what you offer.
+                            </p>
+
+                        </div>
+
+                        <!-- Business Name -->
+                        <div class="mb-6">
+
+                            <label
+                                for="name"
+                                class="block font-bold text-gray-700 mb-2">
+
+                                Business Name
+
+                            </label>
+
+                            <input
+                                id="name"
+                                type="text"
+                                name="name"
+                                value="{{ old('name') }}"
+                                placeholder="Example: Campus Tech Solutions"
+                                class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500"
+                                required>
+
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+
+                            <label
+                                for="category"
+                                class="block font-bold text-gray-700 mb-2">
+
+                                Business Category
+
+                            </label>
+
+                            <select
+                                id="category"
+                                name="category"
+                                class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500"
+                                required>
+
+                                <option value="">
+                                    Select a category
+                                </option>
+
+                                <option
+                                    value="Restaurant"
+                                    {{ old('category') == 'Restaurant' ? 'selected' : '' }}>
+                                    🍽 Restaurant
+                                </option>
+
+                                <option
+                                    value="Hostel"
+                                    {{ old('category') == 'Hostel' ? 'selected' : '' }}>
+                                    🏠 Hostel
+                                </option>
+
+                                <option
+                                    value="Barbershop"
+                                    {{ old('category') == 'Barbershop' ? 'selected' : '' }}>
+                                    💈 Barbershop
+                                </option>
+
+                                <option
+                                    value="Salon"
+                                    {{ old('category') == 'Salon' ? 'selected' : '' }}>
+                                    💇 Salon
+                                </option>
+
+                                <option
+                                    value="Laundry"
+                                    {{ old('category') == 'Laundry' ? 'selected' : '' }}>
+                                    🧺 Laundry
+                                </option>
+
+                                <option
+                                    value="Electronics"
+                                    {{ old('category') == 'Electronics' ? 'selected' : '' }}>
+                                    🔌 Electronics
+                                </option>
+
+                                <option
+                                    value="Bookshop"
+                                    {{ old('category') == 'Bookshop' ? 'selected' : '' }}>
+                                    📚 Bookshop
+                                </option>
+
+                                <option
+                                    value="Cyber Cafe"
+                                    {{ old('category') == 'Cyber Cafe' ? 'selected' : '' }}>
+                                    💻 Cyber Cafe
+                                </option>
+
+                                <option
+                                    value="Supermarket"
+                                    {{ old('category') == 'Supermarket' ? 'selected' : '' }}>
+                                    🛒 Supermarket
+                                </option>
+
+                                <option
+                                    value="Printing"
+                                    {{ old('category') == 'Printing' ? 'selected' : '' }}>
+                                    🖨 Printing
+                                </option>
+
+                                <option
+                                    value="Other"
+                                    {{ old('category') == 'Other' ? 'selected' : '' }}>
+                                    🏪 Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+
+                        <label
+                            for="description"
+                            class="block font-bold text-gray-700 mb-2">
+
+                            Business Description
+
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="6"
+                            placeholder="Describe your business, products, services, prices, special offers and anything students should know..."
+                            class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500"
+                            required>{{ old('description') }}</textarea>
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            A clear description helps students understand your business before contacting you.
+                        </p>
+
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div>
+
+                        <div class="mb-5">
+
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                📞 Contact Information
+                            </h2>
+
+                            <p class="text-gray-500 mt-1">
+                                Provide reliable contact details so students can reach you.
+                            </p>
+
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+
+                            <!-- Phone -->
+                            <div>
+
+                                <label
+                                    for="phone"
+                                    class="block font-bold text-gray-700 mb-2">
+
+                                    Phone Number
+
+                                </label>
+
+                                <input
+                                    id="phone"
+                                    type="text"
+                                    name="phone"
+                                    value="{{ old('phone', auth()->user()->phone ?? '') }}"
+                                    placeholder="+254 7XX XXX XXX"
+                                    class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500"
+                                    required>
+
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div>
+
+                                <label
+                                    for="whatsapp"
+                                    class="block font-bold text-gray-700 mb-2">
+
+                                    WhatsApp Number
+
+                                </label>
+
+                                <input
+                                    id="whatsapp"
+                                    type="text"
+                                    name="whatsapp"
+                                    value="{{ old('whatsapp') }}"
+                                    placeholder="+254 7XX XXX XXX"
+                                    class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500">
+
+                                <p class="text-sm text-gray-500 mt-2">
+                                    Optional.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+
+                        <label
+                            for="location"
+                            class="block font-bold text-gray-700 mb-2">
+
+                            📍 Business Location
+
+                        </label>
+
+                        <input
+                            id="location"
+                            type="text"
+                            name="location"
+                            value="{{ old('location') }}"
+                            placeholder="Example: Near KU Main Gate, opposite QuickMart"
+                            class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500"
+                            required>
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            Include a nearby landmark where possible so students can easily find you.
+                        </p>
+
+                    </div>
+
+                    <!-- Opening Hours -->
+                    <div>
+
+                        <label
+                            for="opening_hours"
+                            class="block font-bold text-gray-700 mb-2">
+
+                            🕒 Opening Hours
+
+                        </label>
+
+                        <input
+                            id="opening_hours"
+                            type="text"
+                            name="opening_hours"
+                            value="{{ old('opening_hours') }}"
+                            placeholder="Example: Mon-Fri 8:00 AM - 8:00 PM"
+                            class="w-full rounded-xl border-gray-300 p-4 focus:border-orange-500 focus:ring-orange-500">
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            Let students know when they can visit or contact you.
+                        </p>
+
+                    </div>
+
+                    <!-- Helpful Notice -->
+                    <div class="bg-orange-50 border border-orange-200 rounded-2xl p-6">
+
+                        <div class="flex items-start gap-4">
+
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                                💡
+                            </div>
+
+                            <div>
+
+                                <h3 class="font-bold text-orange-800 text-lg">
+                                    Make your listing stand out
+                                </h3>
+
+                                <p class="text-orange-700 mt-1 leading-6">
+                                    Use a clear business name, accurate location and useful description.
+                                    Students will use these details when deciding which businesses to contact.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+
+                        <button
+                            type="submit"
+                            class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-2xl font-bold shadow-lg transition hover:-translate-y-1">
+
+                            🚀 Post Business
+
+                        </button>
+
+                        <a
+                            href="{{ route('businesses.index') }}"
+                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-center px-8 py-4 rounded-2xl font-bold transition">
+
+                            ← Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+                <!-- Back Link -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+
+                    <a
+                        href="{{ route('businesses.index') }}"
+                        class="text-orange-600 font-bold hover:underline">
+
+                        ← Back to Businesses
+
+                    </a>
 
                 </div>
 
-                <div class="mt-5">
-
-                    <label class="font-semibold">
-                        Opening Hours
-                    </label>
-
-                    <input
-                        type="text"
-                        name="opening_hours"
-                        placeholder="8:00 AM - 8:00 PM"
-                        class="w-full mt-2 border rounded-xl p-3">
-
-                </div>
-
-                <button
-                    class="mt-8 bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-2xl font-bold">
-
-                    🚀 Post Business
-
-                </button>
-
-            </form>
+            </div>
 
         </div>
 
