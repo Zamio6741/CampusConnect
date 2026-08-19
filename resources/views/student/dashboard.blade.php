@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-student-layout>
 
 @php
     $semesterProgress = isset($semesterProgress)
@@ -920,7 +920,7 @@
 
                     <h3
                         class="text-2xl
-                               font-bold
+                               font-bold"
                                mt-6"
                     >
                         Lost & Found
@@ -1440,4 +1440,4 @@
 
 </div>
 
-</x-app-layout>
+</x-student-layout>

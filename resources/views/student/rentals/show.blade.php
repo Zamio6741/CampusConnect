@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-student-layout>
 
 <div class="min-h-screen bg-slate-100">
 
@@ -270,7 +270,7 @@
 
 </div>
 
-</x-app-layout>
+</x-student-layout>
 @if(session('success'))
     <div class="max-w-7xl mx-auto mt-6 px-6">
         <div class="bg-green-100 border border-green-300 text-green-700 px-6 py-4 rounded-2xl shadow">
