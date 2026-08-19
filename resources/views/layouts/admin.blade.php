@@ -4,7 +4,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>CampusConnect Admin</title>
 
@@ -41,15 +45,26 @@
             scrollbar-color: #334155 transparent;
         }
 
-        /* Prevent dashboard content from forcing the page wider */
         .dashboard-main {
             min-width: 0;
             width: 100%;
         }
 
-        /* Smooth mobile sidebar */
-        .mobile-sidebar {
-            will-change: transform, width;
+        .admin-sidebar {
+            will-change: width, transform;
+        }
+
+        /* Keep desktop sidebar transitions smooth */
+        @media (min-width: 1024px) {
+
+            .admin-sidebar {
+                width: 6rem;
+            }
+
+            .admin-sidebar:hover {
+                width: 18rem;
+            }
+
         }
 
     </style>
@@ -65,6 +80,7 @@
         sidebar: false,
         mobileSidebar: false
     }"
+
     class="min-h-screen"
 >
 
@@ -77,14 +93,20 @@
         x-show="mobileSidebar"
         x-transition.opacity
         @click="mobileSidebar = false"
-        class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-[2px] lg:hidden"
+
+        class="fixed inset-0
+               z-40
+               bg-slate-950/60
+               backdrop-blur-[2px]
+               lg:hidden"
+
         style="display: none;"
     ></div>
 
 
 
     <!-- ========================================================= -->
-    <!-- SIDEBAR -->
+    <!-- ADMIN SIDEBAR -->
     <!-- ========================================================= -->
 
     <aside
@@ -96,86 +118,142 @@
             ? 'translate-x-0'
             : '-translate-x-full lg:translate-x-0'"
 
-        :style="window.innerWidth >= 1024
-            ? (sidebar ? 'width:18rem' : 'width:6rem')
-            : 'width:18rem'"
+        class="admin-sidebar
 
-        class="mobile-sidebar
-               fixed inset-y-0 left-0
-               z-50 lg:z-30
+               fixed
+               inset-y-0
+               left-0
+
+               z-50
+               lg:z-30
+
                h-screen
+
+               w-72
+               lg:w-24
+
                bg-slate-900
                text-white
-               transition-all duration-300 ease-in-out
-               flex flex-col
+
+               transition-all
+               duration-300
+               ease-in-out
+
+               flex
+               flex-col
+
                shadow-2xl
+
                overflow-hidden
                shrink-0"
     >
 
 
         <!-- ===================================================== -->
-        <!-- LOGO -->
+        <!-- SIDEBAR HEADER -->
         <!-- ===================================================== -->
 
         <div
-            class="h-20
-                   border-b border-slate-800
-                   flex items-center justify-center
+            class="relative
+                   h-20
+                   border-b
+                   border-slate-800
+
+                   flex
+                   items-center
+                   justify-center
+
                    shrink-0"
         >
 
-            <!-- Expanded Logo -->
+
+            <!-- ================================================= -->
+            <!-- EXPANDED BRAND -->
+            <!-- ================================================= -->
 
             <div
                 x-show="sidebar || mobileSidebar"
+
                 x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+
                 x-transition:leave="transition ease-in duration-100"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="text-center whitespace-nowrap"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+
+                class="text-center
+                       whitespace-nowrap"
             >
 
-                <h1 class="text-2xl font-black tracking-wide">
+                <h1
+                    class="text-2xl
+                           font-black
+                           tracking-wide"
+                >
                     🎓 CampusConnect
                 </h1>
 
-                <p class="text-xs text-slate-400 text-center mt-1">
+                <p
+                    class="text-xs
+                           text-slate-400
+                           text-center
+                           mt-1"
+                >
                     Admin Control Center
                 </p>
 
             </div>
 
 
-            <!-- Collapsed Logo -->
+
+            <!-- ================================================= -->
+            <!-- COLLAPSED BRAND -->
+            <!-- ================================================= -->
 
             <div
                 x-show="!sidebar && !mobileSidebar"
+
                 x-transition
-                class="text-4xl"
+
+                class="text-4xl
+                       select-none"
             >
                 🎓
             </div>
 
 
-            <!-- Mobile Close -->
+
+            <!-- ================================================= -->
+            <!-- MOBILE CLOSE -->
+            <!-- ================================================= -->
 
             <button
                 type="button"
+
                 @click="mobileSidebar = false"
+
                 class="lg:hidden
                        absolute
-                       right-4
+                       right-3
                        top-5
-                       w-9 h-9
+
+                       w-9
+                       h-9
+
                        rounded-xl
+
                        bg-slate-800
                        hover:bg-slate-700
-                       flex items-center justify-center
+
+                       flex
+                       items-center
+                       justify-center
+
                        text-slate-300
+
                        transition"
+
                 aria-label="Close menu"
             >
                 ✕
@@ -193,26 +271,37 @@
             class="flex-1
                    overflow-y-auto
                    sidebar-scroll
+
                    py-6
-                   px-4
+                   px-3
+
                    space-y-2"
         >
 
 
-            <!-- Dashboard -->
+            <!-- ================================================= -->
+            <!-- DASHBOARD -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.dashboard') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.dashboard')
-                            ? 'bg-sky-600 text-white shadow-xl scale-[1.02]'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            ? 'bg-sky-600 text-white shadow-xl'
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -221,8 +310,11 @@
 
                 <span
                     x-show="sidebar || mobileSidebar"
+
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Dashboard
                 </span>
@@ -231,20 +323,29 @@
 
 
 
-            <!-- Users -->
+            <!-- ================================================= -->
+            <!-- USERS -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.users') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.users*')
-                            ? 'bg-sky-600 text-white shadow-xl scale-[1.02]'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            ? 'bg-sky-600 text-white shadow-xl'
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -254,7 +355,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Users
                 </span>
@@ -263,20 +366,29 @@
 
 
 
-            <!-- Businesses -->
+            <!-- ================================================= -->
+            <!-- BUSINESSES -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.businesses') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.businesses*')
                             ? 'bg-sky-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -286,7 +398,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Businesses
                 </span>
@@ -295,20 +409,29 @@
 
 
 
-            <!-- Marketplace -->
+            <!-- ================================================= -->
+            <!-- MARKETPLACE -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.marketplace') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.marketplace*')
                             ? 'bg-orange-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -318,7 +441,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Marketplace
                 </span>
@@ -327,20 +452,29 @@
 
 
 
-            <!-- Accommodations -->
+            <!-- ================================================= -->
+            <!-- ACCOMMODATIONS -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.accommodations') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.accommodations*')
                             ? 'bg-sky-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -350,7 +484,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Accommodations
                 </span>
@@ -359,20 +495,29 @@
 
 
 
-            <!-- Notes -->
+            <!-- ================================================= -->
+            <!-- NOTES -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.notes') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.notes*')
                             ? 'bg-sky-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -382,7 +527,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Notes
                 </span>
@@ -391,20 +538,29 @@
 
 
 
-            <!-- Announcements -->
+            <!-- ================================================= -->
+            <!-- ANNOUNCEMENTS -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.announcements') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.announcements*')
                             ? 'bg-red-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -414,7 +570,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Announcements
                 </span>
@@ -423,20 +581,29 @@
 
 
 
-            <!-- Reports -->
+            <!-- ================================================= -->
+            <!-- REPORTS -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.reports') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.reports*')
                             ? 'bg-sky-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -446,7 +613,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Reports
                 </span>
@@ -455,20 +624,29 @@
 
 
 
-            <!-- Settings -->
+            <!-- ================================================= -->
+            <!-- SETTINGS -->
+            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.settings') }}"
+
                 class="group
-                       flex items-center
-                       gap-4
-                       px-5 py-3
+                       flex
+                       items-center
+
                        rounded-xl
-                       transition-all duration-300
+
+                       transition-all
+                       duration-300
 
                        {{ request()->routeIs('admin.settings*')
                             ? 'bg-sky-600 text-white shadow-lg'
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-2 hover:shadow-lg' }}"
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4 px-4 py-3 justify-start'
+                    : 'px-3 py-3 justify-center'"
             >
 
                 <span class="text-xl shrink-0">
@@ -478,7 +656,9 @@
                 <span
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="whitespace-nowrap"
+
+                    class="font-semibold
+                           whitespace-nowrap"
                 >
                     Settings
                 </span>
@@ -494,18 +674,30 @@
         <!-- ===================================================== -->
 
         <div
-            class="border-t border-slate-800
-                   p-5
+            class="border-t
+                   border-slate-800
+                   p-4
                    shrink-0"
         >
 
-            <div class="flex items-center gap-4">
+            <div
+                class="flex
+                       items-center"
+                :class="sidebar || mobileSidebar
+                    ? 'gap-4'
+                    : 'justify-center'"
+            >
 
                 <div
-                    class="w-12 h-12
+                    class="w-11
+                           h-11
                            rounded-full
                            bg-sky-600
-                           flex items-center justify-center
+
+                           flex
+                           items-center
+                           justify-center
+
                            text-xl
                            shrink-0"
                 >
@@ -516,14 +708,23 @@
                 <div
                     x-show="sidebar || mobileSidebar"
                     x-transition
-                    class="flex-1 min-w-0"
+
+                    class="flex-1
+                           min-w-0"
                 >
 
-                    <p class="font-semibold whitespace-nowrap">
+                    <p
+                        class="font-semibold
+                               whitespace-nowrap"
+                    >
                         Administrator
                     </p>
 
-                    <p class="text-xs text-green-400 whitespace-nowrap">
+                    <p
+                        class="text-xs
+                               text-green-400
+                               whitespace-nowrap"
+                    >
                         ● Online
                     </p>
 
@@ -533,41 +734,53 @@
 
 
 
-            <!-- Logout -->
+            <!-- ================================================= -->
+            <!-- LOGOUT -->
+            <!-- ================================================= -->
 
             <form
                 action="{{ route('admin.logout') }}"
                 method="POST"
-                class="mt-5"
+                class="mt-4"
             >
 
                 @csrf
 
                 <button
                     type="submit"
+
                     class="w-full
                            bg-red-600
                            hover:bg-red-700
+
                            py-3
+
                            rounded-xl
+
                            font-semibold
+
                            transition
-                           flex items-center justify-center"
+
+                           flex
+                           items-center
+                           justify-center"
+
+                    :class="sidebar || mobileSidebar
+                        ? 'gap-2'
+                        : ''"
                 >
+
+                    <span>
+                        🚪
+                    </span>
 
                     <span
                         x-show="sidebar || mobileSidebar"
                         x-transition
+
                         class="whitespace-nowrap"
                     >
-                        🚪 Logout
-                    </span>
-
-                    <span
-                        x-show="!sidebar && !mobileSidebar"
-                        x-transition
-                    >
-                        🚪
+                        Logout
                     </span>
 
                 </button>
@@ -587,6 +800,7 @@
     <main
         class="dashboard-main
                min-h-screen
+
                lg:ml-24"
     >
 
@@ -599,71 +813,114 @@
             class="bg-white
                    shadow-sm
                    border-b
-                   sticky top-0
+                   sticky
+                   top-0
                    z-20"
         >
 
             <div
                 class="min-h-20
-                       px-4 sm:px-6 lg:px-8
+                       px-4
+                       sm:px-6
+                       lg:px-8
                        py-3
-                       flex items-center
+
+                       flex
+                       items-center
                        justify-between
+
                        gap-3"
             >
 
 
+                <!-- ================================================= -->
                 <!-- LEFT -->
+                <!-- ================================================= -->
 
                 <div
-                    class="flex items-center
-                           gap-3 sm:gap-5
+                    class="flex
+                           items-center
+                           gap-3
+                           sm:gap-5
+
                            min-w-0"
                 >
+
 
                     <!-- MOBILE MENU -->
 
                     <button
                         type="button"
+
                         @click="mobileSidebar = true"
+
                         class="lg:hidden
-                               w-11 h-11
+
+                               w-11
+                               h-11
+
                                shrink-0
+
                                rounded-xl
+
                                bg-slate-100
                                hover:bg-slate-200
+
                                transition
-                               flex items-center justify-center"
+
+                               flex
+                               items-center
+                               justify-center"
+
                         aria-label="Open menu"
                     >
                         ☰
                     </button>
 
 
-                    <!-- DESKTOP MENU DECORATIVE -->
 
-                    <button
-                        type="button"
-                        class="hidden lg:flex
-                               w-12 h-12
+                    <!-- DESKTOP SIDEBAR INDICATOR -->
+
+                    <div
+                        class="hidden
+                               lg:flex
+
+                               w-12
+                               h-12
+
                                shrink-0
+
                                rounded-xl
+
                                bg-slate-100
-                               hover:bg-slate-200
-                               transition
-                               items-center justify-center"
-                        aria-label="Menu"
+
+                               items-center
+                               justify-center
+
+                               text-xl
+
+                               select-none"
+
+                        title="Hover over the sidebar to expand"
                     >
                         ☰
-                    </button>
+                    </div>
 
+
+
+                    <!-- PAGE TITLE -->
 
                     <div class="min-w-0">
 
                         <h2
-                            class="text-xl sm:text-2xl lg:text-3xl
+                            class="text-xl
+                                   sm:text-2xl
+                                   lg:text-3xl
+
                                    font-bold
+
                                    text-slate-800
+
                                    truncate"
                         >
                             @yield('title')
@@ -671,7 +928,9 @@
 
                         <p
                             class="text-gray-500
-                                   text-xs sm:text-sm
+                                   text-xs
+                                   sm:text-sm
+
                                    truncate"
                         >
                             CampusConnect Administration
@@ -683,11 +942,18 @@
 
 
 
+                <!-- ================================================= -->
                 <!-- RIGHT -->
+                <!-- ================================================= -->
 
                 <div
-                    class="flex items-center
-                           gap-2 sm:gap-4 lg:gap-6
+                    class="flex
+                           items-center
+
+                           gap-2
+                           sm:gap-4
+                           lg:gap-6
+
                            shrink-0"
                 >
 
@@ -699,13 +965,15 @@
                     <form
                         action="{{ route('admin.search') }}"
                         method="GET"
-                        class="flex shrink-0"
+
+                        class="hidden
+                               sm:flex
+                               shrink-0"
                     >
 
                         <div
                             class="relative
-                                   w-28
-                                   sm:w-44
+                                   w-40
                                    md:w-56
                                    lg:w-64
                                    xl:w-80"
@@ -714,46 +982,73 @@
                             <input
                                 type="text"
                                 name="q"
+
                                 value="{{ request('q') }}"
+
                                 placeholder="Search..."
+
                                 autocomplete="off"
+
                                 class="w-full
-                                       h-10 sm:h-11
+                                       h-10
+                                       sm:h-11
+
                                        rounded-xl
-                                       border border-slate-300
+
+                                       border
+                                       border-slate-300
+
                                        bg-white
-                                       pl-3 sm:pl-4
-                                       pr-9 sm:pr-11
-                                       text-xs sm:text-sm
+
+                                       pl-3
+                                       sm:pl-4
+
+                                       pr-9
+                                       sm:pr-11
+
+                                       text-xs
+                                       sm:text-sm
+
                                        text-slate-700
+
                                        placeholder-slate-400
+
                                        focus:ring-2
                                        focus:ring-sky-500
+
                                        focus:border-sky-500
+
                                        focus:outline-none
+
                                        transition"
                             >
+
 
                             <button
                                 type="submit"
+
                                 class="absolute
-                                       right-0 top-0
-                                       h-10 sm:h-11
-                                       w-9 sm:w-11
-                                       flex items-center justify-center
+                                       right-0
+                                       top-0
+
+                                       h-10
+                                       sm:h-11
+
+                                       w-9
+                                       sm:w-11
+
+                                       flex
+                                       items-center
+                                       justify-center
+
                                        text-slate-400
                                        hover:text-sky-600
+
                                        transition"
+
                                 aria-label="Search"
-                                title="Search"
                             >
-
-                                <span
-                                    class="text-sm sm:text-lg leading-none"
-                                >
-                                    🔍
-                                </span>
-
+                                🔍
                             </button>
 
                         </div>
@@ -789,24 +1084,40 @@
                         @endphp
 
 
-                        <!-- Bell -->
-
                         <button
                             type="button"
+
                             @click="notificationsOpen = !notificationsOpen"
+
                             class="relative
-                                   flex items-center justify-center
-                                   w-10 h-10 sm:w-11 sm:h-11
+                                   flex
+                                   items-center
+                                   justify-center
+
+                                   w-10
+                                   h-10
+                                   sm:w-11
+                                   sm:h-11
+
                                    rounded-xl
+
                                    text-slate-600
+
                                    hover:bg-sky-50
                                    hover:text-sky-600
-                                   transition duration-200"
+
+                                   transition
+                                   duration-200"
+
                             title="Notifications"
                             aria-label="Notifications"
                         >
 
-                            <span class="text-xl sm:text-2xl leading-none">
+                            <span
+                                class="text-xl
+                                       sm:text-2xl
+                                       leading-none"
+                            >
                                 🔔
                             </span>
 
@@ -815,17 +1126,34 @@
 
                                 <span
                                     class="absolute
-                                           -top-1 -right-1
-                                           min-w-[18px] sm:min-w-[20px]
+
+                                           -top-1
+                                           -right-1
+
+                                           min-w-[18px]
+                                           sm:min-w-[20px]
+
                                            h-5
+
                                            px-1
+
                                            rounded-full
+
                                            bg-red-600
                                            text-white
-                                           text-[10px] sm:text-xs
+
+                                           text-[10px]
+                                           sm:text-xs
+
                                            font-bold
-                                           flex items-center justify-center
-                                           border-2 border-white
+
+                                           flex
+                                           items-center
+                                           justify-center
+
+                                           border-2
+                                           border-white
+
                                            shadow-sm"
                                 >
                                     {{ $notificationCount > 99 ? '99+' : $notificationCount }}
@@ -837,31 +1165,53 @@
 
 
 
+                        <!-- ================================================= -->
                         <!-- NOTIFICATION DROPDOWN -->
+                        <!-- ================================================= -->
 
                         <div
                             x-show="notificationsOpen"
+
                             x-transition
+
                             @click.outside="notificationsOpen = false"
+
                             class="absolute
+
                                    right-0
                                    mt-3
+
                                    w-[calc(100vw-2rem)]
+
                                    max-w-96
+
                                    bg-white
+
                                    rounded-2xl
+
                                    shadow-2xl
-                                   border border-slate-200
+
+                                   border
+                                   border-slate-200
+
                                    z-50"
+
                             style="display: none;"
                         >
 
-                            <!-- Header -->
+
+                            <!-- HEADER -->
 
                             <div
-                                class="px-5 py-4
-                                       border-b border-slate-200
-                                       flex items-center justify-between"
+                                class="px-5
+                                       py-4
+
+                                       border-b
+                                       border-slate-200
+
+                                       flex
+                                       items-center
+                                       justify-between"
                             >
 
                                 <div>
@@ -874,7 +1224,11 @@
                                         Notifications
                                     </h3>
 
-                                    <p class="text-xs text-slate-500 mt-1">
+                                    <p
+                                        class="text-xs
+                                               text-slate-500
+                                               mt-1"
+                                    >
 
                                         @if($notificationCount > 0)
 
@@ -903,6 +1257,7 @@
 
                                         <button
                                             type="submit"
+
                                             class="text-xs
                                                    font-semibold
                                                    text-sky-600
@@ -919,17 +1274,28 @@
 
 
 
-                            <!-- Notification List -->
+                            <!-- ================================================= -->
+                            <!-- NOTIFICATION LIST -->
+                            <!-- ================================================= -->
 
-                            <div class="max-h-[420px] overflow-y-auto">
+                            <div
+                                class="max-h-[420px]
+                                       overflow-y-auto"
+                            >
 
                                 @forelse($headerNotifications as $notification)
 
                                     <div
-                                        class="px-5 py-4
-                                               border-b border-slate-100
+                                        class="px-5
+                                               py-4
+
+                                               border-b
+                                               border-slate-100
+
                                                hover:bg-slate-50
+
                                                transition
+
                                                {{ !$notification->is_read
                                                     ? 'bg-sky-50'
                                                     : 'bg-white' }}"
@@ -937,14 +1303,21 @@
 
                                         <div class="flex gap-3">
 
-                                            <!-- Icon -->
+
+                                            <!-- ICON -->
 
                                             <div
-                                                class="w-10 h-10
+                                                class="w-10
+                                                       h-10
+
                                                        rounded-xl
-                                                       flex items-center
+
+                                                       flex
+                                                       items-center
                                                        justify-center
+
                                                        shrink-0
+
                                                        {{ !$notification->is_read
                                                             ? 'bg-sky-100'
                                                             : 'bg-slate-100' }}"
@@ -985,18 +1358,23 @@
 
 
 
-                                            <!-- Content -->
+                                            <!-- CONTENT -->
 
-                                            <div class="flex-1 min-w-0">
+                                            <div
+                                                class="flex-1
+                                                       min-w-0"
+                                            >
 
                                                 <div
-                                                    class="flex items-start
+                                                    class="flex
+                                                           items-start
                                                            justify-between
                                                            gap-2"
                                                 >
 
                                                     <h4
                                                         class="text-sm
+
                                                                {{ !$notification->is_read
                                                                     ? 'font-bold text-slate-900'
                                                                     : 'font-semibold text-slate-700' }}"
@@ -1008,7 +1386,8 @@
                                                     @if(!$notification->is_read)
 
                                                         <span
-                                                            class="w-2 h-2
+                                                            class="w-2
+                                                                   h-2
                                                                    rounded-full
                                                                    bg-sky-600
                                                                    shrink-0
@@ -1031,9 +1410,12 @@
 
 
                                                 <div
-                                                    class="flex items-center
+                                                    class="flex
+                                                           items-center
                                                            justify-between
+
                                                            gap-2
+
                                                            mt-2"
                                                 >
 
@@ -1057,6 +1439,7 @@
 
                                                             <button
                                                                 type="submit"
+
                                                                 class="text-xs
                                                                        font-semibold
                                                                        text-sky-600
@@ -1079,6 +1462,7 @@
 
                                                             <button
                                                                 type="submit"
+
                                                                 class="text-xs
                                                                        font-semibold
                                                                        text-sky-600
@@ -1101,9 +1485,15 @@
 
                                 @empty
 
-                                    <div class="py-12 text-center">
+                                    <div
+                                        class="py-12
+                                               text-center"
+                                    >
 
-                                        <div class="text-5xl mb-3">
+                                        <div
+                                            class="text-5xl
+                                                   mb-3"
+                                        >
                                             🎉
                                         </div>
 
@@ -1130,24 +1520,32 @@
 
 
 
-                            <!-- Footer -->
+                            <!-- FOOTER -->
 
                             <div
                                 class="p-3
-                                       border-t border-slate-200"
+                                       border-t
+                                       border-slate-200"
                             >
 
                                 <a
                                     href="{{ route('notifications.index') }}"
+
                                     class="block
                                            text-center
+
                                            py-2
+
                                            rounded-xl
+
                                            bg-slate-100
                                            hover:bg-slate-200
+
                                            text-sm
                                            font-semibold
+
                                            text-slate-700
+
                                            transition"
                                 >
                                     View all notifications →
@@ -1165,13 +1563,27 @@
                     <!-- ADMIN PROFILE -->
                     <!-- ================================================= -->
 
-                    <div class="flex items-center gap-3 shrink-0">
+                    <div
+                        class="flex
+                               items-center
+                               gap-3
+                               shrink-0"
+                    >
 
                         <div
-                            class="w-10 h-10 sm:w-11 sm:h-11
+                            class="w-10
+                                   h-10
+                                   sm:w-11
+                                   sm:h-11
+
                                    rounded-full
+
                                    bg-sky-600
-                                   flex items-center justify-center
+
+                                   flex
+                                   items-center
+                                   justify-center
+
                                    text-white
                                    font-bold"
                         >
@@ -1185,7 +1597,10 @@
                                 Admin
                             </p>
 
-                            <p class="text-xs text-gray-500">
+                            <p
+                                class="text-xs
+                                       text-gray-500"
+                            >
                                 Super Administrator
                             </p>
 
@@ -1208,9 +1623,11 @@
         <section
             class="w-full
                    min-w-0
+
                    px-4
                    sm:px-6
                    lg:px-8
+
                    py-4
                    sm:py-6"
         >
@@ -1235,4 +1652,5 @@
 
 
 </body>
+
 </html>

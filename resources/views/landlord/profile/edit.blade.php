@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-landlord-layout>
 
     <div class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-cyan-100">
 
@@ -162,7 +162,7 @@
                                p-4 sm:p-6"
                     >
 
-                        @include('profile.partials.update-profile-information-form')
+                        @include('landlord.profile.partials.update-profile-information-form')
 
                     </div>
 
@@ -237,7 +237,7 @@
                                p-4 sm:p-6"
                     >
 
-                        @include('profile.partials.update-password-form')
+                        @include('landlord.profile.partials.update-password-form')
 
                     </div>
 
@@ -311,7 +311,7 @@
                                p-4 sm:p-6"
                     >
 
-                        @include('profile.partials.delete-user-form')
+                        @include('landlord.profile.partials.delete-user-form')
 
                     </div>
 
@@ -451,4 +451,4 @@
     </style>
 
 
-</x-app-layout>
+</x-landlord-layout>

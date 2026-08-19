@@ -1,85 +1,13 @@
-<x-app-layout>
-
-<div class="min-h-screen bg-slate-100">
+<x-landlord-layout>
 
     <div class="flex">
-
-        {{-- ================= SIDEBAR ================= --}}
-
-        <aside class="w-80 bg-slate-900 text-white min-h-screen shadow-2xl">
-
-            <div class="px-8 py-8 border-b border-slate-700">
-
-                <h1 class="text-3xl font-extrabold text-sky-400">
-                    CampusConnect
-                </h1>
-
-                <p class="text-slate-400 mt-2">
-                    Landlord Portal
-                </p>
-
-            </div>
-
-            <nav class="p-6 space-y-2">
-
-                <a href="{{ route('landlord.dashboard') }}"
-                   class="flex items-center gap-4 px-5 py-4 rounded-xl bg-sky-600">
-
-                    <span class="text-2xl">🏠</span>
-
-                    <span class="font-semibold">
-                        Dashboard
-                    </span>
-
-                </a>
-
-                <a href="{{ route('rental.step1') }}"
-                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
-
-                    <span class="text-2xl">➕</span>
-
-                    <span>Add Rental</span>
-
-                </a>
-
-                <a href="{{ route('rentals.index') }}"
-                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
-
-                    <span class="text-2xl">🏢</span>
-
-                    <span>My Rentals</span>
-
-                </a>
-
-                <a href="{{ route('landlord.bookings') }}"
-                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
-
-                    <span class="text-2xl">📅</span>
-
-                    <span>Bookings</span>
-
-                </a>
-
-                <a href="{{ route('profile.edit') }}"
-                   class="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-800 transition">
-
-                    <span class="text-2xl">👤</span>
-
-                    <span>Profile</span>
-
-                </a>
-
-            </nav>
-
-        </aside>
-
-        {{-- ================= MAIN CONTENT ================= --}}
+   
+     {{-- ================= MAIN CONTENT ================= --}}
 
         <main class="flex-1">
 
             {{-- TOP BAR --}}
 
-            <div class="bg-white shadow-sm border-b">
 
                 <div class="px-10 py-6 flex justify-between items-center">
 
@@ -980,4 +908,4 @@ menu.classList.add('hidden');
 
 </script>
 
-</x-app-layout>
+</x-landlord-layout>

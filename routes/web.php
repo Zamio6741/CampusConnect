@@ -117,6 +117,15 @@ Route::delete('/landlord/rental/photo/{photo}', [RentalController::class, 'delet
 
 Route::post('/landlord/rental/{accommodation}/photos', [RentalController::class, 'uploadPhotos'])
     ->name('rentals.photos.upload');    
+
+    Route::get('/landlord/profile', [ProfileController::class, 'landlordEdit'])
+    ->name('landlord.profile');
+
+    Route::patch('/landlord/profile', [ProfileController::class, 'landlordUpdate'])
+    ->name('landlord.profile.update');
+
+Route::delete('/landlord/profile', [ProfileController::class, 'landlordDestroy'])
+    ->name('landlord.profile.destroy');
     
     
 Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])

@@ -11,6 +11,12 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | GENERIC / STUDENT PROFILE
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Display the user's profile form.
      */
@@ -34,13 +40,69 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')
+            ->with('status', 'profile-updated');
     }
 
     /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LANDLORD PROFILE
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Display the landlord's profile form.
+     */
+    public function landlordEdit(Request $request): View
+    {
+        return view('landlord.profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Update the landlord's profile information.
+     */
+    public function landlordUpdate(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return Redirect::route('landlord.profile')
+            ->with('status', 'profile-updated');
+    }
+
+    /**
+     * Delete the landlord's account.
+     */
+    public function landlordDestroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],

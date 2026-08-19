@@ -1,4 +1,5 @@
-<x-app-layout>
+<x-landlord-layout>
+
 
 <div class="min-h-screen bg-slate-100 py-8">
 
@@ -253,4 +254,4 @@ document.getElementById('bookingSearch').addEventListener('keyup', function () {
 });
 </script>
 
-</x-app-layout>
+</x-landlord-layout>

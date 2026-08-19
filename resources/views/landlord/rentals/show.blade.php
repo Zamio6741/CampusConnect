@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-landlord-layout>
 
 <div class="min-h-screen bg-slate-100 py-10">
 
@@ -275,4 +275,4 @@
 
 </div>
 
-</x-app-layout>
+</x-landlord-layout>
