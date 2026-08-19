@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-business-layout>
 
 <div class="max-w-6xl mx-auto py-10">
 
@@ -200,4 +200,4 @@
 
 </div>
 
-</x-app-layout>
+</x-business-layout>

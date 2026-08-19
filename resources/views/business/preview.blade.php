@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-business-layout>
     <div class="bg-red-600 text-white text-4xl p-8 text-center">
     TEST VIEW LOADED
 </div>
@@ -527,4 +527,4 @@
 
 </div>
 
-</x-app-layout>
+</x-business-layout>

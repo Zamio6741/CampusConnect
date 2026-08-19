@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-business-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-blue-100">
 
@@ -384,4 +384,4 @@ new Chart(ctx, {
 });
 </script>
 
-</x-app-layout>
+</x-business-layout>

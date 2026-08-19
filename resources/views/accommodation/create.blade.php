@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-landlord-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 py-6 sm:py-10">
 
@@ -536,4 +536,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-</x-app-layout>
+</x-landlord-layout>

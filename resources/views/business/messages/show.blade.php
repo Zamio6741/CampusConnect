@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-business-layout>
 
 <div class="min-h-screen bg-slate-100">
 
@@ -124,4 +124,4 @@ let chat=document.getElementById('chat-box');
 chat.scrollTop=chat.scrollHeight;
 </script>
 
-</x-app-layout>
+</x-business-layout>

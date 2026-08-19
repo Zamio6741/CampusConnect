@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-landlord-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-6 sm:py-10 lg:py-12">
 
@@ -191,4 +191,4 @@
 
 </div>
 
-</x-app-layout>
+</x-landlord-layout>
