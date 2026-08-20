@@ -1,155 +1,215 @@
-<x-app-layout>
+<x-business-layout>
 
-<div class="max-w-5xl mx-auto py-10">
+<div class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100 px-3 sm:px-5 lg:px-8">
 
-    <div class="bg-white rounded-3xl shadow-xl p-10">
+    <div class="max-w-5xl mx-auto py-5 sm:py-8 lg:py-10">
 
-        <h1 class="text-4xl font-bold mb-10">
-            ✏ Edit Product
-        </h1>
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200 p-4 sm:p-6 md:p-8 lg:p-10">
 
-        <form action="{{ route('products.update', $product) }}"
-              method="POST"
-              enctype="multipart/form-data">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 lg:mb-10 text-slate-800">
+                ✏ Edit Product
+            </h1>
 
-            @csrf
-            @method('PUT')
+            <form action="{{ route('products.update', $product) }}"
+                  method="POST"
+                  enctype="multipart/form-data">
 
-            <div class="grid md:grid-cols-2 gap-8">
+                @csrf
+                @method('PUT')
 
-                <!-- Product Name -->
-                <div>
-                    <label class="font-semibold">
-                        Product Name
-                    </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
 
-                    <input
-                        type="text"
-                        name="name"
-                        value="{{ old('name', $product->name) }}"
-                        class="w-full border rounded-xl mt-2 p-4"
-                        required>
-                </div>
+                    <!-- Product Name -->
+                    <div>
+                        <label class="font-semibold text-sm sm:text-base text-gray-700 block">
+                            Product Name
+                        </label>
 
-                <!-- Category -->
-                <div>
-                    <label class="font-semibold">
-                        Category
-                    </label>
-
-                    <input
-                        type="text"
-                        name="category"
-                        value="{{ old('category', $product->category) }}"
-                        class="w-full border rounded-xl mt-2 p-4">
-                </div>
-
-                <!-- Price -->
-                <div>
-                    <label class="font-semibold">
-                        Price (KES)
-                    </label>
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="price"
-                        value="{{ old('price', $product->price) }}"
-                        class="w-full border rounded-xl mt-2 p-4"
-                        required>
-                </div>
-
-                <!-- Quantity -->
-                <div>
-                    <label class="font-semibold">
-                        Quantity
-                    </label>
-
-                    <input
-                        type="number"
-                        name="quantity"
-                        value="{{ old('quantity', $product->quantity) }}"
-                        class="w-full border rounded-xl mt-2 p-4"
-                        required>
-                </div>
-
-            </div>
-
-            <!-- Description -->
-            <div class="mt-8">
-
-                <label class="font-semibold">
-                    Description
-                </label>
-
-                <textarea
-                    name="description"
-                    rows="5"
-                    class="w-full border rounded-xl mt-2 p-4">{{ old('description', $product->description) }}</textarea>
-
-            </div>
-
-            <!-- Current Image -->
-            <div class="mt-8">
-
-                <label class="font-semibold block mb-3">
-                    Current Product Image
-                </label>
-
-                @if($product->image)
-                    <img
-                        src="{{ asset('storage/'.$product->image) }}"
-                        class="w-48 h-48 object-cover rounded-2xl border shadow">
-                @else
-                    <div class="w-48 h-48 rounded-2xl bg-gray-100 flex items-center justify-center text-5xl border">
-                        🛍
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ old('name', $product->name) }}"
+                            class="w-full border-2 border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl mt-2 p-3 sm:p-4 text-sm sm:text-base outline-none transition"
+                            required>
                     </div>
-                @endif
 
-            </div>
+                    <!-- Category -->
+                    <div>
+                        <label class="font-semibold text-sm sm:text-base text-gray-700 block">
+                            Category
+                        </label>
 
-            <!-- Upload New Image -->
-            <div class="mt-8">
+                        <input
+                            type="text"
+                            name="category"
+                            value="{{ old('category', $product->category) }}"
+                            class="w-full border-2 border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl mt-2 p-3 sm:p-4 text-sm sm:text-base outline-none transition">
+                    </div>
 
-                <label class="font-semibold">
-                    Replace Image (Optional)
-                </label>
+                    <!-- Price -->
+                    <div>
+                        <label class="font-semibold text-sm sm:text-base text-gray-700 block">
+                            Price (KES)
+                        </label>
 
-                <input
-                    type="file"
-                    name="image"
-                    class="block mt-3">
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="price"
+                            value="{{ old('price', $product->price) }}"
+                            class="w-full border-2 border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl mt-2 p-3 sm:p-4 text-sm sm:text-base outline-none transition"
+                            required>
+                    </div>
 
-                <p class="text-sm text-gray-500 mt-2">
-                    Leave this empty if you don't want to change the current image.
-                </p>
+                    <!-- Quantity -->
+                    <div>
+                        <label class="font-semibold text-sm sm:text-base text-gray-700 block">
+                            Quantity
+                        </label>
 
-            </div>
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{{ old('quantity', $product->quantity) }}"
+                            class="w-full border-2 border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl mt-2 p-3 sm:p-4 text-sm sm:text-base outline-none transition"
+                            required>
+                    </div>
 
-            <!-- Buttons -->
-            <div class="mt-10 flex gap-4">
+                </div>
 
-                <button
-                    type="submit"
-                    class="bg-sky-600 hover:bg-sky-700 text-white px-10 py-4 rounded-2xl font-bold">
+                <!-- Description -->
+                <div class="mt-6 sm:mt-8">
 
-                    💾 Update Product
+                    <label class="font-semibold text-sm sm:text-base text-gray-700 block">
+                        Description
+                    </label>
 
-                </button>
+                    <textarea
+                        name="description"
+                        rows="5"
+                        class="w-full border-2 border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-xl mt-2 p-3 sm:p-4 text-sm sm:text-base outline-none transition resize-y">{{ old('description', $product->description) }}</textarea>
 
-                <a href="{{ route('products.index') }}"
-                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-10 py-4 rounded-2xl font-bold">
+                </div>
 
-                    Cancel
+                <!-- Current Image -->
+                <div class="mt-6 sm:mt-8">
 
-                </a>
+                    <label class="font-semibold text-sm sm:text-base text-gray-700 block mb-3">
+                        Current Product Image
+                    </label>
 
-            </div>
+                    <div class="inline-block border-2 border-gray-300 rounded-2xl p-1.5 bg-white shadow-sm">
 
-        </form>
+                        @if($product->image)
+
+                            <img
+                                src="{{ asset('storage/'.$product->image) }}"
+                                class="w-40 h-40 sm:w-48 sm:h-48 object-cover rounded-xl">
+
+                        @else
+
+                            <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-xl bg-gray-100 flex items-center justify-center text-5xl border border-gray-300">
+                                🛍
+                            </div>
+
+                        @endif
+
+                    </div>
+
+                </div>
+
+                <!-- Upload New Image -->
+                <div class="mt-6 sm:mt-8">
+
+                    <label class="font-semibold text-sm sm:text-base text-gray-700 block mb-3">
+                        Replace Image (Optional)
+                    </label>
+
+                    <div class="border-2 border-dashed border-sky-400 bg-sky-50/50 rounded-2xl p-4 sm:p-6 transition hover:border-sky-500 hover:bg-sky-50">
+
+                        <label
+                            for="product-image"
+                            class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 cursor-pointer text-center sm:text-left">
+
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white border-2 border-sky-200 shadow-sm flex items-center justify-center text-2xl sm:text-3xl shrink-0">
+                                📷
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <p class="font-semibold text-sky-700 text-sm sm:text-base">
+                                    Choose New Product Image
+                                </p>
+
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                                    Tap here to select a replacement image
+                                </p>
+
+                            </div>
+
+                        </label>
+
+                        <input
+                            id="product-image"
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            class="mt-4 block w-full text-sm text-gray-700
+                                   border-2 border-gray-300
+                                   rounded-xl
+                                   bg-white
+                                   p-2
+                                   shadow-sm
+                                   cursor-pointer
+                                   file:mr-3
+                                   file:py-2
+                                   file:px-3
+                                   file:rounded-lg
+                                   file:border-0
+                                   file:bg-sky-600
+                                   file:text-white
+                                   file:font-semibold
+                                   file:cursor-pointer
+                                   hover:file:bg-sky-700
+                                   focus:outline-none
+                                   focus:ring-2
+                                   focus:ring-sky-300">
+
+                        <p class="text-xs sm:text-sm text-gray-500 mt-3 leading-relaxed">
+                            Leave this empty if you don't want to change the current image.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+
+                    <button
+                        type="submit"
+                        class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold text-sm sm:text-base shadow-md hover:shadow-lg transition">
+
+                        💾 Update Product
+
+                    </button>
+
+                    <a
+                        href="{{ route('products.index') }}"
+                        class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 active:bg-gray-500 text-gray-800 px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold text-sm sm:text-base transition">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
 
-</x-app-layout>
+</x-business-layout>
