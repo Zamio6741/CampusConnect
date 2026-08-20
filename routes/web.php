@@ -144,6 +144,12 @@ Route::delete('/notifications/{notification}', [NotificationController::class, '
 Route::get('/rentals/{accommodation}', [AccommodationController::class, 'show'])
     ->name('rentals.public.show');
 
+    Route::get('/robots-test', function () {
+    return response()->file(public_path('robots.txt'), [
+        'Content-Type' => 'text/plain',
+    ]);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
