@@ -219,7 +219,9 @@ public function index()
 
 public function profile()
 {
-    $business = auth()->user()->businesses()->firstOrFail();
+    $business = auth()->user()->business;
+
+                abort_unless($business, 404);
 
     return view('business.profile', compact('business'));
 }

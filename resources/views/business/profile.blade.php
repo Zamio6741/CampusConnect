@@ -1,4 +1,4 @@
-<x-business-profile-layout>
+<x-business-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100 py-4 sm:py-6 lg:py-10">
 
@@ -410,4 +410,4 @@
 
 </div>
 
-</x-business-profile-layout>
+</x-business-layout>

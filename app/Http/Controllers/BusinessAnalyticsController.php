@@ -11,7 +11,9 @@ class BusinessAnalyticsController extends Controller
 {
     public function index()
     {
-        $business = auth()->user()->businesses()->firstOrFail();
+        $business = auth()->user()->business;
+
+                    abort_unless($business, 404);
 
         $products = Product::where('business_id', $business->id)->get();
 

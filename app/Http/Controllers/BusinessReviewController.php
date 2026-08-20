@@ -9,7 +9,9 @@ class BusinessReviewController extends Controller
 {
     public function index(Request $request)
     {
-        $business = auth()->user()->businesses()->firstOrFail();
+        $business = auth()->user()->business;
+
+                        abort_unless($business, 404);
 
         // Reviews query
         $query = BusinessReview::where('business_id', $business->id)
