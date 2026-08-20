@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-business-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
 
@@ -190,4 +190,4 @@
 
 </div>
 
-</x-app-layout>
+</x-business-layout>

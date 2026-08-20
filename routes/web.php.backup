@@ -448,7 +448,12 @@ Route::put('/businesses/{business}', [BusinessController::class, 'update'])
 
 Route::delete('/businesses/{business}', [BusinessController::class, 'destroy'])
     ->name('businesses.destroy');
- 
+
+Route::get('/business/{business}/edit', [BusinessController::class, 'edit'])
+    ->name('businesses.edit');
+
+Route::put('/business/{business}', [BusinessController::class, 'update'])
+    ->name('businesses.update');  
 Route::get('/businesses/{business}/gallery', [BusinessGalleryController::class, 'index'])
     ->name('business.gallery');
 
@@ -525,8 +530,15 @@ Route::resource('products', ProductController::class);
 Route::patch('/products/{product}/featured',
     [ProductController::class, 'featured'])
     ->name('products.featured');    
+    
 
-Route::middleware(['auth', 'verified', 'student'])->group(function () {
+Route::middleware(['auth', 'role:Student'])->group(function () {
+
+    Route::get('/businesses', [StudentBusinessController::class, 'index'])
+        ->name('businesses.index');
+}); 
+
+Route::middleware(['auth', 'student'])->group(function () {
 
     Route::get('/businesses', [StudentBusinessController::class, 'index'])
         ->name('businesses.index');
@@ -534,7 +546,20 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
         ->name('businesses.show');
 
-});    
+});
+
+Route::middleware(['auth', 'verified', 'student'])->group(function () {
+
+    Route::get('/businesses', [StudentBusinessController::class, 'index'])
+        ->name('businesses.index');
+
+    Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
+        ->name('business.preview');
+
+});
+
+Route::get('/businesses/{business}', [StudentBusinessController::class, 'show'])
+    ->name('business.preview');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -593,7 +618,11 @@ Route::patch('/business/profile', [BusinessProfileController::class, 'update'])
 
 Route::post('/businesses/{business}/reviews', [BusinessReviewController::class, 'store'])
     ->name('business.reviews.store');
- 
+Route::post(
+    '/businesses/{business}/reviews',
+    [BusinessReviewController::class, 'store']
+)->name('business.reviews.store');  
+
 Route::post('/business/messages/{message}/reply',
     [BusinessMessageController::class, 'reply'])
     ->name('business.messages.reply');

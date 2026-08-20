@@ -1,4 +1,4 @@
-<x-business-layout>
+<x-student-layout>
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 py-8">
 
@@ -286,4 +286,4 @@
 
 </div>
 
-</x-business-layout>
+</x-student-layout>

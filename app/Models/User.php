@@ -244,10 +244,10 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function businesses()
-    {
-        return $this->hasMany(Business::class);
-    }
+  public function business(): HasOne
+{
+    return $this->hasOne(Business::class);
+}
 
     /*
     |--------------------------------------------------------------------------
