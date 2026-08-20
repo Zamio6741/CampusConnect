@@ -38,6 +38,7 @@ use App\Http\Controllers\StudentMessageController;
 use App\Http\Controllers\BusinessAnalyticsController;
 use App\Http\Controllers\BusinessNotificationController;
 use App\Http\Controllers\BusinessSettingsController;
+use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\BusinessManagementController;
@@ -149,43 +150,38 @@ Route::get('/', function () {
 
 Route::get('/sitemap.xml', function () {
 
+    $urls = [
+        '/',
+        '/campus-hostels',
+        '/marketplace',
+        '/businesses',
+        '/notes',
+        '/past-papers',
+        '/lost-found',
+    ];
+
     $xml = '<?xml version="1.0" encoding="UTF-8"?>';
 
     $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/') . '</loc>';
-    $xml .= '</url>';
+    foreach ($urls as $path) {
 
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/campus-hostels') . '</loc>';
-    $xml .= '</url>';
+        $xml .= '<url>';
 
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/marketplace') . '</loc>';
-    $xml .= '</url>';
+        $xml .= '<loc>'
+            . htmlspecialchars(url($path), ENT_XML1, 'UTF-8')
+            . '</loc>';
 
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/notes') . '</loc>';
-    $xml .= '</url>';
+        $xml .= '</url>';
 
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/past-papers') . '</loc>';
-    $xml .= '</url>';
-
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/student-services') . '</loc>';
-    $xml .= '</url>';
-
-    $xml .= '<url>';
-    $xml .= '<loc>' . url('/lost-found') . '</loc>';
-    $xml .= '</url>';
+    }
 
     $xml .= '</urlset>';
 
     return response($xml, 200)
         ->header('Content-Type', 'application/xml');
-});
+
+})->name('sitemap');
 
 Route::get('/account-suspended', function () {
     return view('account-suspended');
@@ -606,8 +602,11 @@ Route::middleware(['auth', 'role:Business Owner'])->group(function () {
     [BusinessReviewController::class, 'reply'])
     ->name('business.reviews.reply');
 
-    Route::get('/business/profile', [BusinessController::class, 'profile'])
+    Route::get('/business/profile', [BusinessProfileController::class, 'edit'])
     ->name('business.profile');
+
+Route::patch('/business/profile', [BusinessProfileController::class, 'update'])
+    ->name('business.profile.update');
 
 });
 
