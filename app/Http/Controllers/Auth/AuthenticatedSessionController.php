@@ -30,9 +30,28 @@ class AuthenticatedSessionController extends Controller
 
         $user = auth()->user();
 
-        return match (optional($user->roleRelation)->name) {
+        /*
+         * The normal login page is only for:
+         * - Student
+         * - Landlord
+         * - Business Owner
+         *
+         * Admins must use the dedicated /admin/login page.
+         */
+        if (optional($user->roleRelation)->name === 'Admin') {
+            Auth::guard('web')->logout();
 
-            'Admin' => redirect()->route('admin.dashboard'),
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'email' => 'Admin accounts must use the Admin login page.',
+                ]);
+        }
+
+        return match (optional($user->roleRelation)->name) {
 
             'Student' => redirect()->route('student.dashboard'),
 

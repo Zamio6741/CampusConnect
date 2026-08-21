@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,13 +37,49 @@ class LoginRequest extends FormRequest
     /**
      * Attempt to authenticate the request's credentials.
      *
+     * The normal /login page is for non-admin accounts only.
+     *
      * @throws ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        /*
+         * Find the account by email and load its role.
+         */
+        $user = User::with('role')
+            ->where('email', $this->string('email')->toString())
+            ->first();
+
+        /*
+         * Admin accounts must use the dedicated /admin/login page.
+         *
+         * We check both:
+         * 1. The role name is "Admin"
+         * 2. The is_admin flag is true
+         */
+        if (
+            $user &&
+            (
+                optional($user->role)->name === 'Admin' ||
+                $user->is_admin === true
+            )
+        ) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Admin accounts must use the Admin login page.',
+            ]);
+        }
+
+        /*
+         * Authenticate normal users.
+         */
+        if (! Auth::attempt(
+            $this->only('email', 'password'),
+            $this->boolean('remember')
+        )) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -81,6 +118,10 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(
+            Str::lower($this->string('email')->toString())
+            . '|'
+            . $this->ip()
+        );
     }
 }
