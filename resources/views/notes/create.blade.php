@@ -71,60 +71,85 @@
 
 
                     {{-- ================================================= --}}
-                    {{-- UNIT --}}
-                    {{-- ================================================= --}}
+{{-- UNIT INFORMATION --}}
+{{-- ================================================= --}}
 
-                    <div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-                        <label
-                            for="unit_id"
-                            class="block font-semibold text-gray-700 mb-2"
-                        >
-                            📘 Select Unit
-                        </label>
+    {{-- UNIT CODE --}}
 
-                        <select
-                            id="unit_id"
-                            name="unit_id"
-                            required
-                            class="w-full rounded-xl
-                                   border-2 border-slate-300
-                                   bg-white
-                                   text-gray-700
-                                   px-4 py-3.5
-                                   shadow-sm
-                                   outline-none
-                                   transition
-                                   duration-200
-                                   hover:border-slate-400
-                                   focus:border-sky-500
-                                   focus:ring-4
-                                   focus:ring-sky-100"
-                        >
+    <div>
 
-                            <option value="">
-                                -- Select Unit --
-                            </option>
+        <label
+            for="unit_code"
+            class="block font-semibold text-gray-700 mb-2"
+        >
+            📘 Unit Code
+        </label>
 
-                            @foreach($units as $unit)
+        <input
+            type="text"
+            id="unit_code"
+            name="unit_code"
+            value="{{ old('unit_code') }}"
+            required
+            maxlength="100"
+            placeholder="e.g. SMA 191"
+            class="w-full rounded-xl
+                   border-2 border-slate-300
+                   bg-white
+                   text-gray-700
+                   px-4 py-3.5
+                   shadow-sm
+                   outline-none
+                   transition
+                   duration-200
+                   hover:border-slate-400
+                   focus:border-sky-500
+                   focus:ring-4
+                   focus:ring-sky-100"
+        >
 
-                                <option
-                                    value="{{ $unit->id }}"
-                                    {{ old('unit_id') == $unit->id ? 'selected' : '' }}
-                                >
+    </div>
 
-                                    {{ $unit->unit_code }}
-                                    —
-                                    {{ $unit->unit_name }}
 
-                                </option>
+    {{-- UNIT NAME --}}
 
-                            @endforeach
+    <div>
 
-                        </select>
+        <label
+            for="unit_name"
+            class="block font-semibold text-gray-700 mb-2"
+        >
+            📚 Unit Name
+        </label>
 
-                    </div>
+        <input
+            type="text"
+            id="unit_name"
+            name="unit_name"
+            value="{{ old('unit_name') }}"
+            required
+            maxlength="255"
+            placeholder="e.g. Introduction to Computer Programming"
+            class="w-full rounded-xl
+                   border-2 border-slate-300
+                   bg-white
+                   text-gray-700
+                   px-4 py-3.5
+                   shadow-sm
+                   outline-none
+                   transition
+                   duration-200
+                   hover:border-slate-400
+                   focus:border-sky-500
+                   focus:ring-4
+                   focus:ring-sky-100"
+        >
 
+    </div>
+
+</div>
 
                     {{-- ================================================= --}}
                     {{-- TITLE --}}

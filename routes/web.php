@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\NoteManagementController;
 use App\Http\Controllers\Admin\AnnouncementManagementController;
 use App\Http\Controllers\StudentSemesterController;
 use App\Http\Controllers\Admin\AdminSearchController;
+use App\Http\Controllers\StudentSearchController;
 
 Route::middleware(['auth', 'role:Landlord'])->group(function () {
 
@@ -494,6 +495,10 @@ Route::middleware(['auth', 'account.active'])->group(function () {
     Route::get('/student/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:Student')
         ->name('student.dashboard');
+        
+    Route::get('/student/search', [StudentSearchController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('student.search');    
 
     Route::get('/landlord/dashboard', [LandlordDashboardController::class, 'index'])
         ->middleware('role:Landlord')

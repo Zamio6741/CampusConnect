@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | University
+        | UNIVERSITY
         |--------------------------------------------------------------------------
         */
 
@@ -34,14 +34,14 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Recent Announcements
+        | RECENT ANNOUNCEMENTS
         |--------------------------------------------------------------------------
-        |
-        | Only select the columns actually needed by the dashboard.
-        |
         */
 
-        $announcements = Announcement::where('university_id', $universityId)
+        $announcements = Announcement::where(
+                'university_id',
+                $universityId
+            )
             ->select([
                 'id',
                 'title',
@@ -55,18 +55,17 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Trending Notes
+        | TRENDING NOTES
         |--------------------------------------------------------------------------
-        |
-        | The dashboard only displays the note title and uploader name.
-        | There is no need to load the Unit relationship here.
-        |
         */
 
         $trendingNotes = Note::with([
                 'user:id,name',
             ])
-            ->where('university_id', $universityId)
+            ->where(
+                'university_id',
+                $universityId
+            )
             ->select([
                 'id',
                 'user_id',
@@ -80,88 +79,175 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Statistics
+        | REAL DASHBOARD / SIDEBAR STATISTICS
         |--------------------------------------------------------------------------
         |
-        | These are the statistics currently used by the dashboard/sidebar.
+        | These values are pulled directly from the database.
         |
+        */
+
+        $notesCount = Note::where(
+            'university_id',
+            $universityId
+        )->count();
+
+
+        $pastPapersCount = PastPaper::where(
+            'university_id',
+            $universityId
+        )->count();
+
+
+        $businessesCount = Business::where(
+            'university_id',
+            $universityId
+        )->count();
+
+
+        $accommodationsCount = Accommodation::where(
+            'university_id',
+            $universityId
+        )->count();
+
+
+        $announcementsCount = Announcement::where(
+            'university_id',
+            $universityId
+        )->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | MESSAGES
+        |--------------------------------------------------------------------------
+        */
+
+        $messagesCount = Message::where(function ($query) use ($user) {
+
+            $query->where('student_id', $user->id)
+                ->orWhere('sender_id', $user->id);
+
+        })->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UNREAD MESSAGES
+        |--------------------------------------------------------------------------
+        */
+
+        $unreadMessages = Message::where(
+                'student_id',
+                $user->id
+            )
+            ->where(
+                'sender_id',
+                '!=',
+                $user->id
+            )
+            ->where(
+                'is_read',
+                false
+            )
+            ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | MARKETPLACE
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        |
+        | Your current project does not show a Marketplace model in this
+        | controller. Therefore we do NOT pretend there is real marketplace
+        | data available.
+        |
+        | We expose the value as 0 until the actual marketplace model/table
+        | is connected.
+        |
+        */
+
+        $marketplaceCount = 0;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIDEBAR DATA
+        |--------------------------------------------------------------------------
+        |
+        | This is the exact data structure the student sidebar should use.
+        |
+        */
+
+        $sidebarStats = [
+
+            'notes' => $notesCount,
+
+            'pastpapers' => $pastPapersCount,
+
+            'businesses' => $businessesCount,
+
+            'accommodations' => $accommodationsCount,
+
+            'announcements' => $announcementsCount,
+
+            'messages' => $messagesCount,
+
+            'unreadMessages' => $unreadMessages,
+
+            'marketplace' => $marketplaceCount,
+        ];
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DASHBOARD STATISTICS
+        |--------------------------------------------------------------------------
         */
 
         $stats = [
 
-            'notes' => Note::where(
-                'university_id',
-                $universityId
-            )->count(),
+            'notes' => $notesCount,
 
-            'pastpapers' => PastPaper::where(
-                'university_id',
-                $universityId
-            )->count(),
+            'pastpapers' => $pastPapersCount,
 
-            'businesses' => Business::where(
-                'university_id',
-                $universityId
-            )->count(),
+            'businesses' => $businessesCount,
 
-            'accommodations' => Accommodation::where(
-                'university_id',
-                $universityId
-            )->count(),
+            'accommodations' => $accommodationsCount,
 
-            'announcements' => Announcement::where(
-                'university_id',
-                $universityId
-            )->count(),
-
-            /*
-            | Units are not displayed directly on the dashboard,
-            | so keep this lightweight.
-            */
-
-            'units' => 0,
+            'announcements' => $announcementsCount,
 
             'myNotes' => Note::where(
                 'user_id',
                 $user->id
             )->count(),
 
-            'messages' => Message::where(function ($query) use ($user) {
+            'messages' => $messagesCount,
 
-                $query->where('student_id', $user->id)
-                    ->orWhere('sender_id', $user->id);
-
-            })->count(),
-
-            'marketplace' => 0,
+            'marketplace' => $marketplaceCount,
         ];
 
 
         /*
         |--------------------------------------------------------------------------
-        | Notifications
-        |--------------------------------------------------------------------------
-        |
-        | The dashboard itself does not render the notification collection.
-        | We only calculate the unread count.
-        |
-        */
-
-        $notificationCount = Notification::where('user_id', $user->id)
-            ->where('created_at', '>=', now()->subDays(7))
-            ->where('is_read', false)
-            ->count();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Unread Messages
+        | NOTIFICATIONS
         |--------------------------------------------------------------------------
         */
 
-        $unreadMessages = Message::where('student_id', $user->id)
-            ->where('sender_id', '!=', $user->id)
-            ->where('is_read', false)
+        $notificationCount = Notification::where(
+                'user_id',
+                $user->id
+            )
+            ->where(
+                'created_at',
+                '>=',
+                now()->subDays(7)
+            )
+            ->where(
+                'is_read',
+                false
+            )
             ->count();
 
 
@@ -169,12 +255,12 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         | REAL SEMESTER DATA
         |--------------------------------------------------------------------------
-        |
-        | Semester information comes directly from student_semesters.
-        |
         */
 
-        $semester = StudentSemester::where('user_id', $user->id)
+        $semester = StudentSemester::where(
+                'user_id',
+                $user->id
+            )
             ->select([
                 'id',
                 'user_id',
@@ -187,7 +273,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Default Semester Values
+        | DEFAULT SEMESTER VALUES
         |--------------------------------------------------------------------------
         */
 
@@ -210,7 +296,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Calculate Real Semester Progress
+        | CALCULATE REAL SEMESTER PROGRESS
         |--------------------------------------------------------------------------
         */
 
@@ -220,20 +306,23 @@ class DashboardController extends Controller
 
             $semesterEndDate = $semester->end_date;
 
+
             $startDate = Carbon::parse(
                 $semesterStartDate
             )->startOfDay();
 
+
             $endDate = Carbon::parse(
                 $semesterEndDate
             )->startOfDay();
+
 
             $today = Carbon::now()->startOfDay();
 
 
             /*
             |--------------------------------------------------------------------------
-            | Total Semester Duration
+            | TOTAL SEMESTER DAYS
             |--------------------------------------------------------------------------
             */
 
@@ -245,7 +334,7 @@ class DashboardController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Semester Has NOT Started
+            | SEMESTER NOT STARTED
             |--------------------------------------------------------------------------
             */
 
@@ -267,7 +356,7 @@ class DashboardController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Semester Is Currently Running
+            | SEMESTER RUNNING
             |--------------------------------------------------------------------------
             */
 
@@ -277,13 +366,20 @@ class DashboardController extends Controller
 
                 $semesterCompleted = false;
 
+
                 $semesterDaysPassed = $startDate->diffInDays(
                     $today
                 );
 
+
                 $semesterProgress = round(
-                    ($semesterDaysPassed / $semesterTotalDays) * 100
+                    (
+                        $semesterDaysPassed
+                        /
+                        $semesterTotalDays
+                    ) * 100
                 );
+
 
                 $semesterProgress = min(
                     100,
@@ -293,6 +389,7 @@ class DashboardController extends Controller
                     )
                 );
 
+
                 $semesterDaysRemaining = $today->diffInDays(
                     $endDate
                 );
@@ -301,7 +398,7 @@ class DashboardController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Semester Has Ended
+            | SEMESTER COMPLETED
             |--------------------------------------------------------------------------
             */
 
@@ -322,7 +419,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | CONTEXT-AWARE ROTATING SEMESTER MESSAGES
+        | SEMESTER MESSAGES
         |--------------------------------------------------------------------------
         */
 
@@ -336,7 +433,7 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | CONTEXT-AWARE DAILY TIP
+        | DAILY TIP
         |--------------------------------------------------------------------------
         */
 
@@ -350,31 +447,55 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Dashboard View
+        | DASHBOARD VIEW
         |--------------------------------------------------------------------------
         */
 
         return view('student.dashboard', [
 
+            /*
+            | User
+            */
+
             'user' => $user,
+
+
+            /*
+            | Dashboard content
+            */
 
             'announcements' => $announcements,
 
             'trendingNotes' => $trendingNotes,
 
-            'stats' => $stats,
 
             /*
-            | Notification count is kept available for the
-            | dashboard/layout if required.
+            | Dashboard statistics
+            */
+
+            'stats' => $stats,
+
+
+            /*
+            | SIDEBAR STATISTICS
+            |
+            | The sidebar should use this variable.
+            */
+
+            'sidebarStats' => $sidebarStats,
+
+
+            /*
+            | Notifications
             */
 
             'notificationCount' => $notificationCount,
 
             'unreadMessages' => $unreadMessages,
 
+
             /*
-            | Semester information
+            | Semester
             */
 
             'semesterProgress' => $semesterProgress,
@@ -393,14 +514,16 @@ class DashboardController extends Controller
 
             'semesterEndDate' => $semesterEndDate,
 
+
             /*
-            | Rotating semester messages
+            | Rotating messages
             */
 
             'semesterMessages' => $semesterMessages,
 
+
             /*
-            | Daily Tip
+            | Daily tip
             */
 
             'dailyTip' => $dailyTip,
@@ -409,7 +532,7 @@ class DashboardController extends Controller
 
 
     /**
-     * Get context-aware rotating messages for the semester progress card.
+     * Get context-aware rotating messages.
      */
     private function getSemesterMessages(
         bool $semesterStarted,
@@ -417,12 +540,6 @@ class DashboardController extends Controller
         ?int $daysRemaining,
         int $semesterProgress
     ): array {
-
-        /*
-        |--------------------------------------------------------------------------
-        | Semester Has Not Started
-        |--------------------------------------------------------------------------
-        */
 
         if (!$semesterStarted && !$semesterCompleted) {
 
@@ -443,12 +560,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Semester Completed
-        |--------------------------------------------------------------------------
-        */
-
         if ($semesterCompleted) {
 
             return [
@@ -467,12 +578,6 @@ class DashboardController extends Controller
             ];
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | 80%+ COMPLETE
-        |--------------------------------------------------------------------------
-        */
 
         if ($semesterProgress >= 80) {
 
@@ -493,12 +598,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 60%–79% COMPLETE
-        |--------------------------------------------------------------------------
-        */
-
         if ($semesterProgress >= 60) {
 
             return [
@@ -517,12 +616,6 @@ class DashboardController extends Controller
             ];
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | 30%–59% COMPLETE
-        |--------------------------------------------------------------------------
-        */
 
         if ($semesterProgress >= 30) {
 
@@ -543,12 +636,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | EARLY SEMESTER
-        |--------------------------------------------------------------------------
-        */
-
         return [
 
             '🌱 You are just getting started. Build good habits now.',
@@ -568,8 +655,6 @@ class DashboardController extends Controller
 
     /**
      * Generate a context-aware daily tip.
-     *
-     * The tip changes once per day.
      */
     private function getDailyTip(
         bool $semesterStarted,
@@ -578,28 +663,20 @@ class DashboardController extends Controller
         int $semesterProgress
     ): string {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Daily Rotation Number
-        |--------------------------------------------------------------------------
-        */
-
         $referenceDate = Carbon::create(
             2026,
             1,
             1
         )->startOfDay();
 
+
         $today = Carbon::now()->startOfDay();
 
-        $dayNumber = $referenceDate->diffInDays($today);
 
+        $dayNumber = $referenceDate->diffInDays(
+            $today
+        );
 
-        /*
-        |--------------------------------------------------------------------------
-        | SEMESTER NOT STARTED
-        |--------------------------------------------------------------------------
-        */
 
         if (!$semesterStarted && !$semesterCompleted) {
 
@@ -626,12 +703,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | SEMESTER COMPLETED
-        |--------------------------------------------------------------------------
-        */
-
         if ($semesterCompleted) {
 
             $tips = [
@@ -656,12 +727,6 @@ class DashboardController extends Controller
             return $tips[$dayNumber % count($tips)];
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | FINAL 7 DAYS
-        |--------------------------------------------------------------------------
-        */
 
         if ($daysRemaining !== null && $daysRemaining <= 7) {
 
@@ -688,12 +753,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 7–14 DAYS REMAINING
-        |--------------------------------------------------------------------------
-        */
-
         if ($daysRemaining !== null && $daysRemaining <= 14) {
 
             $tips = [
@@ -719,12 +778,6 @@ class DashboardController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 14–30 DAYS REMAINING
-        |--------------------------------------------------------------------------
-        */
-
         if ($daysRemaining !== null && $daysRemaining <= 30) {
 
             $tips = [
@@ -749,12 +802,6 @@ class DashboardController extends Controller
             return $tips[$dayNumber % count($tips)];
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | 30+ DAYS REMAINING
-        |--------------------------------------------------------------------------
-        */
 
         $tips = [
 
@@ -826,12 +873,6 @@ class DashboardController extends Controller
         $user = Auth::user();
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Create Student Semester
-        |--------------------------------------------------------------------------
-        */
-
         StudentSemester::create([
 
             'user_id' => $user->id,
@@ -850,4 +891,3 @@ class DashboardController extends Controller
             );
     }
 }
-

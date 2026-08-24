@@ -90,44 +90,84 @@
                     @csrf
 
 
-                    {{-- ================================================= --}}
-                    {{-- UNIT --}}
-                    {{-- ================================================= --}}
+                   {{-- ================================================= --}}
+{{-- UNIT INFORMATION --}}
+{{-- ================================================= --}}
 
-                    <div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-                        <label
-                            for="unit_id"
-                            class="block font-bold text-gray-700 mb-2"
-                        >
-                            📘 Unit
-                        </label>
+    {{-- UNIT CODE --}}
 
-                        <select
-                            id="unit_id"
-                            name="unit_id"
-                            required
-                            class="w-full rounded-2xl border-2 border-slate-300 bg-white py-3.5 sm:py-4 px-4 sm:px-5 text-gray-700 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-                        >
+    <div>
 
-                            <option value="">
-                                Choose Unit
-                            </option>
+        <label
+            for="unit_code"
+            class="block font-bold text-gray-700 mb-2"
+        >
+            📘 Unit Code
+        </label>
 
-                            @foreach($units as $unit)
+        <input
+            type="text"
+            id="unit_code"
+            name="unit_code"
+            value="{{ old('unit_code') }}"
+            required
+            maxlength="100"
+            placeholder="e.g. SST 102"
+            class="w-full rounded-2xl
+                   border-2 border-slate-300
+                   bg-white
+                   py-3.5 sm:py-4
+                   px-4 sm:px-5
+                   text-gray-700
+                   shadow-sm
+                   outline-none
+                   transition
+                   focus:border-sky-500
+                   focus:ring-4
+                   focus:ring-sky-100"
+        >
 
-                                <option
-                                    value="{{ $unit->id }}"
-                                    {{ old('unit_id') == $unit->id ? 'selected' : '' }}
-                                >
-                                    {{ $unit->unit_code }} - {{ $unit->unit_name }}
-                                </option>
+    </div>
 
-                            @endforeach
 
-                        </select>
+    {{-- UNIT NAME --}}
 
-                    </div>
+    <div>
+
+        <label
+            for="unit_name"
+            class="block font-bold text-gray-700 mb-2"
+        >
+            📚 Unit Name
+        </label>
+
+        <input
+            type="text"
+            id="unit_name"
+            name="unit_name"
+            value="{{ old('unit_name') }}"
+            required
+            maxlength="255"
+            placeholder="e.g. Discrete Mathematics"
+            class="w-full rounded-2xl
+                   border-2 border-slate-300
+                   bg-white
+                   py-3.5 sm:py-4
+                   px-4 sm:px-5
+                   text-gray-700
+                   shadow-sm
+                   outline-none
+                   transition
+                   focus:border-sky-500
+                   focus:ring-4
+                   focus:ring-sky-100"
+        >
+
+    </div>
+
+</div>
 
 
                     {{-- ================================================= --}}

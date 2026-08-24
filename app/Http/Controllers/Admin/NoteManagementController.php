@@ -41,7 +41,17 @@ class NoteManagementController extends Controller
             ->when($request->department, fn($q)=>$q->where('department_id',$request->department))
             ->when($request->programme, fn($q)=>$q->where('programme_id',$request->programme))
             ->when($request->semester, fn($q)=>$q->where('semester_id',$request->semester))
-            ->when($request->unit, fn($q)=>$q->where('unit_id',$request->unit))
+            ->when($request->unit, function ($q) use ($request) {
+
+    $q->where(function ($query) use ($request) {
+
+        $query->where('unit_id', $request->unit)
+              ->orWhere('unit_code', 'like', '%' . $request->unit . '%')
+              ->orWhere('unit_name', 'like', '%' . $request->unit . '%');
+
+    });
+
+})
             ->when($request->status, fn($q)=>$q->where('status',$request->status))
 
             ->when($request->premium !== null && $request->premium !== '', function ($query) use ($request) {

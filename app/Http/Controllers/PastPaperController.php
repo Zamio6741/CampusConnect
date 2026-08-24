@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\PastPaper;
-use App\Models\Unit;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +21,6 @@ class PastPaperController extends Controller
 
         $papers = PastPaper::with(['user', 'unit'])
 
-            // Only show papers from the logged-in user's university
             ->where('university_id', Auth::user()->university_id)
 
             ->when($search, function ($query) use ($search) {
@@ -30,27 +28,26 @@ class PastPaperController extends Controller
                 $query->where(function ($query) use ($search) {
 
                     $query->where('title', 'like', "%{$search}%")
-                          ->orWhereHas('unit', function ($q) use ($search) {
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('unit_code', 'like', "%{$search}%")
+                        ->orWhere('unit_name', 'like', "%{$search}%")
+                        ->orWhereHas('unit', function ($q) use ($search) {
 
-                              $q->where('unit_code', 'like', "%{$search}%")
+                            $q->where('unit_code', 'like', "%{$search}%")
                                 ->orWhere('unit_name', 'like', "%{$search}%");
 
-                          });
+                        });
 
                 });
 
             })
 
             ->when($year, function ($query) use ($year) {
-
                 $query->where('year', $year);
-
             })
 
             ->when($type, function ($query) use ($type) {
-
                 $query->where('type', $type);
-
             })
 
             ->latest()
@@ -69,9 +66,7 @@ class PastPaperController extends Controller
      */
     public function create()
     {
-        $units = Unit::orderBy('unit_code')->get();
-
-        return view('pastpapers.create', compact('units'));
+        return view('pastpapers.create');
     }
 
     /**
@@ -81,12 +76,14 @@ class PastPaperController extends Controller
     {
         $request->validate([
 
-            'unit_id' => 'required|exists:units,id',
-            'title' => 'required|max:255',
+            'unit_code' => 'required|string|max:100',
+            'unit_name' => 'required|string|max:255',
+
+            'title' => 'required|string|max:255',
             'year' => 'required',
             'semester' => 'required',
             'type' => 'required',
-            'description' => 'nullable|max:1000',
+            'description' => 'nullable|string|max:1000',
             'pdf' => 'required|mimes:pdf|max:25600',
 
         ]);
@@ -97,7 +94,11 @@ class PastPaperController extends Controller
 
             'user_id'       => Auth::id(),
             'university_id' => Auth::user()->university_id,
-            'unit_id'       => $request->unit_id,
+
+            // Free-text unit information
+            'unit_code'     => trim($request->unit_code),
+            'unit_name'     => trim($request->unit_name),
+
             'title'         => $request->title,
             'year'          => $request->year,
             'semester'      => $request->semester,
@@ -107,7 +108,7 @@ class PastPaperController extends Controller
 
         ]);
 
-        // Notify users from the same university only
+        // Notify users from the same university
         $users = User::where(
             'university_id',
             Auth::user()->university_id

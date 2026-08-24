@@ -33,11 +33,6 @@
     |--------------------------------------------------------------------------
     | USER ROLE
     |--------------------------------------------------------------------------
-    |
-    | IMPORTANT:
-    | The User model uses the "role" relationship.
-    | Do NOT use roleRelation here.
-    |
     */
 
     $role = $user?->role?->name;
@@ -79,8 +74,69 @@
 
     /*
     |--------------------------------------------------------------------------
-    | SAFE SEMESTER DEFAULTS
+    | REAL DASHBOARD / SIDEBAR DATA
     |--------------------------------------------------------------------------
+    |
+    | The DashboardController already provides these values.
+    | We preserve them instead of replacing them with zero.
+    |
+    */
+
+   /*
+|--------------------------------------------------------------------------
+| REAL SIDEBAR DATA
+|--------------------------------------------------------------------------
+*/
+
+$sidebarStats = is_array($sidebarStats ?? null)
+    ? $sidebarStats
+    : [];
+
+$notesCount = (int) ($sidebarStats['notes'] ?? 0);
+
+$pastPapersCount = (int) ($sidebarStats['pastpapers'] ?? 0);
+
+$businessesCount = (int) ($sidebarStats['businesses'] ?? 0);
+
+$rentalsCount = (int) ($sidebarStats['accommodations'] ?? 0);
+
+$announcementsCount = (int) ($sidebarStats['announcements'] ?? 0);
+
+$messagesCount = (int) ($sidebarStats['messages'] ?? 0);
+
+$marketplaceCount = (int) ($sidebarStats['marketplace'] ?? 0);
+
+$unreadMessages = (int) ($sidebarStats['unreadMessages'] ?? 0);
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOTIFICATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    $notificationCount = isset($notificationCount)
+        ? (int) $notificationCount
+        : 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UNREAD MESSAGES
+    |--------------------------------------------------------------------------
+    */
+
+    $unreadMessages = isset($unreadMessages)
+        ? (int) $unreadMessages
+        : 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SEMESTER DATA
+    |--------------------------------------------------------------------------
+    |
+    | These values come directly from DashboardController.
+    |
     */
 
     $semesterProgress = isset($semesterProgress)
@@ -93,32 +149,47 @@
 
     $semesterDaysRemaining = $semesterDaysRemaining ?? null;
 
-    $semesterStarted = $semesterStarted ?? false;
+    $semesterTotalDays = $semesterTotalDays ?? null;
 
-    $semesterCompleted = $semesterCompleted ?? false;
+    $semesterDaysPassed = $semesterDaysPassed ?? null;
+
+    $semesterStarted = (bool) ($semesterStarted ?? false);
+
+    $semesterCompleted = (bool) ($semesterCompleted ?? false);
 
 
     /*
     |--------------------------------------------------------------------------
-    | DAILY QUOTES
+    | SEMESTER MESSAGES
     |--------------------------------------------------------------------------
     */
 
-    $semesterMessages = $semesterMessages ?? [
+    $semesterMessages = is_array($semesterMessages ?? null)
+        ? $semesterMessages
+        : [
 
-        '💪 Keep pushing! Small progress every day matters.',
+            '💪 Keep pushing! Small progress every day matters.',
 
-        '📚 Stay consistent with your studies.',
+            '📚 Stay consistent with your studies.',
 
-        '🎯 Set your goals and keep moving forward.',
+            '🎯 Set your goals and keep moving forward.',
 
-        '🧠 Learn something new today.',
+            '🧠 Learn something new today.',
 
-        '🔥 Stay focused. Your future self will thank you.',
+            '🔥 Stay focused. Your future self will thank you.',
 
-        '🚀 Great things are built one step at a time.',
+            '🚀 Great things are built one step at a time.',
 
-    ];
+        ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DAILY TIP FALLBACK
+    |--------------------------------------------------------------------------
+    */
+
+    $dailyTip = $dailyTip ?? null;
 
 @endphp
 
@@ -138,9 +209,9 @@
 
     <aside
 
-        @mouseenter="sidebar = true"
+        @mouseenter="if (window.innerWidth >= 1024) sidebar = true"
 
-        @mouseleave="sidebar = false"
+        @mouseleave="if (window.innerWidth >= 1024) sidebar = false"
 
         :class="mobileSidebar
             ? 'translate-x-0'
@@ -173,6 +244,7 @@
 
             <div
                 x-show="!sidebar && !mobileSidebar"
+                x-cloak
                 class="w-full flex justify-center"
             >
 
@@ -193,6 +265,7 @@
 
             <div
                 x-show="sidebar || mobileSidebar"
+                x-cloak
                 x-transition
                 class="px-6 flex items-center gap-3 whitespace-nowrap"
             >
@@ -209,7 +282,7 @@
                 </div>
 
 
-                <div>
+                <div class="min-w-0">
 
                     <h1 class="text-xl font-extrabold tracking-tight">
                         CampusConnect
@@ -230,7 +303,10 @@
         <!-- NAVIGATION -->
         <!-- ===================================================== -->
 
-        <nav class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-6">
+        <nav
+            class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-6"
+            style="scrollbar-width: thin;"
+        >
 
 
             <!-- ================================================= -->
@@ -239,6 +315,7 @@
 
             <a
                 href="{{ $dashboardRoute }}"
+                @click="mobileSidebar = false"
 
                 class="group flex items-center rounded-xl
                        bg-gradient-to-r from-blue-600 to-indigo-600
@@ -252,6 +329,7 @@
                 :class="sidebar || mobileSidebar
                     ? 'justify-start px-4 gap-4'
                     : 'justify-center'"
+
             >
 
                 <span class="text-xl shrink-0">
@@ -260,6 +338,7 @@
 
                 <span
                     x-show="sidebar || mobileSidebar"
+                    x-cloak
                     x-transition
                     class="whitespace-nowrap"
                 >
@@ -277,6 +356,7 @@
 
                 <p
                     x-show="sidebar || mobileSidebar"
+                    x-cloak
                     x-transition
                     class="px-3 mb-3
                            text-xs font-bold uppercase
@@ -295,7 +375,9 @@
 
                     <a
                         href="{{ route('notes.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -307,10 +389,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Notes
+                        </span>
+
+                        <!-- REAL COUNT -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-blue-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $notesCount }}
                         </span>
 
                     </a>
@@ -320,7 +419,9 @@
 
                     <a
                         href="{{ route('pastpapers.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -332,10 +433,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Past Papers
+                        </span>
+
+                        <!-- REAL COUNT -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-blue-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $pastPapersCount }}
                         </span>
 
                     </a>
@@ -345,7 +463,9 @@
 
                     <a
                         href="{{ route('announcements.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -357,10 +477,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Announcements
+                        </span>
+
+                        <!-- REAL COUNT -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-red-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $announcementsCount }}
                         </span>
 
                     </a>
@@ -372,6 +509,8 @@
 
                         <a
                             href="{{ route('semester.edit') }}"
+                            @click="mobileSidebar = false"
+
                             class="sidebar-link
                                    bg-blue-500/10
                                    hover:bg-blue-500/20"
@@ -387,6 +526,7 @@
 
                             <span
                                 x-show="sidebar || mobileSidebar"
+                                x-cloak
                                 x-transition
                                 class="whitespace-nowrap"
                             >
@@ -410,6 +550,7 @@
 
                 <p
                     x-show="sidebar || mobileSidebar"
+                    x-cloak
                     x-transition
                     class="px-3 mb-3
                            text-xs font-bold uppercase
@@ -428,7 +569,9 @@
 
                     <a
                         href="{{ route('campus.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -440,6 +583,7 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
                             class="whitespace-nowrap"
                         >
@@ -453,7 +597,9 @@
 
                     <a
                         href="{{ route('browse.rentals') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -465,10 +611,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Rentals
+                        </span>
+
+                        <!-- REAL COUNT -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-green-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $rentalsCount }}
                         </span>
 
                     </a>
@@ -478,7 +641,9 @@
 
                     <a
                         href="{{ route('marketplace.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -490,10 +655,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Marketplace
+                        </span>
+
+                        <!-- CURRENT CONTROLLER VALUE -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-orange-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $marketplaceCount }}
                         </span>
 
                     </a>
@@ -503,7 +685,9 @@
 
                     <a
                         href="{{ route('lostfound.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -515,6 +699,7 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
                             class="whitespace-nowrap"
                         >
@@ -536,6 +721,7 @@
 
                 <p
                     x-show="sidebar || mobileSidebar"
+                    x-cloak
                     x-transition
                     class="px-3 mb-3
                            text-xs font-bold uppercase
@@ -554,7 +740,9 @@
 
                     <a
                         href="{{ route('student-services.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -566,6 +754,7 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
                             class="whitespace-nowrap"
                         >
@@ -579,7 +768,9 @@
 
                     <a
                         href="{{ route('businesses.index') }}"
+                        @click="mobileSidebar = false"
                         class="sidebar-link"
+
                         :class="sidebar || mobileSidebar
                             ? 'justify-start px-4 gap-4'
                             : 'justify-center'"
@@ -591,10 +782,27 @@
 
                         <span
                             x-show="sidebar || mobileSidebar"
+                            x-cloak
                             x-transition
-                            class="whitespace-nowrap"
+                            class="whitespace-nowrap flex-1"
                         >
                             Businesses
+                        </span>
+
+                        <!-- REAL COUNT -->
+
+                        <span
+                            x-show="sidebar || mobileSidebar"
+                            x-cloak
+                            class="text-xs
+                                   bg-slate-700
+                                   text-purple-300
+                                   rounded-full
+                                   min-w-6 h-6
+                                   px-1.5
+                                   flex items-center justify-center"
+                        >
+                            {{ $businessesCount }}
                         </span>
 
                     </a>
@@ -614,6 +822,7 @@
 
                     <p
                         x-show="sidebar || mobileSidebar"
+                        x-cloak
                         x-transition
                         class="px-3 mb-3
                                text-xs font-bold uppercase
@@ -629,7 +838,9 @@
 
                         <a
                             href="{{ route('student.messages') }}"
+                            @click="mobileSidebar = false"
                             class="sidebar-link"
+
                             :class="sidebar || mobileSidebar
                                 ? 'justify-start px-4 gap-4'
                                 : 'justify-center'"
@@ -641,11 +852,49 @@
 
                             <span
                                 x-show="sidebar || mobileSidebar"
+                                x-cloak
                                 x-transition
-                                class="whitespace-nowrap"
+                                class="whitespace-nowrap flex-1"
                             >
                                 Messages
                             </span>
+
+                            <!-- UNREAD BADGE -->
+
+                            @if($unreadMessages > 0)
+
+                                <span
+                                    x-show="sidebar || mobileSidebar"
+                                    x-cloak
+                                    class="text-xs
+                                           bg-red-500
+                                           text-white
+                                           rounded-full
+                                           min-w-6 h-6
+                                           px-1.5
+                                           flex items-center justify-center
+                                           font-bold"
+                                >
+                                    {{ $unreadMessages > 99 ? '99+' : $unreadMessages }}
+                                </span>
+
+                            @else
+
+                                <span
+                                    x-show="sidebar || mobileSidebar"
+                                    x-cloak
+                                    class="text-xs
+                                           bg-slate-700
+                                           text-sky-300
+                                           rounded-full
+                                           min-w-6 h-6
+                                           px-1.5
+                                           flex items-center justify-center"
+                                >
+                                    {{ $messagesCount }}
+                                </span>
+
+                            @endif
 
                         </a>
 
@@ -664,12 +913,15 @@
 
                 <div
                     x-show="sidebar || mobileSidebar"
+                    x-cloak
                     x-transition
                     class="mt-8"
                 >
 
 
+                    <!-- ================================================= -->
                     <!-- YOUR ACTIVITY -->
+                    <!-- ================================================= -->
 
                     <div
                         class="rounded-3xl
@@ -689,14 +941,14 @@
 
                             <!-- NOTES -->
 
-                            <div class="flex justify-between">
+                            <div class="flex items-center justify-between gap-3">
 
                                 <span class="text-slate-300">
                                     📚 Notes
                                 </span>
 
                                 <span class="font-bold text-blue-400">
-                                    {{ $stats['notes'] ?? 0 }}
+                                    {{ $notesCount }}
                                 </span>
 
                             </div>
@@ -704,14 +956,14 @@
 
                             <!-- RENTALS -->
 
-                            <div class="flex justify-between">
+                            <div class="flex items-center justify-between gap-3">
 
                                 <span class="text-slate-300">
                                     🏡 Rentals
                                 </span>
 
                                 <span class="font-bold text-green-400">
-                                    {{ $stats['accommodations'] ?? 0 }}
+                                    {{ $rentalsCount }}
                                 </span>
 
                             </div>
@@ -719,14 +971,14 @@
 
                             <!-- MARKETPLACE -->
 
-                            <div class="flex justify-between">
+                            <div class="flex items-center justify-between gap-3">
 
                                 <span class="text-slate-300">
                                     🛒 Marketplace
                                 </span>
 
                                 <span class="font-bold text-orange-400">
-                                    {{ $stats['marketplace'] ?? 0 }}
+                                    {{ $marketplaceCount }}
                                 </span>
 
                             </div>
@@ -734,14 +986,14 @@
 
                             <!-- ANNOUNCEMENTS -->
 
-                            <div class="flex justify-between">
+                            <div class="flex items-center justify-between gap-3">
 
                                 <span class="text-slate-300">
                                     📢 Announcements
                                 </span>
 
                                 <span class="font-bold text-red-400">
-                                    {{ $stats['announcements'] ?? 0 }}
+                                    {{ $announcementsCount }}
                                 </span>
 
                             </div>
@@ -749,14 +1001,14 @@
 
                             <!-- MESSAGES -->
 
-                            <div class="flex justify-between">
+                            <div class="flex items-center justify-between gap-3">
 
                                 <span class="text-slate-300">
                                     💬 Messages
                                 </span>
 
                                 <span class="font-bold text-sky-400">
-                                    {{ $stats['messages'] ?? 0 }}
+                                    {{ $messagesCount }}
                                 </span>
 
                             </div>
@@ -778,7 +1030,7 @@
                                mb-5"
                     >
 
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center justify-between mb-4 gap-3">
 
                             <h3 class="font-bold text-white">
                                 📈 Semester Progress
@@ -875,13 +1127,13 @@
 
                                 @if($semesterStartDate)
 
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between gap-3">
 
                                         <span class="text-slate-400">
                                             Start
                                         </span>
 
-                                        <span class="text-slate-200">
+                                        <span class="text-slate-200 text-right">
                                             {{ \Carbon\Carbon::parse($semesterStartDate)->format('M d, Y') }}
                                         </span>
 
@@ -892,13 +1144,13 @@
 
                                 @if($semesterEndDate)
 
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between gap-3">
 
                                         <span class="text-slate-400">
                                             End
                                         </span>
 
-                                        <span class="text-slate-200">
+                                        <span class="text-slate-200 text-right">
                                             {{ \Carbon\Carbon::parse($semesterEndDate)->format('M d, Y') }}
                                         </span>
 
@@ -917,6 +1169,8 @@
 
                             <a
                                 href="{{ route('semester.edit') }}"
+                                @click="mobileSidebar = false"
+
                                 class="mt-5
                                        flex items-center justify-center gap-2
                                        w-full
@@ -978,12 +1232,13 @@
                             x-data="{
                                 messages: @js($semesterMessages),
                                 current: 0,
+                                timer: null,
 
                                 init() {
 
                                     if (this.messages.length > 1) {
 
-                                        setInterval(() => {
+                                        this.timer = setInterval(() => {
 
                                             this.current =
                                                 (this.current + 1)
@@ -991,6 +1246,14 @@
 
                                         }, 7000);
 
+                                    }
+
+                                },
+
+                                destroy() {
+
+                                    if (this.timer) {
+                                        clearInterval(this.timer);
                                     }
 
                                 }
@@ -1018,6 +1281,8 @@
 
                         <a
                             href="{{ route('semester.edit') }}"
+                            @click="mobileSidebar = false"
+
                             class="flex items-center gap-3
                                    rounded-2xl
                                    border border-slate-700
@@ -1065,6 +1330,7 @@
                    border-t border-white/5
                    p-4"
             x-show="sidebar || mobileSidebar"
+            x-cloak
             x-transition
         >
 
@@ -1083,6 +1349,7 @@
 
     <div
         x-show="mobileSidebar"
+        x-cloak
         x-transition.opacity
         @click="mobileSidebar = false"
         class="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -1124,6 +1391,7 @@
                     <button
                         @click="mobileSidebar = !mobileSidebar"
                         type="button"
+
                         class="lg:hidden
                                w-11 h-11
                                rounded-xl
@@ -1132,7 +1400,9 @@
                                flex items-center justify-center
                                text-xl
                                transition"
+
                         aria-label="Open navigation menu"
+                        :aria-expanded="mobileSidebar"
                     >
                         ☰
                     </button>
@@ -1191,11 +1461,12 @@
                                    hover:shadow-lg
                                    flex items-center justify-center
                                    transition"
+                            aria-label="Notifications"
                         >
 
                             🔔
 
-                            @if(($notificationCount ?? 0) > 0)
+                            @if($notificationCount > 0)
 
                                 <span
                                     class="absolute
@@ -1226,11 +1497,13 @@
                         @click.outside="userMenu = false"
                     >
 
+
                         <!-- USER BUTTON -->
 
                         <button
                             type="button"
                             @click="userMenu = !userMenu"
+
                             class="flex items-center gap-3
                                    bg-gray-50
                                    hover:bg-blue-50
@@ -1245,9 +1518,11 @@
                                    focus:outline-none
                                    focus:ring-2
                                    focus:ring-blue-500/30"
+
                             aria-label="Open user menu"
                             :aria-expanded="userMenu"
                         >
+
 
                             <!-- AVATAR -->
 
@@ -1270,9 +1545,9 @@
 
                             <!-- USER DETAILS -->
 
-                            <div class="hidden md:block text-left">
+                            <div class="hidden md:block text-left min-w-0">
 
-                                <p class="font-semibold text-sm text-gray-800">
+                                <p class="font-semibold text-sm text-gray-800 truncate max-w-40">
                                     {{ $user?->name ?? 'User' }}
                                 </p>
 
@@ -1311,21 +1586,25 @@
 
                         <div
                             x-show="userMenu"
+                            x-cloak
+
                             x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+
                             x-transition:leave="transition ease-in duration-150"
                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                             x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+
                             class="absolute right-0 mt-3
                                    w-64
+                                   max-w-[calc(100vw-2rem)]
                                    bg-white
                                    rounded-2xl
                                    shadow-2xl
                                    border border-gray-200
                                    overflow-hidden
                                    z-50"
-                            style="display: none;"
                         >
 
 
@@ -1339,11 +1618,11 @@
                                        text-white"
                             >
 
-                                <p class="font-bold text-sm">
+                                <p class="font-bold text-sm truncate">
                                     {{ $user?->name ?? 'User' }}
                                 </p>
 
-                                <p class="text-xs text-blue-100 mt-1">
+                                <p class="text-xs text-blue-100 mt-1 truncate">
                                     {{ $user?->email ?? '' }}
                                 </p>
 
@@ -1362,6 +1641,7 @@
                                     <a
                                         href="{{ route('profile.edit') }}"
                                         @click="userMenu = false"
+
                                         class="flex items-center gap-3
                                                px-4 py-3
                                                rounded-xl
@@ -1411,6 +1691,7 @@
                                     <button
                                         type="submit"
                                         @click="userMenu = false"
+
                                         class="w-full
                                                flex items-center gap-3
                                                px-4 py-3
@@ -1482,6 +1763,11 @@
 
     <style>
 
+        [x-cloak] {
+            display: none !important;
+        }
+
+
         .sidebar-link {
 
             display: flex;
@@ -1500,6 +1786,8 @@
 
             white-space: nowrap;
 
+            min-width: 0;
+
         }
 
 
@@ -1510,6 +1798,24 @@
             color: #ffffff;
 
             transform: translateX(2px);
+
+        }
+
+
+        .sidebar-link > span {
+
+            min-width: 0;
+
+        }
+
+
+        @media (max-width: 1023px) {
+
+            .sidebar-link:hover {
+
+                transform: none;
+
+            }
 
         }
 

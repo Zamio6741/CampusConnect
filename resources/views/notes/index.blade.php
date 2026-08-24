@@ -97,7 +97,7 @@
 
             <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 text-purple-700">
 
-                {{ $notes->pluck('unit_id')->unique()->count() }}
+                {{ $notes->pluck('unit_code')->filter()->unique()->count() }}
 
             </h2>
 

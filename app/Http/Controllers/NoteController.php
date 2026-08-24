@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use App\Models\Unit;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,7 +22,6 @@ class NoteController extends Controller
                 'unit',
                 'ratings'
             ])
-            // Only show notes from the user's university
             ->where('university_id', Auth::user()->university_id)
 
             ->when($search, function ($query) use ($search) {
@@ -31,13 +29,15 @@ class NoteController extends Controller
                 $query->where(function ($query) use ($search) {
 
                     $query->where('title', 'like', "%{$search}%")
-                          ->orWhere('description', 'like', "%{$search}%")
-                          ->orWhereHas('unit', function ($q) use ($search) {
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('unit_code', 'like', "%{$search}%")
+                        ->orWhere('unit_name', 'like', "%{$search}%")
+                        ->orWhereHas('unit', function ($q) use ($search) {
 
-                              $q->where('unit_code', 'like', "%{$search}%")
+                            $q->where('unit_code', 'like', "%{$search}%")
                                 ->orWhere('unit_name', 'like', "%{$search}%");
 
-                          });
+                        });
 
                 });
 
@@ -54,9 +54,7 @@ class NoteController extends Controller
      */
     public function create()
     {
-        $units = Unit::orderBy('unit_code')->get();
-
-        return view('notes.create', compact('units'));
+        return view('notes.create');
     }
 
     /**
@@ -65,25 +63,29 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'unit_id' => 'required|exists:units,id',
-            'title' => 'required|max:255',
-            'description' => 'nullable|max:1000',
+            'unit_code' => 'required|string|max:100',
+            'unit_name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'pdf' => 'required|mimes:pdf|max:25600',
         ]);
 
         $path = $request->file('pdf')->store('notes', 'public');
 
-        // Create the note
         $note = Note::create([
             'user_id'        => Auth::id(),
             'university_id'  => Auth::user()->university_id,
-            'unit_id'        => $request->unit_id,
+
+            // Free-text unit information
+            'unit_code'      => trim($request->unit_code),
+            'unit_name'      => trim($request->unit_name),
+
             'title'          => $request->title,
             'description'    => $request->description,
             'file_path'      => $path,
         ]);
 
-        // Notify users from the SAME university only
+        // Notify users from the same university only
         $users = User::where(
             'university_id',
             Auth::user()->university_id

@@ -10,6 +10,8 @@ class PastPaper extends Model
         'user_id',
         'university_id',
         'unit_id',
+        'unit_code',
+        'unit_name',
         'title',
         'year',
         'semester',

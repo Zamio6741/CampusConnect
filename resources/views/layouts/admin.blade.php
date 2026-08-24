@@ -26,6 +26,18 @@
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -45,16 +57,38 @@
             scrollbar-color: #334155 transparent;
         }
 
+        /*
+        =========================================================
+        MAIN DASHBOARD WIDTH FIX
+        =========================================================
+        */
+
         .dashboard-main {
             min-width: 0;
             width: 100%;
+            max-width: 100%;
         }
+
+        @media (min-width: 1024px) {
+
+            .dashboard-main {
+                width: calc(100% - 6rem);
+                max-width: calc(100% - 6rem);
+                margin-left: 6rem;
+            }
+
+        }
+
+        /*
+        =========================================================
+        SIDEBAR
+        =========================================================
+        */
 
         .admin-sidebar {
             will-change: width, transform;
         }
 
-        /* Keep desktop sidebar transitions smooth */
         @media (min-width: 1024px) {
 
             .admin-sidebar {
@@ -63,6 +97,59 @@
 
             .admin-sidebar:hover {
                 width: 18rem;
+            }
+
+        }
+
+        /*
+        =========================================================
+        GLOBAL CONTENT PROTECTION
+        =========================================================
+        */
+
+        .dashboard-main,
+        .dashboard-main > header,
+        .dashboard-main > section,
+        .dashboard-main section,
+        .dashboard-main div {
+            min-width: 0;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+
+        /*
+        =========================================================
+        MOBILE NOTIFICATION PROTECTION
+        =========================================================
+
+        Keeps the notification dropdown inside the viewport.
+        */
+
+        .admin-notification-dropdown {
+            max-width: calc(100vw - 1rem);
+            min-width: 0;
+        }
+
+        @media (max-width: 639px) {
+
+            .admin-notification-dropdown {
+                position: fixed !important;
+
+                left: 0.5rem !important;
+                right: 0.5rem !important;
+
+                top: 5.5rem !important;
+
+                width: auto !important;
+                max-width: none !important;
+
+                margin-top: 0 !important;
+
+                max-height: calc(100vh - 6rem);
+
+                overflow: hidden;
             }
 
         }
@@ -81,13 +168,13 @@
         mobileSidebar: false
     }"
 
-    class="min-h-screen"
+    class="min-h-screen w-full max-w-full overflow-x-hidden"
 >
 
 
-    <!-- ========================================================= -->
-    <!-- MOBILE BACKDROP -->
-    <!-- ========================================================= -->
+    <!-- =========================================================
+    MOBILE BACKDROP
+    ========================================================= -->
 
     <div
         x-show="mobileSidebar"
@@ -105,9 +192,9 @@
 
 
 
-    <!-- ========================================================= -->
-    <!-- ADMIN SIDEBAR -->
-    <!-- ========================================================= -->
+    <!-- =========================================================
+    ADMIN SIDEBAR
+    ========================================================= -->
 
     <aside
 
@@ -149,9 +236,9 @@
     >
 
 
-        <!-- ===================================================== -->
-        <!-- SIDEBAR HEADER -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+        SIDEBAR HEADER
+        ===================================================== -->
 
         <div
             class="relative
@@ -167,9 +254,7 @@
         >
 
 
-            <!-- ================================================= -->
             <!-- EXPANDED BRAND -->
-            <!-- ================================================= -->
 
             <div
                 x-show="sidebar || mobileSidebar"
@@ -207,9 +292,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- COLLAPSED BRAND -->
-            <!-- ================================================= -->
 
             <div
                 x-show="!sidebar && !mobileSidebar"
@@ -224,9 +307,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- MOBILE CLOSE -->
-            <!-- ================================================= -->
 
             <button
                 type="button"
@@ -263,9 +344,9 @@
 
 
 
-        <!-- ===================================================== -->
-        <!-- NAVIGATION -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+        NAVIGATION
+        ===================================================== -->
 
         <nav
             class="flex-1
@@ -279,9 +360,7 @@
         >
 
 
-            <!-- ================================================= -->
             <!-- DASHBOARD -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.dashboard') }}"
@@ -323,9 +402,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- USERS -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.users') }}"
@@ -339,7 +416,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.users*')
+                       {{ request()->routeIs('admin.users.*')
                             ? 'bg-sky-600 text-white shadow-xl'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -366,9 +443,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- BUSINESSES -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.businesses') }}"
@@ -382,7 +457,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.businesses*')
+                       {{ request()->routeIs('admin.businesses.*')
                             ? 'bg-sky-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -409,9 +484,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- MARKETPLACE -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.marketplace') }}"
@@ -425,7 +498,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.marketplace*')
+                       {{ request()->routeIs('admin.marketplace.*')
                             ? 'bg-orange-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -452,9 +525,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- ACCOMMODATIONS -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.accommodations') }}"
@@ -468,7 +539,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.accommodations*')
+                       {{ request()->routeIs('admin.accommodations.*')
                             ? 'bg-sky-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -495,9 +566,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- NOTES -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.notes') }}"
@@ -511,7 +580,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.notes*')
+                       {{ request()->routeIs('admin.notes.*')
                             ? 'bg-sky-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -538,9 +607,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- ANNOUNCEMENTS -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.announcements') }}"
@@ -554,7 +621,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.announcements*')
+                       {{ request()->routeIs('admin.announcements.*')
                             ? 'bg-red-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -581,9 +648,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- REPORTS -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.reports') }}"
@@ -597,7 +662,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.reports*')
+                       {{ request()->routeIs('admin.reports.*')
                             ? 'bg-sky-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -624,9 +689,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- SETTINGS -->
-            <!-- ================================================= -->
 
             <a
                 href="{{ route('admin.settings') }}"
@@ -640,7 +703,7 @@
                        transition-all
                        duration-300
 
-                       {{ request()->routeIs('admin.settings*')
+                       {{ request()->routeIs('admin.settings.*')
                             ? 'bg-sky-600 text-white shadow-lg'
                             : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
 
@@ -669,9 +732,9 @@
 
 
 
-        <!-- ===================================================== -->
-        <!-- BOTTOM USER -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+        BOTTOM USER
+        ===================================================== -->
 
         <div
             class="border-t
@@ -734,9 +797,7 @@
 
 
 
-            <!-- ================================================= -->
             <!-- LOGOUT -->
-            <!-- ================================================= -->
 
             <form
                 action="{{ route('admin.logout') }}"
@@ -793,21 +854,21 @@
 
 
 
-    <!-- ========================================================= -->
-    <!-- MAIN APPLICATION -->
-    <!-- ========================================================= -->
+    <!-- =========================================================
+    MAIN APPLICATION
+    ========================================================= -->
 
     <main
         class="dashboard-main
                min-h-screen
-
-               lg:ml-24"
+               min-w-0
+               overflow-x-hidden"
     >
 
 
-        <!-- ===================================================== -->
-        <!-- TOP NAVIGATION -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+        TOP NAVIGATION
+        ===================================================== -->
 
         <header
             class="bg-white
@@ -815,11 +876,15 @@
                    border-b
                    sticky
                    top-0
-                   z-20"
+                   z-20
+                   w-full
+                   max-w-full"
         >
 
             <div
                 class="min-h-20
+                       w-full
+                       max-w-full
                        px-4
                        sm:px-6
                        lg:px-8
@@ -829,13 +894,14 @@
                        items-center
                        justify-between
 
-                       gap-3"
+                       gap-3
+                       min-w-0"
             >
 
 
-                <!-- ================================================= -->
-                <!-- LEFT -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                LEFT
+                ================================================= -->
 
                 <div
                     class="flex
@@ -843,7 +909,8 @@
                            gap-3
                            sm:gap-5
 
-                           min-w-0"
+                           min-w-0
+                           flex-1"
                 >
 
 
@@ -910,7 +977,7 @@
 
                     <!-- PAGE TITLE -->
 
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
 
                         <h2
                             class="text-xl
@@ -941,26 +1008,26 @@
                 </div>
 
 
-
-                <!-- ================================================= -->
-                <!-- RIGHT -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                RIGHT
+                ================================================= -->
 
                 <div
                     class="flex
                            items-center
 
-                           gap-2
-                           sm:gap-4
-                           lg:gap-6
+                           gap-1.5
+                           sm:gap-3
+                           lg:gap-4
 
-                           shrink-0"
+                           shrink-0
+                           min-w-0"
                 >
 
 
-                    <!-- ================================================= -->
-                    <!-- SEARCH -->
-                    <!-- ================================================= -->
+                    <!-- =================================================
+                    SEARCH
+                    ================================================= -->
 
                     <form
                         action="{{ route('admin.search') }}"
@@ -968,15 +1035,17 @@
 
                         class="hidden
                                sm:flex
-                               shrink-0"
+                               shrink
+                               min-w-0"
                     >
 
                         <div
                             class="relative
-                                   w-40
-                                   md:w-56
-                                   lg:w-64
-                                   xl:w-80"
+                                   w-36
+                                   md:w-48
+                                   lg:w-56
+                                   xl:w-72
+                                   max-w-full"
                         >
 
                             <input
@@ -990,6 +1059,8 @@
                                 autocomplete="off"
 
                                 class="w-full
+                                       max-w-full
+
                                        h-10
                                        sm:h-11
 
@@ -1057,9 +1128,9 @@
 
 
 
-                    <!-- ================================================= -->
-                    <!-- NOTIFICATIONS -->
-                    <!-- ================================================= -->
+                    <!-- =================================================
+                    NOTIFICATIONS
+                    ================================================= -->
 
                     <div
                         x-data="{ notificationsOpen: false }"
@@ -1165,9 +1236,9 @@
 
 
 
-                        <!-- ================================================= -->
-                        <!-- NOTIFICATION DROPDOWN -->
-                        <!-- ================================================= -->
+                        <!-- =================================================
+                        NOTIFICATION DROPDOWN
+                        ================================================= -->
 
                         <div
                             x-show="notificationsOpen"
@@ -1176,14 +1247,15 @@
 
                             @click.outside="notificationsOpen = false"
 
-                            class="absolute
+                            class="admin-notification-dropdown
+
+                                   absolute
 
                                    right-0
                                    mt-3
 
-                                   w-[calc(100vw-2rem)]
-
-                                   max-w-96
+                                   w-96
+                                   max-w-[calc(100vw-2rem)]
 
                                    bg-white
 
@@ -1194,7 +1266,9 @@
                                    border
                                    border-slate-200
 
-                                   z-50"
+                                   z-50
+
+                                   overflow-hidden"
 
                             style="display: none;"
                         >
@@ -1203,7 +1277,8 @@
                             <!-- HEADER -->
 
                             <div
-                                class="px-5
+                                class="px-4
+                                       sm:px-5
                                        py-4
 
                                        border-b
@@ -1211,15 +1286,22 @@
 
                                        flex
                                        items-center
-                                       justify-between"
+                                       justify-between
+
+                                       gap-3
+
+                                       min-w-0"
                             >
 
-                                <div>
+                                <div class="min-w-0 flex-1">
 
                                     <h3
                                         class="font-bold
-                                               text-lg
-                                               text-slate-800"
+                                               text-base
+                                               sm:text-lg
+                                               text-slate-800
+
+                                               truncate"
                                     >
                                         Notifications
                                     </h3>
@@ -1250,6 +1332,7 @@
                                     <form
                                         action="{{ route('notifications.readAll') }}"
                                         method="POST"
+                                        class="shrink-0"
                                     >
 
                                         @csrf
@@ -1258,10 +1341,12 @@
                                         <button
                                             type="submit"
 
-                                            class="text-xs
+                                            class="text-[11px]
+                                                   sm:text-xs
                                                    font-semibold
                                                    text-sky-600
-                                                   hover:text-sky-800"
+                                                   hover:text-sky-800
+                                                   whitespace-nowrap"
                                         >
                                             Mark all as read
                                         </button>
@@ -1274,19 +1359,24 @@
 
 
 
-                            <!-- ================================================= -->
-                            <!-- NOTIFICATION LIST -->
-                            <!-- ================================================= -->
+                            <!-- =================================================
+                            NOTIFICATION LIST
+                            ================================================= -->
 
                             <div
-                                class="max-h-[420px]
-                                       overflow-y-auto"
+                                class="max-h-[calc(100vh-11rem)]
+                                       sm:max-h-[420px]
+
+                                       overflow-y-auto
+                                       overflow-x-hidden"
                             >
 
                                 @forelse($headerNotifications as $notification)
 
                                     <div
-                                        class="px-5
+                                        class="px-4
+                                               sm:px-5
+
                                                py-4
 
                                                border-b
@@ -1296,12 +1386,19 @@
 
                                                transition
 
+                                               min-w-0
+
                                                {{ !$notification->is_read
                                                     ? 'bg-sky-50'
                                                     : 'bg-white' }}"
                                     >
 
-                                        <div class="flex gap-3">
+                                        <div
+                                            class="flex
+                                                   gap-3
+                                                   min-w-0
+                                                   max-w-full"
+                                        >
 
 
                                             <!-- ICON -->
@@ -1362,18 +1459,28 @@
 
                                             <div
                                                 class="flex-1
-                                                       min-w-0"
+                                                       min-w-0
+                                                       max-w-full
+                                                       overflow-hidden"
                                             >
 
                                                 <div
                                                     class="flex
                                                            items-start
                                                            justify-between
-                                                           gap-2"
+                                                           gap-2
+
+                                                           min-w-0
+                                                           max-w-full"
                                                 >
 
                                                     <h4
                                                         class="text-sm
+                                                               min-w-0
+                                                               max-w-full
+
+                                                               break-words
+                                                               overflow-wrap-anywhere
 
                                                                {{ !$notification->is_read
                                                                     ? 'font-bold text-slate-900'
@@ -1402,8 +1509,15 @@
                                                 <p
                                                     class="text-xs
                                                            text-slate-500
+
                                                            mt-1
-                                                           line-clamp-2"
+
+                                                           line-clamp-2
+
+                                                           break-words
+                                                           overflow-wrap-anywhere
+
+                                                           max-w-full"
                                                 >
                                                     {{ $notification->message }}
                                                 </p>
@@ -1416,12 +1530,17 @@
 
                                                            gap-2
 
-                                                           mt-2"
+                                                           mt-2
+
+                                                           min-w-0
+                                                           max-w-full"
                                                 >
 
                                                     <span
                                                         class="text-[11px]
-                                                               text-slate-400"
+                                                               text-slate-400
+                                                               truncate
+                                                               min-w-0"
                                                     >
                                                         {{ $notification->created_at->diffForHumans() }}
                                                     </span>
@@ -1432,6 +1551,7 @@
                                                         <form
                                                             action="{{ route('notifications.read', $notification) }}"
                                                             method="POST"
+                                                            class="shrink-0"
                                                         >
 
                                                             @csrf
@@ -1443,7 +1563,8 @@
                                                                 class="text-xs
                                                                        font-semibold
                                                                        text-sky-600
-                                                                       hover:text-sky-800"
+                                                                       hover:text-sky-800
+                                                                       whitespace-nowrap"
                                                             >
                                                                 View →
                                                             </button>
@@ -1455,6 +1576,7 @@
                                                         <form
                                                             action="{{ route('notifications.read', $notification) }}"
                                                             method="POST"
+                                                            class="shrink-0"
                                                         >
 
                                                             @csrf
@@ -1466,7 +1588,8 @@
                                                                 class="text-xs
                                                                        font-semibold
                                                                        text-sky-600
-                                                                       hover:text-sky-800"
+                                                                       hover:text-sky-800
+                                                                       whitespace-nowrap"
                                                             >
                                                                 Mark as read
                                                             </button>
@@ -1487,7 +1610,9 @@
 
                                     <div
                                         class="py-12
-                                               text-center"
+                                               px-4
+                                               text-center
+                                               min-w-0"
                                     >
 
                                         <div
@@ -1507,7 +1632,8 @@
                                         <p
                                             class="text-sm
                                                    text-slate-400
-                                                   mt-1"
+                                                   mt-1
+                                                   break-words"
                                         >
                                             No recent notifications.
                                         </p>
@@ -1546,7 +1672,9 @@
 
                                            text-slate-700
 
-                                           transition"
+                                           transition
+
+                                           truncate"
                                 >
                                     View all notifications →
                                 </a>
@@ -1559,9 +1687,9 @@
 
 
 
-                    <!-- ================================================= -->
-                    <!-- ADMIN PROFILE -->
-                    <!-- ================================================= -->
+                    <!-- =================================================
+                    ADMIN PROFILE
+                    ================================================= -->
 
                     <div
                         class="flex
@@ -1585,21 +1713,23 @@
                                    justify-center
 
                                    text-white
-                                   font-bold"
+                                   font-bold
+                                   shrink-0"
                         >
                             A
                         </div>
 
 
-                        <div class="hidden md:block">
+                        <div class="hidden md:block min-w-0">
 
-                            <p class="font-semibold">
+                            <p class="font-semibold truncate">
                                 Admin
                             </p>
 
                             <p
                                 class="text-xs
-                                       text-gray-500"
+                                       text-gray-500
+                                       truncate"
                             >
                                 Super Administrator
                             </p>
@@ -1616,12 +1746,13 @@
 
 
 
-        <!-- ========================================================= -->
-        <!-- PAGE CONTENT -->
-        <!-- ========================================================= -->
+        <!-- =========================================================
+        PAGE CONTENT
+        ========================================================= -->
 
         <section
             class="w-full
+                   max-w-full
                    min-w-0
 
                    px-4
@@ -1629,7 +1760,9 @@
                    lg:px-8
 
                    py-4
-                   sm:py-6"
+                   sm:py-6
+
+                   overflow-x-hidden"
         >
 
             @yield('content')
@@ -1642,9 +1775,9 @@
 
 
 
-<!-- ========================================================= -->
-<!-- CHART JS -->
-<!-- ========================================================= -->
+<!-- =========================================================
+CHART JS
+========================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

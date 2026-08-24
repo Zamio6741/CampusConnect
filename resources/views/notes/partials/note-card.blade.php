@@ -38,7 +38,7 @@
                        max-w-[75%]
                        truncate"
             >
-                {{ $note->unit->unit_code }}
+                {{ $note->unit_code ?? $note->unit?->unit_code ?? 'N/A' }}
             </span>
 
 
@@ -139,7 +139,7 @@
                    mt-2
                    break-words"
         >
-            {{ $note->unit->unit_name }}
+            {{ $note->unit_name ?? $note->unit?->unit_name ?? 'Unit name not provided' }}
         </p>
 
 

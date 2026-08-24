@@ -14,6 +14,8 @@ class Note extends Model
         'programme_id',
         'semester_id',
         'unit_id',
+        'unit_code',
+        'unit_name',
 
         'title',
         'description',
