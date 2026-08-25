@@ -1,14 +1,4 @@
 User-agent: *
 Allow: /
 
-Disallow: /dashboard
-Disallow: /login
-Disallow: /register
-Disallow: /admin
-Disallow: /profile
-Disallow: /notifications
-Disallow: /student/
-Disallow: /landlord/
-Disallow: /business/
-
 Sitemap: https://campusconnect-lkvz.onrender.com/sitemap.xml
